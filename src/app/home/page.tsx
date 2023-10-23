@@ -14,8 +14,10 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
-import Select from '@/app/components/Select';
-import Button from '@/app/components/Button';
+import Select from '@/app/components/ui/Select';
+import Button from '@/app/components/ui/Button';
+import InputField from '@/app/components/ui/Input';
+import Logo from '../components/Logo';
 
 const navigation = [
   {
@@ -107,11 +109,7 @@ const Home = () => {
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-zinc-950 px-6 pb-2 ring-1 ring-white/10">
                     <div className="flex h-16 shrink-0 items-center">
-                      <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
-                      />
+                      <Logo />
                     </div>
                     <nav className="flex flex-1 flex-col">
                       <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -119,17 +117,13 @@ const Home = () => {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
+                                <Button
+                                  variant='ghost'
                                   href={item.href}
-                                  className={classNames(
-                                    item.current
-                                      ? 'bg-zinc-800 text-white'
-                                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800',
-                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                  )}
+                                  className={classNames('group')}
                                 >
                                   <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                                </a>
+                                </Button>
                               </li>
                             ))}
                           </ul>
@@ -139,19 +133,15 @@ const Home = () => {
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
                             {teams.map((team) => (
                               <li key={team.name}>
-                                <a
+                                <Button
                                   href={team.href}
-                                  className={classNames(
-                                    team.current
-                                      ? 'bg-zinc-800 text-white'
-                                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800',
-                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold',
-                                  )}
+                                  variant="ghost"
+                                  className={classNames('group')}
                                 >
                                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800 text-[0.625rem] font-medium text-zinc-400 group-hover:text-white">
                                     {team.initial}
                                   </span>
-                                </a>
+                                </Button>
                               </li>
                             ))}
                           </ul>
@@ -170,11 +160,7 @@ const Home = () => {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-zinc-950 px-6">
             <div className="flex h-16 shrink-0 items-center">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                alt="Your Company"
-              />
+              <Logo />
             </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -244,13 +230,19 @@ const Home = () => {
         <main className="py-4 lg:pl-24">
           {/* todo move to own component */}
           <div className="px-4 sm:px-6 lg:px-8">
-            <div className="border-b border-solid border-zinc-900 flex flex-col space-y-4 pb-2">
-              <div className="flex">
-                <Select />
+            <div className="border-b border-solid border-zinc-800 flex flex-col space-y-4 pb-2">
+              <div className="flex items-center space-x-2">
+                <Select options={[{ id: '1', name: 'Selected value' }]} selected={{ id: '1', name: 'Selected value' }} onChange={() => undefined} />
+                <InputField value="" placeholder='Hello world' onChange={() => undefined} />
               </div>
-              <div className="w-full">
-                <div className="w-4 h-4 text-red-600 hover:bg-red-600 bg-opacity-40 border-red-200"></div>
-                <Button variant='outline' color="primary">Click me</Button>
+              <div className="w-full flex flex-col space-y-2 items-start">
+                <Button>Primary button</Button>
+                <Button variant='outline'>Outline</Button>
+                <Button variant='secondary'>Secondary</Button>
+                <Button variant='ghost'>Ghost</Button>
+                <Button variant='danger'>Danger</Button>
+                <Button variant='link'>Link</Button>
+                <Button variant='success'>Success</Button>
               </div>
             </div>
           </div>
