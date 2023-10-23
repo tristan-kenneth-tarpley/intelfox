@@ -1,6 +1,9 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import colors from 'tailwindcss/colors';
 
 const config: Config = {
+
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -8,6 +11,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        cyan: colors.cyan,
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -16,5 +22,5 @@ const config: Config = {
     },
   },
   plugins: [],
-}
-export default config
+};
+export default config;

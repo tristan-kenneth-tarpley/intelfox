@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const Home = () => {
   return (
-    <div className="relative isolate overflow-hidden bg-stone-950">
+    <div className="relative isolate overflow-hidden bg-zinc-950">
       <svg
         className="absolute inset-0 -z-10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
         aria-hidden="true"
@@ -20,7 +20,7 @@ const Home = () => {
             <path d="M.5 200V.5H200" fill="none" />
           </pattern>
         </defs>
-        <svg x="50%" y={-1} className="overflow-visible fill-slate-800/20">
+        <svg x="50%" y={-1} className="overflow-visible fill-zinc-800/20">
           <path
             d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
             strokeWidth={0}
@@ -44,7 +44,7 @@ const Home = () => {
         <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
           <div className="mt-24 sm:mt-32 lg:mt-16">
             <a href="#" className="inline-flex space-x-6">
-              <span className="rounded-full bg-teal-500/10 px-3 py-1 text-sm font-semibold leading-6 text-teal-400 ring-1 ring-inset ring-teal-500/20">
+              <span className="rounded-full bg-orange-500/10 px-3 py-1 text-sm font-semibold leading-6 text-orange-400 ring-1 ring-inset ring-orange-500/20">
                 What&apos;s new
               </span>
               <span className="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-300">
@@ -63,7 +63,7 @@ const Home = () => {
           <div className="mt-10 flex items-center gap-x-6">
             <a
               href="#"
-              className="rounded-md bg-teal-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-400"
+              className="rounded-md bg-orange-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
             >
               Get started
             </a>
