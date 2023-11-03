@@ -15,12 +15,53 @@ enum RedditItemType {
   COMMENT
 }
 
-model RedditItem {
+model RedditItems {
   id         String         @id @default(auto()) @map("_id") @db.ObjectId
   href       String         @unique
   type       RedditItemType
   text       String
-  embeddings Int[]
+  embeddings Float[] // todo why is this truncating the embeddings values?
   // todo we will need to key this with a specific user/team somehow
   // ....or do we?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model Teams {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  primaryUrl      String
+  description     String
+  trackedKeywords String[]
+  createdByUserId String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model TrackedKeywords {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  phrase           String
+  phraseEmbeddings Float[]
+  teamId           String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model BillingTargets {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  teamId           String
+  billingEmail     String
+  billingPhone     String
+  billingName      String
+  stripeCustomerId String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model CompetitorRelationships {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  trackingTeamId String
+  followedTeamId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

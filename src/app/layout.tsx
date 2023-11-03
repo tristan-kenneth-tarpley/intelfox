@@ -1,3 +1,4 @@
+import { dark } from '@clerk/themes';
 import type { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Inter } from 'next/font/google';
@@ -16,7 +17,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider appearance={{
+      baseTheme: dark,
+    }}>
       <html lang="en">
         <body className={inter.className}>
           {children}
