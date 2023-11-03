@@ -9,3 +9,18 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+enum RedditItemType {
+  POST
+  COMMENT
+}
+
+model RedditItem {
+  id         String         @id @default(auto()) @map("_id") @db.ObjectId
+  href       String         @unique
+  type       RedditItemType
+  text       String
+  embeddings Int[]
+  // todo we will need to key this with a specific user/team somehow
+  // ....or do we?
+}
