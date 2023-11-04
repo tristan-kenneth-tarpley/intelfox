@@ -1,14 +1,16 @@
 import { appConfig } from '@/config';
 import axios from 'axios';
 
+const spyfuAuthAsB64 = Buffer.from(`${appConfig.spyfuAppId}:${appConfig.spyfuSecretKey}`).toString('base64');
+
 const spyfuAxios = axios.create({
   baseURL: 'https://www.spyfu.com/apis',
   headers: {
-    Authorization: `Basic ${appConfig.spyfuSecretKey}`,
+    Authorization: `Basic ${spyfuAuthAsB64}`,
   },
 });
 
-interface SEOKeywordsForDomainResponse {
+export interface SEOKeywordsForDomainResponse {
   resultCount: number;
   results: Array<{
     keyword: string;
@@ -42,7 +44,7 @@ interface CompetitorInfo {
   commonTerms: number;
 }
 
-interface CompetitorAPIResponse {
+export interface CompetitorAPIResponse {
   resultCount: number;
   totalMatchingResults: number;
   results: CompetitorInfo[];
@@ -77,7 +79,7 @@ interface PPCKeywordResult {
   adPosition: number;
 }
 
-interface PPCKeywordAPIResponse {
+export interface PPCKeywordAPIResponse {
   resultCount: number;
   totalMatchingResults: number;
   results: PPCKeywordResult[];
@@ -96,14 +98,14 @@ export const spyfuService = {
     pageSize: '5',
     countryCode: 'US',
   }).toString()}`),
-  getPPCKeywordsForDomain: (domain: string) => spyfuAxios.get<PPCKeywordAPIResponse>(`/keyword_api/v2/ppc/getMostSuccessful?${new URLSearchParams({
-    domain,
+  getMostSuccessfulPPCKeywords: (query: string) => spyfuAxios.get<PPCKeywordAPIResponse>(`/keyword_api/v2/ppc/getMostSuccessful?${new URLSearchParams({
+    query,
     startingRow: '1',
     pageSize: '5',
     countryCode: 'US',
   }).toString()}`),
-  getSEOKeywordsForDomain: (domain: string) => spyfuAxios.get<SEOKeywordsForDomainResponse>(`/serp_api/v2/seo/getMostValuableKeywords?${new URLSearchParams({
-    query: domain,
+  getSEOKeywordsByValue: (query: string) => spyfuAxios.get<SEOKeywordsForDomainResponse>(`/serp_api/v2/seo/getMostValuableKeywords?${new URLSearchParams({
+    query,
     startingRow: '1',
     pageSize: '5',
     countryCode: 'US',

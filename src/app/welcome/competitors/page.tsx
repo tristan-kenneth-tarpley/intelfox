@@ -8,6 +8,7 @@ import InputField from '@/components/ui/Input';
 import FormGroup from '@/components/ui/FormGroup';
 import WelcomeContainer from '../WelcomeContainer';
 
+// - hit Spyfu API to get keywords and competitor domains
 const CompetitorsPage = () => {
   return (
     <WelcomeContainer

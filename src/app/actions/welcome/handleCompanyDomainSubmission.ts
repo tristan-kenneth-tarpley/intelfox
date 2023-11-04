@@ -1,46 +1,49 @@
 'use server';
 
 import { routes } from '@/app/routes';
-import { clerkClient, auth } from '@clerk/nextjs';
-import { FormAction } from '@/app/types';
+import { auth, clerkClient } from '@clerk/nextjs';
+import { FormStateHandler } from '@/app/types';
 import scrapeMetaDescriptionFromURL from '@/lib/logic/scraping/scrapeMetaDescriptionFromURL';
 import { redirect } from 'next/navigation';
-import db from '@/lib/services/db/db';
+import onboardNewTeam from '@/lib/logic/teams/onboardNewTeam';
+import makeActionError from '../makeActionError';
 
-const handleCompanyDomainSubmission: FormAction = async (e) => {
-  const url = e.get('url') as string;
+const unauthError = makeActionError({
+  code: 401,
+  name: 'Unauthorized',
+  message: 'You must be logged in to create a team.',
+});
+
+// todo add error handling - probably add a form action wrapper for generic fallbacks
+const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
+  const url = formData.get('company_url') as string;
   const parsedURL = url.startsWith('http://') || url.startsWith('https://') ? new URL(url) : new URL(`https://${url}`);
   const finalUrl = parsedURL.origin;
 
   const reqAuth = auth();
 
   if (!reqAuth.userId) {
-    return; // handle
+    return unauthError;
   }
 
-  const metaDescription = await scrapeMetaDescriptionFromURL(url);
+  const user = await clerkClient.users.getUser(reqAuth.userId);
 
-  console.log('reqAuth', reqAuth);
-  const organization = await clerkClient.organizations.createOrganization({ name: parsedURL.hostname, createdBy: reqAuth.userId });
-  const team = await db.teams.create({
-    data: {
-      primaryDomain: finalUrl,
-      clerkOrgId: organization.id,
-      description: metaDescription ?? '',
-    },
+  if (!user) {
+    return unauthError;
+  }
+
+  const metaDescription = await scrapeMetaDescriptionFromURL(finalUrl);
+
+  const { team } = await onboardNewTeam({
+    primaryDomain: finalUrl,
+    description: metaDescription ?? '',
+    createdByUserId: reqAuth.userId,
+    createdByEmail: user.emailAddresses[0].emailAddress,
+    createdByName: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.emailAddresses[0].emailAddress,
+    teamName: parsedURL.hostname,
   });
 
-  // create billing target and stripe customer
-
-  redirect(routes.welcomeAbout({ orgId: organization.id }));
-
-  // - validate URL
-  // - create team in clerk
-  // - create Teams document
-  // - scrape site, validate URL, and get meta description
-
-  // do this at load time?
-  // - hit Spyfu API to get keywords and competitor domains
+  redirect(routes.welcomeAbout({ t: team.id }));
 };
 
 export default handleCompanyDomainSubmission;

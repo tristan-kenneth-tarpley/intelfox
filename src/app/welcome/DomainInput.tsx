@@ -11,9 +11,19 @@ const DomainInput = () => {
       <InputField
         type="url"
         className="w-full"
-        placeholder='yourwebsite.com'
+        placeholder='https://yourwebsite.com'
+        name="company_url"
         value={domain}
-        onChange={(e) => setDomain(e.target.value)}
+        onChange={(e) => {
+          if (
+            domain.length > 'https://'.length
+            && !domain.startsWith('https://')
+          ) {
+            setDomain(`https://${e.target.value}`);
+          } else {
+            setDomain(e.target.value);
+          }
+        }}
       />
     </div>
   );

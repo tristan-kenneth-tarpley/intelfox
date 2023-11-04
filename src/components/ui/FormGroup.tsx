@@ -29,7 +29,7 @@ const FormGroup: React.FC<{
     >
       {label}
     </label>
-    {subLabel && <Text size="xs">{subLabel}</Text>}
+    {subLabel && <Text size="xs" className="mb-2">{subLabel}</Text>}
     <div className="mt-1">
       {children}
     </div>

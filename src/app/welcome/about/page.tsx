@@ -1,25 +1,24 @@
-import Button from '@/components/ui/Button';
 import { routes } from '@/app/routes';
-import { ChevronLeftIcon } from '@heroicons/react/20/solid';
-import WelcomeContainer from '../WelcomeContainer';
-import AboutInputField from './AboutInputField';
+import TeamLoader from '@/components/TeamLoader';
+import { PageProps } from '@/app/types';
+import { redirect } from 'next/navigation';
+import AboutPageClient from './AboutPageClient';
 
-const AboutPage = () => {
+const AboutPage = ({
+  searchParams,
+}: PageProps) => {
+  if (!searchParams?.t) {
+    return redirect(routes.welcome());
+  }
+
+  const { t } = searchParams;
+
   return (
-    <WelcomeContainer
-      formAction={() => undefined}
-      activeName="About company"
-      heading="Tell us more about yourself"
-      subheading="We found this from your website. Feel free to edit it or just leave as-is." // todo show fallback if we couldn't find anything from their URL
-      actions={[
-        <Button key="back" href={routes.welcome()} variant="secondary">
-          <ChevronLeftIcon className="h-5 w-5" />
-        </Button>,
-        <Button key="continue">Continue</Button>,
-      ]}
-    >
-      <AboutInputField />
-    </WelcomeContainer>
+    <TeamLoader teamId={t as string}>
+      {({ team }) => (
+        <AboutPageClient team={team} />
+      )}
+    </TeamLoader>
   );
 };
 

@@ -28,12 +28,13 @@ model RedditItems {
 }
 
 model Teams {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  clerkOrgId    String
-  primaryDomain String
-  description   String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkOrgId      String
+  primaryDomain   String
+  description     String
+  createdByUserId String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model TrackedKeywords {
@@ -49,9 +50,9 @@ model BillingTargets {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   teamId           String
   billingEmail     String
-  billingPhone     String
   billingName      String
   stripeCustomerId String
+  billingPhone     String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }

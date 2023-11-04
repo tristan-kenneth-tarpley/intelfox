@@ -1,22 +1,21 @@
 import BreadcrumbMenu from '@/components/ui/Breadcrumb';
-import { routes } from '../routes';
 
 const steps = [
   {
     name: 'Domain',
-    href: routes.welcome(),
+    href: '',
   },
   {
     name: 'About company',
-    href: routes.welcomeAbout({ orgId: 'hi' }),
+    href: '',
   },
   {
     name: 'Keywords',
-    href: routes.welcomeKeywords(),
+    href: '',
   },
   {
     name: 'Pick competitors',
-    href: routes.welcomeCompetitors(),
+    href: '',
   },
 ] as const;
 

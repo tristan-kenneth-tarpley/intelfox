@@ -5,16 +5,19 @@ const Checkbox = ({
   name,
   className,
   checked,
+  id,
   onChange,
 }: {
   describedBy?: string;
   name: string;
   className?: string;
-  checked: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  checked?: boolean;
+  id?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
     <input
+      id={id}
       checked={checked}
       onChange={onChange}
       aria-describedby={describedBy}

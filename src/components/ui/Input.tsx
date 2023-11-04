@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { CSSProperties } from 'react';
 
 interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -7,6 +8,8 @@ interface Props {
   className?: string;
   type?: 'text' | 'password' | 'email' | 'number' | 'url';
   textArea?: boolean;
+  name?: string;
+  style?: CSSProperties
 }
 
 const InputField = ({
@@ -16,6 +19,8 @@ const InputField = ({
   className,
   type = 'text',
   textArea,
+  name,
+  style,
 }: Props) => {
   const classes = classNames(
     'bg-zinc-950 px-2 py-1 rounded-md',
@@ -32,6 +37,8 @@ const InputField = ({
         onChange={onChange}
         placeholder={placeholder}
         className={classes}
+        name={name}
+        style={style}
       />
     ) : (
       <input
@@ -40,6 +47,8 @@ const InputField = ({
         type={type}
         placeholder={placeholder}
         className={classes}
+        name={name}
+        style={style}
       />
     )
   );
