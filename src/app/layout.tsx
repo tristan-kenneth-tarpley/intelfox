@@ -22,7 +22,10 @@ export default function RootLayout({
     }}>
       <html lang="en">
         <body className={inter.className}>
-          {children}
+          <div className="">
+             {/* todo figure out why global bg color isn't working as expected */}
+            {children}
+          </div>
         </body>
       </html>
     </ClerkProvider>
