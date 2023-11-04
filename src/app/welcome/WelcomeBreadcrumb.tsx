@@ -7,12 +7,12 @@ const steps = [
     href: routes.welcome(),
   },
   {
-    name: 'Keywords',
-    href: routes.welcomeKeywords(),
-  },
-  {
     name: 'About company',
     href: routes.welcomeAbout(),
+  },
+  {
+    name: 'Keywords',
+    href: routes.welcomeKeywords(),
   },
   {
     name: 'Pick competitors',
@@ -20,12 +20,15 @@ const steps = [
   },
 ] as const;
 
-const foo = steps.map((step) => step.name);
+const stepNames = steps.map((step) => step.name);
 
-const WelcomeBreadcrumb = ({ activeName }: { activeName: typeof foo[number] }) => {
+export type WelcomeBreadcrumbActiveName = typeof stepNames[number];
+
+const WelcomeBreadcrumb = ({ activeName }: { activeName: WelcomeBreadcrumbActiveName }) => {
   const pages = steps.map((step) => ({
     ...step,
     current: step.name === activeName,
+    disabled: true,
   }));
 
   return (

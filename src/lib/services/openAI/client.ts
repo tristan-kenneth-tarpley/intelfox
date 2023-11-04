@@ -2,9 +2,10 @@ import OpenAI from 'openai';
 
 import logger from '@/lib/logger';
 import { AppError, LOG_PREFIXES } from '@/lib/logic/errors';
+import { appConfig } from '@/config';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPEN_AI_SECRET,
+  apiKey: appConfig.openAISecret,
 });
 
 const openAIClient = {

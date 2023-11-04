@@ -29,7 +29,7 @@ model RedditItems {
 
 model Teams {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  clerkTeamId   String
+  clerkOrgId    String
   primaryDomain String
   description   String
   createdAt     DateTime @default(now())

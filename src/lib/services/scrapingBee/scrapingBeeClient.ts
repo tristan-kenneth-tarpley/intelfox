@@ -1,5 +1,6 @@
+import { appConfig } from '@/config';
 import { ScrapingBeeClient } from 'scrapingbee';
 
-const scrapingBee = new ScrapingBeeClient(process.env.SCRAPING_BEE_API_KEY ?? '');
+const scrapingBee = new ScrapingBeeClient(appConfig.scrapingBeeAPIKey);
 
 export default scrapingBee;

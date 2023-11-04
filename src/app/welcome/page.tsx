@@ -1,28 +1,28 @@
-import Heading from '@/components/ui/Heading';
 import Button from '@/components/ui/Button';
-import { ChevronLeftIcon } from '@heroicons/react/20/solid';
-import Text from '@/components/ui/Text';
 import DomainInput from './DomainInput';
-import WelcomeBreadcrumb from './WelcomeBreadcrumb';
+import WelcomeContainer from './WelcomeContainer';
 
 const WelcomePage = () => {
+  // on submit:
+  // - validate URL
+  // - create team in clerk
+  // - create Teams document
+  // - scrape site, validate URL, and get meta description
+  // - hit Spyfu API to get keywords and competitor domains
+
   return (
-    <div>
-      <WelcomeBreadcrumb activeName="Domain" />
-      <div className="flex flex-col space-y-4">
-        <div>
-          <Heading level={1} displayAs={3}>What is your company&apos;s URL?</Heading>
-          <Text>This will be used to find relevant keywords about your business, data about your competitors, and info about your products.</Text>
-        </div>
-        <div className="w-full flex items-stretch">
-          <DomainInput />
-        </div>
-        <div className="justify-end flex space-x-2">
-          <Button variant='secondary'><ChevronLeftIcon className="h-5 w-5" /></Button>
-          <Button>Continue</Button>
-        </div>
+    <WelcomeContainer
+      activeName='Domain'
+      heading="What is your company's URL?"
+      subheading="This will be used to find relevant keywords about your business, data about your competitors, and info about your products."
+      actions={[
+        <Button key="container">Continue</Button>,
+      ]}
+    >
+      <div className="w-full flex items-stretch">
+        <DomainInput />
       </div>
-    </div>
+    </WelcomeContainer>
   );
 };
 
