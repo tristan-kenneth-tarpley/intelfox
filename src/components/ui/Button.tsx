@@ -82,7 +82,7 @@ const Button: React.FC<IButton> = ({
           'border-transparent hover:bg-zinc-800': variant === 'ghost',
           'bg-red-700 border-red-700 hover:bg-red-800 hover:border-red-800 focus:ring-offset-red-800': variant === 'danger',
           'bg-green-700 border-green-700 hover:bg-green-800 hover:border-green-800 focus:ring-offset-green-800': variant === 'success',
-          'text-zinc-200 border-transparent rounded-none hover:border-b-zinc-200': variant === 'link',
+          'text-zinc-200 border-transparent rounded-none focus:ring-0 focus:ring-offset-0 hover:border-b-zinc-200': variant === 'link',
         },
       )}
       {...(href ? { href } : {})}

@@ -1,9 +1,20 @@
 import classNames from 'classnames';
 
-const Text = ({ children, className }: { children: React.ReactNode; className?: string; }) => (
+const Text = ({
+  children,
+  className,
+  size = 'sm',
+}: {
+  children: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'xs'
+}) => (
   <p className={classNames(
     'text-zinc-300',
-    'text-sm',
+    {
+      'text-sm': size === 'sm',
+      'text-xs': size === 'xs',
+    },
     className,
   )}>{children}</p>
 );

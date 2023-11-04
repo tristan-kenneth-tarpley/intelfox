@@ -11,12 +11,12 @@ type HeadingProps = {
 };
 
 const displayClasses = {
-  1: 'text-4xl font-bold',
-  2: 'text-3xl font-semibold',
-  3: 'text-2xl font-semibold',
-  4: 'text-xl font-semibold',
-  5: 'text-lg font-semibold',
-  6: 'text-base font-semibold',
+  1: 'text-4xl mb-2 font-bold',
+  2: 'text-3xl mb-2 font-semibold',
+  3: 'text-2xl mb-1.5 font-semibold',
+  4: 'text-xl mb-1.5 font-semibold',
+  5: 'text-lg mb-1 font-semibold',
+  6: 'text-base mb-1 font-semibold',
 } as const;
 
 const Heading: React.FC<HeadingProps> = ({

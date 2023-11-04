@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import type { Config } from 'tailwindcss';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import colors from 'tailwindcss/colors';
@@ -21,6 +22,8 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 };
 export default config;

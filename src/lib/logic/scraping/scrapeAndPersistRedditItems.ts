@@ -14,6 +14,7 @@ const scrapeAndPersistRedditItems = async (phrase: string) => {
 
   const combined = [...posts ?? [], ...comments ?? []];
 
+  // todo should do this in one API call to Mongo rather than multiple
   return Promise.all(combined.map(putScrapedRedditItem));
 };
 
