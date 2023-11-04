@@ -12,11 +12,12 @@ const KeywordSelectionPage = () => {
 
   return (
     <WelcomeContainer
+      formAction={() => undefined}
       activeName='Keywords'
       heading="Pick some keywords"
       subheading="We will monitor these keywords for you around the internet and include relevant conversations in your IntelFox feed."
       actions={[
-        <Button key="back" href={routes.welcomeAbout()} variant='secondary'><ChevronLeftIcon className="h-5 w-5" /></Button>,
+        <Button key="back" href={routes.welcomeAbout({ orgId: 'hi' })} variant='secondary'><ChevronLeftIcon className="h-5 w-5" /></Button>,
         <Button key="continue">Continue</Button>,
       ]}
     >

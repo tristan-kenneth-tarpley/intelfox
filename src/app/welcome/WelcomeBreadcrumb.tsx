@@ -8,7 +8,7 @@ const steps = [
   },
   {
     name: 'About company',
-    href: routes.welcomeAbout(),
+    href: routes.welcomeAbout({ orgId: 'hi' }),
   },
   {
     name: 'Keywords',

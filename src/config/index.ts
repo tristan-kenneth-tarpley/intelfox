@@ -5,4 +5,5 @@ export const appConfig = {
   rocksetAPIKey: process.env.ROCKSET_API_KEY!,
   spyfuAppId: process.env.SPYFU_APP_ID!,
   spyfuSecretKey: process.env.SPYFU_SECRET_KEY!,
+  stripeSecretKey: process.env.STRIPE_SECRET_KEY!,
 } as const;

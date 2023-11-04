@@ -3,5 +3,5 @@ export const routes = {
   welcome: () => '/welcome',
   welcomeCompetitors: () => '/welcome/competitors',
   welcomeKeywords: () => '/welcome/keywords',
-  welcomeAbout: () => '/welcome/about',
+  welcomeAbout: ({ orgId }: { orgId: string }) => `/welcome/about?${new URLSearchParams({ orgId }).toString()}`,
 } as const;

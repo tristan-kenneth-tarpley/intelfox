@@ -7,6 +7,7 @@ import AboutInputField from './AboutInputField';
 const AboutPage = () => {
   return (
     <WelcomeContainer
+      formAction={() => undefined}
       activeName="About company"
       heading="Tell us more about yourself"
       subheading="We found this from your website. Feel free to edit it or just leave as-is." // todo show fallback if we couldn't find anything from their URL

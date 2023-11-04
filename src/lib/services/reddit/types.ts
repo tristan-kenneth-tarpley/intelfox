@@ -1,3 +1,3 @@
-import { RedditItem } from '@prisma/client';
+import { RedditItems } from '@prisma/client';
 
-export type ScrapedRedditItem = Pick<RedditItem, 'text' | 'href' | 'type'>;
+export type ScrapedRedditItem = Pick<RedditItems, 'text' | 'href' | 'type'>;

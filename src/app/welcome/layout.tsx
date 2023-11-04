@@ -13,8 +13,8 @@ const WelcomeLayout = ({
 
   return (
     <div className="w-full max-w-screen overflow-hidden">
-      <div className="absolute opacity-30 z-0">
-        <Image src={bgAlt} alt="" />
+      <div className="w-screen h-screen absolute opacity-30 z-0">
+        <Image className="w-full h-full" src={bgAlt} alt="" />
       </div>
       <div className="container mx-auto p-4 w-1/2 z-10 relative">
         <div className="w-full flex justify-center mb-12">

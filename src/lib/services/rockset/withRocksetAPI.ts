@@ -2,7 +2,7 @@ import { appConfig } from '@/config';
 import rockset, { MainApi } from '@rockset/client';
 
 const rocksetClient = rockset(
-  appConfig.rocksetAPIKey ?? '',
+  appConfig.rocksetAPIKey,
   appConfig.rocksetAPIEndpoint,
 );
 
