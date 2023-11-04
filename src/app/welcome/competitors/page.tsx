@@ -17,7 +17,7 @@ const CompetitorsPage = () => {
       heading="Who are your competitors?"
       subheading="We will monitor these competitors for you around the internet and include relevant conversations in your IntelFox feed."
       actions={[
-        <Button key="back" href={routes.welcomeKeywords()} variant="secondary">
+        <Button key="back" href={routes.welcomeKeywords({ t: 'hi' })} variant="secondary">
           <ChevronLeftIcon className="h-5 w-5" />
         </Button>,
         <Button key="continue">Continue</Button>,
