@@ -6,11 +6,11 @@ import { FormStateHandler } from '@/app/types';
 import scrapeMetaDescriptionFromURL from '@/lib/logic/scraping/scrapeMetaDescriptionFromURL';
 import { redirect } from 'next/navigation';
 import onboardNewTeam from '@/lib/logic/teams/onboardNewTeam';
+import db from '@/lib/services/db/db';
 import makeActionError from '../makeActionError';
 
 const unauthError = makeActionError({
   code: 401,
-  name: 'Unauthorized',
   message: 'You must be logged in to create a team.',
 });
 
@@ -30,6 +30,17 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
 
   if (!user) {
     return unauthError;
+  }
+
+  const existingTeam = await db.teams.findFirst({
+    where: {
+      primaryDomain: finalUrl,
+      createdByUserId: reqAuth.userId,
+    },
+  });
+
+  if (existingTeam) {
+    return redirect(routes.welcomeAbout({ t: existingTeam.id }));
   }
 
   const metaDescription = await scrapeMetaDescriptionFromURL(finalUrl);

@@ -9,7 +9,8 @@ interface Props {
   type?: 'text' | 'password' | 'email' | 'number' | 'url';
   textArea?: boolean;
   name?: string;
-  style?: CSSProperties
+  style?: CSSProperties;
+  required?: boolean;
 }
 
 const InputField = ({
@@ -21,6 +22,7 @@ const InputField = ({
   textArea,
   name,
   style,
+  required,
 }: Props) => {
   const classes = classNames(
     'bg-zinc-950 px-2 py-1 rounded-md',
@@ -39,6 +41,8 @@ const InputField = ({
         className={classes}
         name={name}
         style={style}
+        required={required}
+        aria-required={required}
       />
     ) : (
       <input
@@ -49,6 +53,8 @@ const InputField = ({
         className={classes}
         name={name}
         style={style}
+        required={required}
+        aria-required={required}
       />
     )
   );

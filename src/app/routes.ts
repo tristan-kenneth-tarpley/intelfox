@@ -3,6 +3,7 @@ const home = () => '/home';
 
 export const routes = {
   home,
+  teamHome: ({ teamId }: { teamId: string }) => `/home/${teamId}`,
   welcome,
   afterSignupUrl: welcome,
   afterSigninUrl: home,

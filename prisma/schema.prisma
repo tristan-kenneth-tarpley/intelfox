@@ -20,26 +20,26 @@ model RedditItems {
   href       String         @unique
   type       RedditItemType
   text       String
-  embeddings Float[] // todo why is this truncating the embeddings values?
-  // todo we will need to key this with a specific user/team somehow
-  // ....or do we?
+  embeddings Float[]
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt
 }
 
 model Teams {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  clerkOrgId      String
-  primaryDomain   String
-  description     String
-  createdByUserId String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkOrgId        String
+  primaryDomain     String
+  description       String
+  shortDescription  String?
+  createdByUserId   String
+  competitorDomains String[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
-model TrackedKeywords {
+model TrackedKeyPhrases {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  phrase           String
+  phrase           String   @unique
   phraseEmbeddings Float[]
   teamId           String
   createdAt        DateTime @default(now())

@@ -4,6 +4,7 @@ import { PageProps } from '@/app/types';
 import { redirect } from 'next/navigation';
 import AboutPageClient from './AboutPageClient';
 
+// Todo - Ask GPT to create a 1-liner from the longer description
 const AboutPage = ({
   searchParams,
 }: PageProps) => {

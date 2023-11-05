@@ -11,6 +11,7 @@ const AboutInputField = ({ initialValue }: { initialValue: string }) => {
       textArea
       style={{ minHeight: '200px' }}
       value={value}
+      required
       onChange={(e) => setValue(e.target.value)}
     />
   );

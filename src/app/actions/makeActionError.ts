@@ -7,25 +7,29 @@ const errorCodes = [
   { code: 500, name: 'Internal Server Error' },
 ] as const;
 
+const errorNamesByCode = errorCodes.reduce((acc, { code, name }) => {
+  acc[code] = name;
+  return acc;
+}, {} as Record<number, string>);
+
 const codes = errorCodes.map((x) => x.code);
-const names = errorCodes.map((x) => x.name);
 
 type Code = typeof codes[number];
-type Name = typeof names[number];
 
 const makeActionError = ({
   code,
-  name,
   message,
+  extra,
 }: {
   code: Code,
-  name: Name,
   message: string,
+  extra?: any,
 }) => {
   return {
     code,
-    name,
+    name: errorNamesByCode[code],
     message,
+    ...extra,
   };
 };
 

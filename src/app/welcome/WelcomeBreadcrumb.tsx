@@ -10,7 +10,7 @@ const steps = [
     href: '',
   },
   {
-    name: 'Keywords',
+    name: 'Key phrases',
     href: '',
   },
   {

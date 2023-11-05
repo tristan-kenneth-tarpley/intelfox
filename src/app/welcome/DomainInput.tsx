@@ -3,8 +3,8 @@
 import InputField from '@/components/ui/Input';
 import { useState } from 'react';
 
-const DomainInput = () => {
-  const [domain, setDomain] = useState('');
+const DomainInput = ({ initialValue }: { initialValue: string }) => {
+  const [domain, setDomain] = useState(initialValue);
 
   return (
     <div className="w-full">
@@ -13,6 +13,7 @@ const DomainInput = () => {
         className="w-full"
         placeholder='https://yourwebsite.com'
         name="company_url"
+        required
         value={domain}
         onChange={(e) => {
           if (

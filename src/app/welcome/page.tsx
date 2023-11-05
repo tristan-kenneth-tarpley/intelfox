@@ -1,39 +1,24 @@
-'use client';
+import { currentUser } from '@clerk/nextjs';
+import parseEmailAddress from '@/utils/parseEmailAddress';
+import WelcomePageClient from './WelcomePageClient';
 
-import Button from '@/components/ui/Button';
-import { useFormState } from 'react-dom';
-import FormStatusWrapper from '@/components/FormStatusWrapper';
-import DomainInput from './DomainInput';
-import WelcomeContainer from './WelcomeContainer';
-import handleCompanyDomainSubmission from '../actions/welcome/handleCompanyDomainSubmission';
+const WelcomePage = async () => {
+  const user = await currentUser();
 
-const WelcomePage = () => {
-  const [state, formAction] = useFormState(handleCompanyDomainSubmission, {
-    message: null,
-  });
+  const email = user?.emailAddresses[0]?.emailAddress;
 
-  console.log(state);
+  let guessedDomain = '';
+
+  if (email) {
+    const { domain, isPersonalAddress } = parseEmailAddress(email);
+
+    if (!isPersonalAddress) {
+      guessedDomain = domain;
+    }
+  }
 
   return (
-    <WelcomeContainer
-      formAction={formAction}
-      activeName='Domain'
-      heading="What is your company's URL?"
-      subheading="This will be used to find relevant keywords about your business, data about your competitors, and info about your products."
-      actions={[
-        (
-          <FormStatusWrapper key="container">
-            {({ pending }) => (
-              <Button loading={pending}>Continue</Button>
-            )}
-          </FormStatusWrapper>
-        ),
-      ]}
-    >
-      <div className="w-full flex items-stretch">
-        <DomainInput />
-      </div>
-    </WelcomeContainer>
+    <WelcomePageClient guessedDomain={`https://${guessedDomain}`} />
   );
 };
 

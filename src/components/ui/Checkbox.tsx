@@ -5,6 +5,7 @@ const Checkbox = ({
   name,
   className,
   checked,
+  defaultChecked,
   id,
   onChange,
 }: {
@@ -12,6 +13,7 @@ const Checkbox = ({
   name: string;
   className?: string;
   checked?: boolean;
+  defaultChecked?: boolean;
   id?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
@@ -19,6 +21,7 @@ const Checkbox = ({
     <input
       id={id}
       checked={checked}
+      defaultChecked={defaultChecked}
       onChange={onChange}
       aria-describedby={describedBy}
       name={name}
