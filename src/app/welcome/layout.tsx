@@ -12,7 +12,7 @@ const WelcomeLayout = ({
   // otherwise, let the user move on manually
 
   return (
-    <div className="w-full max-w-screen overflow-hidden">
+    <div className="w-full min-h-screen max-w-screen overflow-hidden">
       <div className="w-screen h-screen absolute opacity-30 z-0">
         <Image className="w-full h-full" src={bgAlt} alt="" />
       </div>

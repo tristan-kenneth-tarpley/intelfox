@@ -1,7 +1,15 @@
+import { currentUser } from '@clerk/nextjs';
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
+import navigateToFirstTeamHome from './navigationHelpers/navigateToFirstTeamHome';
 
-const Home = () => {
+const Home = async () => {
+  const user = await currentUser();
+
+  if (user) {
+    return navigateToFirstTeamHome();
+  }
+
   return (
     <div className="relative isolate overflow-hidden bg-zinc-950">
       <svg

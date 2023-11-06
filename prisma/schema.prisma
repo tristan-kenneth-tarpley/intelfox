@@ -27,7 +27,7 @@ model RedditItems {
 
 model Teams {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  clerkOrgId        String
+  clerkOrgId        String   @unique
   primaryDomain     String
   description       String
   shortDescription  String?

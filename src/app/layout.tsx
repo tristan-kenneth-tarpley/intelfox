@@ -22,8 +22,7 @@ export default function RootLayout({
     }}>
       <html lang="en">
         <body className={inter.className}>
-          <div className="">
-             {/* todo figure out why global bg color isn't working as expected */}
+          <div className="bg-zinc-950 min-h-screen text-zinc-200 dark">
             {children}
           </div>
         </body>
