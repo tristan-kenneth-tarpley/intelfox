@@ -1,5 +1,5 @@
 import findTeamById from '@/lib/logic/teams/findTeamById';
-import { Teams } from '@prisma/client';
+import { Teams } from '@prisma/client/edge';
 import Text from './ui/Text';
 
 interface Props {

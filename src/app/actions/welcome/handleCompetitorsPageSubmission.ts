@@ -4,7 +4,7 @@ import { routes } from '@/app/routes';
 import { FormStateHandler } from '@/app/types';
 import updateTeamById from '@/lib/logic/teams/updateTeamById';
 import splitStringOnCommas from '@/utils/splitStringOnCommas';
-import { Teams } from '@prisma/client';
+import { Teams } from '@prisma/client/edge';
 import _ from 'lodash';
 import { redirect } from 'next/navigation';
 

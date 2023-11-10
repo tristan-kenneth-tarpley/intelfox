@@ -1,6 +1,6 @@
 'use client';
 
-import { Teams } from '@prisma/client';
+import { Teams } from '@prisma/client/edge';
 import Button from '@/components/ui/Button';
 import { useFormState } from 'react-dom';
 import handleAboutPageSubmission from '@/app/actions/welcome/handleAboutPageSubmission';

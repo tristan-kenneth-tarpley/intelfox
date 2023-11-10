@@ -2,7 +2,7 @@
 
 import HStack from '@/components/ui/stack/HStack';
 import { OrganizationSwitcher, UserButton, useOrganizationList } from '@clerk/nextjs';
-import { Teams } from '@prisma/client';
+import { Teams } from '@prisma/client/edge';
 import { useEffect, useRef } from 'react';
 
 const NavbarRight = ({

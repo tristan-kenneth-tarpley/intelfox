@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
 
-import { Teams } from '@prisma/client';
+import { Teams } from '@prisma/client/edge';
 import { CompetitorAPIResponse } from '@/lib/services/spyfu/spyfuService';
 import Button from '@/components/ui/Button';
 import { routes } from '@/app/routes';

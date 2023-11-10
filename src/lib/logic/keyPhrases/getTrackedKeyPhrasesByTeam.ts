@@ -1,5 +1,5 @@
 import db from '@/lib/services/db/db';
-import { TrackedKeyPhrases } from '@prisma/client';
+import { TrackedKeyPhrases } from '@prisma/client/edge';
 
 const getTrackedKeyPhrasesByTeam = async (teamId: string): Promise<Omit<TrackedKeyPhrases, 'phraseEmbeddings'>[]> => {
   return db.trackedKeyPhrases.findMany({

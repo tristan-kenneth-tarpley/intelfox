@@ -1,5 +1,5 @@
 import db from '@/lib/services/db/db';
-import { Teams } from '@prisma/client';
+import { Teams } from '@prisma/client/edge';
 
 const updateTeamById = (
   id: string,

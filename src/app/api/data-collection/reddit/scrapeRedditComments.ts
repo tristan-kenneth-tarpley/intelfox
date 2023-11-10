@@ -1,47 +1,53 @@
-import * as cheerio from 'cheerio';
+import { ScrapedItemCreateParams } from '@/lib/logic/scraping/types';
+import { RedditCommentContextData } from './types';
+import scrapeRedditSearch from './scrapeRedditSearch';
 
-import { ScrapedRedditItem } from '@/lib/services/reddit/types';
-import { redditEndpoints } from '@/lib/services/reddit/endpoints';
-import runScrapingBeeRequest from '@/lib/services/scrapingBee/runScrapingBeeRequest';
+const runScrape = scrapeRedditSearch<RedditCommentContextData>('COMMENT');
+const makeCommentHref = (context: RedditCommentContextData) => {
+  const {
+    post: {
+      url,
+    },
+    comment: {
+      id,
+    },
+  } = context;
 
-import { redditScrapeConfig } from './redditScrapeConfig';
+  return [
+    url,
+    id,
+  ].join(url.endsWith('/') ? '' : '/');
+};
 
 const scrapeRedditComments = async (searchTerm: string) => {
-  const res = await runScrapingBeeRequest((client) => client.get({
-    url: redditEndpoints.searchComments(searchTerm),
-    params: redditScrapeConfig,
-  }));
+  const comments: Omit<ScrapedItemCreateParams, 'embeddings'>[] = [];
 
-  if (res) {
-    const $ = cheerio.load(res);
-    const commentsList = $('[data-faceplate-tracking-context]');
-
-    const comments: ScrapedRedditItem[] = [];
-    commentsList.each((index, comment) => {
-      const contextData = $(comment).attr('data-faceplate-tracking-context');
-      if (!contextData) return;
-
-      try {
-        const context = JSON.parse(contextData);
-
-        if (context.post) {
-          const postName = context.post.title;
-          const postURL = context.post.url;
-
-          comments.push({
-            text: postName,
-            href: postURL,
-            type: 'COMMENT',
-          });
-        }
-      } catch (error) {
-        // todo handle gracefully
-        console.error('Error parsing JSON data:', error);
+  await runScrape(searchTerm, {
+    onItem: (context, postCheerio) => {
+      if (!context.post || !context.comment) {
+        return;
       }
-    });
+      const { post, comment } = context;
+      const postName = post.title;
 
-    return comments;
-  }
+      // the actual comment text is not in the tracking context, so we have to search more of the markup
+      const commentText = postCheerio
+        .find('[id^="comment-content-"]')
+        .text()
+        .trim();
+
+      comments.push({
+        text: commentText,
+        parentText: postName,
+        href: makeCommentHref(context),
+        type: 'COMMENT',
+        source: 'REDDIT',
+        itemCreatedAt: new Date(comment.created_timestamp),
+      });
+    },
+  });
+
+  return comments;
 };
 
 export default scrapeRedditComments;

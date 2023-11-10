@@ -1,7 +1,7 @@
 import HStack from '@/components/ui/stack/HStack';
 import Logo from '@/components/Logo';
 import Button from '@/components/ui/Button';
-import { Teams } from '@prisma/client';
+import { Teams } from '@prisma/client/edge';
 import { padding } from './styles';
 import NavbarRight from './NavbarRight';
 

@@ -3,7 +3,6 @@ import openAI from 'openai';
 
 const summarizeDescription = (description: string) => {
   return openAIClient.createModeratedChatCompletion({
-    model: 'gpt-3.5-turbo-16k',
     stream: false,
     messages: [
       {

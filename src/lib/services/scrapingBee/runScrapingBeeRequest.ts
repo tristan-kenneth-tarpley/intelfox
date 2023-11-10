@@ -7,7 +7,7 @@ const runScrapingBeeRequest = async (
 ) => {
   const res = await getterFn(scrapingBee).catch((err) => {
     // todo handle error
-    console.log('error', err.message);
+    console.log('ScraperBee error', err.message);
   });
 
   const decoder = new TextDecoder();

@@ -1,10 +1,10 @@
-import { RedditItemType } from '@prisma/client';
+import { ItemType } from '@prisma/client/edge';
 import withRocksetAPI from '../withRocksetAPI';
 
 const getKeywordSearchResults = async (tempEmbeddings: string): Promise<{
   text: string,
   href: string,
-  type: RedditItemType,
+  type: ItemType,
   similarity: number,
 }[] | null> => {
   const response = await withRocksetAPI((api) => api.queryLambdas

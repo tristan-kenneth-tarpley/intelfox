@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { routes } from '@/app/routes';
 import { FormStateHandler } from '@/app/types';
 import openAIClient from '@/lib/services/openAI/client';
-import { Teams } from '@prisma/client';
+import { Teams } from '@prisma/client/edge';
 import { redirect } from 'next/navigation';
 import db from '@/lib/services/db/db';
 import splitStringOnCommas from '@/utils/splitStringOnCommas';
@@ -49,7 +49,6 @@ const handleKeywordPageSubmission: FormStateHandler<{ team: Teams; message?: str
 
   if (newKeyPhrases.length > 0) {
     const keywordEmbeddings = await openAIClient.getEmbeddings({
-      model: 'text-embedding-ada-002',
       input: newKeyPhrases,
     });
 

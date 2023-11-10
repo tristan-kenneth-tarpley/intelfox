@@ -4,7 +4,7 @@ import { routes } from '@/app/routes';
 import { FormStateHandler } from '@/app/types';
 import summarizeDescription from '@/lib/logic/aiCapabilities/summarizeDescription';
 import updateTeamById from '@/lib/logic/teams/updateTeamById';
-import { Teams } from '@prisma/client';
+import { Teams } from '@prisma/client/edge';
 import { redirect } from 'next/navigation';
 
 const handleAboutPageSubmission: FormStateHandler<{ team: Teams; message?: string }> = async (

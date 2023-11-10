@@ -1,6 +1,6 @@
 'use client';
 
-import { Teams, TrackedKeyPhrases } from '@prisma/client';
+import { Teams, TrackedKeyPhrases } from '@prisma/client/edge';
 import { useFormState } from 'react-dom';
 import Button from '@/components/ui/Button';
 import Checkbox from '@/components/ui/Checkbox';

@@ -1,32 +1,31 @@
-import * as cheerio from 'cheerio';
+import { ScrapedItemCreateParams } from '@/lib/logic/scraping/types';
+import { RedditPostContextData } from './types';
+import scrapeRedditSearch from './scrapeRedditSearch';
 
-import { ScrapedRedditItem } from '@/lib/services/reddit/types';
-import { redditEndpoints } from '@/lib/services/reddit/endpoints';
-import runScrapingBeeRequest from '@/lib/services/scrapingBee/runScrapingBeeRequest';
-
-import { redditScrapeConfig } from './redditScrapeConfig';
+const runScrape = scrapeRedditSearch<RedditPostContextData>('POST');
 
 const scrapeRedditPosts = async (searchTerm: string) => {
-  const res = await runScrapingBeeRequest((client) => client.get({
-    url: redditEndpoints.searchPosts(searchTerm),
-    params: redditScrapeConfig,
-  }));
+  const comments: Omit<ScrapedItemCreateParams, 'embeddings'>[] = [];
+  await runScrape(searchTerm, {
+    onItem: (context) => {
+      if (!context.post) {
+        return;
+      }
+      const postName = context.post.title;
+      const postURL = context.post.url;
 
-  if (res) {
-    const $ = cheerio.load(res);
-    const postsMarkup = $('[data-testid="post-title"]');
+      comments.push({
+        text: postName,
+        parentText: null,
+        href: postURL,
+        type: 'POST',
+        source: 'REDDIT',
+        itemCreatedAt: new Date(context.post.created_timestamp),
+      });
+    },
+  });
 
-    const posts: ScrapedRedditItem[] = [];
-    postsMarkup.each((index, post) => {
-      const $post = $(post);
-      const text = $post.text().trim();
-      const { href } = ($post.attr() as { href: string });
-
-      posts.push({ text, href, type: 'POST' });
-    });
-
-    return posts;
-  }
+  return comments;
 };
 
 export default scrapeRedditPosts;

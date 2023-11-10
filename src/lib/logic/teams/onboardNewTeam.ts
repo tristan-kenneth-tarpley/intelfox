@@ -1,4 +1,4 @@
-import { Teams } from '@prisma/client';
+import { Teams } from '@prisma/client/edge';
 import { clerkClient } from '@clerk/nextjs';
 import db from '@/lib/services/db/db';
 import stripeService from '@/lib/services/stripe/stripeService';
