@@ -1,6 +1,5 @@
 import scrapeAndPersistRedditItems from '@/lib/logic/scraping/scrapeAndPersistRedditItems';
 import redditAPIClient from '@/lib/services/reddit/redditAPIClient';
-import { NextApiRequest } from 'next';
 
 export async function POST(request: Request) {
   // const { body } = Request.;
@@ -14,7 +13,7 @@ export async function POST(request: Request) {
   return Response.json({ success: true });
 }
 
-export async function GET(request: NextApiRequest) {
+export async function GET(request: Request) {
   console.log('gotcha');
   const { searchParams } = new URL(request.url ?? '');
   const redditClient = await redditAPIClient();
