@@ -1,12 +1,15 @@
 'use server';
 
-import { routes } from '@/app/routes';
-import { FormStateHandler } from '@/app/types';
-import updateTeamById from '@/lib/logic/teams/updateTeamById';
-import splitStringOnCommas from '@/utils/splitStringOnCommas';
-import { Teams } from '@prisma/client/edge';
 import _ from 'lodash';
 import { redirect } from 'next/navigation';
+import { Teams } from '@prisma/client/edge';
+
+import { routes } from '@/app/routes';
+import { FormStateHandler } from '@/app/types';
+import findOrInitializeCompetitor from '@/lib/logic/competitors/findOrInitializeCompetitor';
+import splitStringOnCommas from '@/utils/splitStringOnCommas';
+import findOrCreateCompetitorRelationship from '@/lib/logic/competitors/findOrCreateCompetitorRelationship';
+import findOrCreateKeyPhrase from '@/lib/logic/keyPhrases/findOrCreateKeyPhrase';
 
 const handleCompetitorsPageSubmission: FormStateHandler<{ team: Teams; message?: string }> = async (
   { team },
@@ -22,9 +25,23 @@ const handleCompetitorsPageSubmission: FormStateHandler<{ team: Teams; message?:
     .filter((key) => key.startsWith('int_comp_'))
     .map((key) => key.slice('int_comp_'.length));
 
-  await updateTeamById(team.id, {
-    competitorDomains: _.uniq([...customCompetitors, ...competitors]),
-  });
+  const competitorDomains = _.uniq([...customCompetitors, ...competitors]);
+  const competitorDocuments = await Promise.all(
+    competitorDomains.map(findOrInitializeCompetitor),
+  );
+
+  await Promise.all(
+    [
+      ...competitorDocuments.map(({ id, name }) => findOrCreateKeyPhrase({
+        teamId: id,
+        phrase: name,
+      })),
+      ...competitorDocuments.map(({ id }) => findOrCreateCompetitorRelationship({
+        competitorId: id,
+        teamId: team.id,
+      })),
+    ],
+  );
 
   return redirect(routes.teamHome({ teamId: team.id }));
 };

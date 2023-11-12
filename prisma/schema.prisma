@@ -39,15 +39,35 @@ model ScrapedItems {
 }
 
 model Teams {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  clerkOrgId        String   @unique
-  primaryDomain     String
-  description       String
-  shortDescription  String?
-  createdByUserId   String
-  competitorDomains String[]
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkOrgId       String   @unique
+  primaryDomain    String
+  name             String
+  description      String
+  shortDescription String?
+  createdByUserId  String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Competitors {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  domain           String   @unique
+  name             String
+  description      String?
+  shortDescription String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model CompetitorRelationships {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  teamId       String
+  competitorId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([teamId, competitorId])
 }
 
 model TrackedKeyPhrases {
@@ -68,12 +88,4 @@ model BillingTargets {
   billingPhone     String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-}
-
-model CompetitorRelationships {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  trackingTeamId String
-  followedTeamId String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
 }

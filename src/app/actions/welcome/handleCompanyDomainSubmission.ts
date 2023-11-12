@@ -7,6 +7,8 @@ import scrapeMetaDescriptionFromURL from '@/lib/logic/scraping/scrapeMetaDescrip
 import { redirect } from 'next/navigation';
 import onboardNewTeam from '@/lib/logic/teams/onboardNewTeam';
 import db from '@/lib/services/db/db';
+import extractCompanyNameFromURL from '@/lib/logic/aiCapabilities/extractCompanyNameFromURL';
+import safeParseURL from '@/utils/safeParseURL';
 import makeActionError from '../makeActionError';
 
 const unauthError = makeActionError({
@@ -16,14 +18,18 @@ const unauthError = makeActionError({
 
 // todo add error handling - probably add a form action wrapper for generic fallbacks
 const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
-  const url = formData.get('company_url') as string;
-  const parsedURL = url.startsWith('http://') || url.startsWith('https://') ? new URL(url) : new URL(`https://${url}`);
-  const finalUrl = parsedURL.origin;
-
   const reqAuth = auth();
 
   if (!reqAuth.userId) {
     return unauthError;
+  }
+
+  const domainResponse = formData.get('company_domain');
+  const parsedURL = safeParseURL(domainResponse?.toString() ?? '');
+  const finalUrl = parsedURL?.origin;
+
+  if (!finalUrl) {
+    return makeActionError({ code: 400, message: 'Invalid URL' });
   }
 
   const user = await clerkClient.users.getUser(reqAuth.userId);
@@ -43,7 +49,13 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
     return redirect(routes.welcomeAbout({ t: existingTeam.id }));
   }
 
-  const metaDescription = await scrapeMetaDescriptionFromURL(finalUrl);
+  const [
+    metaDescription,
+    companyTeamNameFromURLChatCompletion,
+  ] = await Promise.all([
+    scrapeMetaDescriptionFromURL(finalUrl),
+    extractCompanyNameFromURL(parsedURL.toString()).catch(() => null),
+  ]);
 
   const { team } = await onboardNewTeam({
     primaryDomain: finalUrl,
@@ -51,7 +63,8 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
     createdByUserId: reqAuth.userId,
     createdByEmail: user.emailAddresses[0].emailAddress,
     createdByName: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.emailAddresses[0].emailAddress,
-    teamName: parsedURL.hostname,
+    clerkOrgName: parsedURL.hostname,
+    name: companyTeamNameFromURLChatCompletion?.choices[0]?.message.content ?? parsedURL.hostname,
   });
 
   redirect(routes.welcomeAbout({ t: team.id }));

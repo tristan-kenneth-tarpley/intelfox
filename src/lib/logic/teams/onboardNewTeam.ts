@@ -9,15 +9,17 @@ const onboardNewTeam = async ({
   createdByUserId,
   createdByEmail,
   createdByName,
-  teamName,
-}: Pick<Teams, 'primaryDomain' | 'description' | 'createdByUserId'> & { teamName: string; createdByEmail: string; createdByName: string }) => {
+  name,
+  clerkOrgName,
+}: Pick<Teams, 'primaryDomain' | 'description' | 'createdByUserId' | 'name'> & { clerkOrgName: string; createdByEmail: string; createdByName: string }) => {
   const organization = await clerkClient.organizations.createOrganization({
-    name: teamName,
+    name: clerkOrgName,
     createdBy: createdByUserId,
   });
 
   const team = await db.teams.create({
     data: {
+      name,
       primaryDomain,
       clerkOrgId: organization.id,
       description,

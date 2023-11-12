@@ -22,16 +22,18 @@ import WelcomeContainer from '../WelcomeContainer';
 const CompetitorsPageClient = ({
   team,
   competitors,
+  trackedCompetitorDomains,
 }: {
   team: Teams,
   competitors: CompetitorAPIResponse['results'],
+  trackedCompetitorDomains: string[];
 }) => {
   const [customCompetitors, setCustomCompetitors] = useState('');
   const [state, formAction] = useFormState(handleCompetitorsPageSubmission, {
     team,
   });
 
-  const trackedCompetitorsSet = new Set(team.competitorDomains);
+  const trackedCompetitorsSet = new Set(trackedCompetitorDomains);
 
   return (
     <WelcomeContainer
