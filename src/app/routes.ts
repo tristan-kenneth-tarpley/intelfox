@@ -2,6 +2,7 @@ const welcome = () => '/welcome';
 const home = () => '/home';
 
 export const routes = {
+  root: () => '/',
   home,
   teamHome: ({ teamId }: { teamId: string }) => `/home/${teamId}`,
   welcome,

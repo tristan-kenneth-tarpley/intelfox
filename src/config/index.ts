@@ -7,4 +7,6 @@ export const appConfig = {
   spyfuSecretKey: process.env.SPYFU_SECRET_KEY!,
   stripePubKey: process.env.STRIPE_PUB_KEY!,
   stripeSecretKey: process.env.STRIPE_SECRET_KEY!,
+  nangoPublicKey: process.env.NEXT_PUBLIC_NANGO_PUBLIC_KEY!,
+  nangoSecretKey: process.env.NANGO_SECRET_KEY,
 } as const;

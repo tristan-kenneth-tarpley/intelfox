@@ -28,6 +28,7 @@ model ScrapedItems {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   href          String    @unique
   text          String
+  bodyText      String?
   parentText    String?
   source        Source
   type          ItemType

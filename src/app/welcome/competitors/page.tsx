@@ -21,14 +21,14 @@ const CompetitorsPage = ({
           ppcCompetitors,
           seoCompetitors,
         ] = await Promise.all([
-          spyfuService.getPPCCompetitors(team.primaryDomain),
-          spyfuService.getSEOCompetitors(team.primaryDomain),
+          spyfuService.getPPCCompetitors(team.primaryDomain).catch(() => null),
+          spyfuService.getSEOCompetitors(team.primaryDomain).catch(() => null),
         ]);
 
         return (
           <CompetitorsPageClient
             team={team}
-            competitors={[...ppcCompetitors.data.results, ...seoCompetitors.data.results]}
+            competitors={[...ppcCompetitors?.data.results ?? [], ...seoCompetitors?.data.results ?? []]}
           />
         );
       }}

@@ -1,11 +1,16 @@
+import _ from 'lodash';
+
 import scrapeRedditComments from '@/app/api/data-collection/reddit/scrapeRedditComments';
-import scrapeRedditPosts from '@/app/api/data-collection/reddit/scrapeRedditPosts';
 import openAIClient from '@/lib/services/openAI/client';
 import db from '@/lib/services/db/db';
-import chunkArrayByMaxBytes from '@/utils/chunkArrayByMaxBytes';
 import { UnwrappedPromise } from '@/utils/types';
+import chunkArrayByMaxBytes from '@/utils/chunkArrayByMaxBytes';
+import searchRedditPosts from '@/app/api/data-collection/reddit/searchRedditPosts';
 import { chunkEmbeddingsRequestsByTokenSize } from '../aiCapabilities/chunkRequestsByMaxTokenSize';
 import { ScrapedItemCreateParams } from './types';
+import createManyScrapedItems from './createManyScrapedItems';
+
+const fiveMbInsertionlimit = 5 * 1024 * 1024;
 
 const makeChunkedEmbeddingsRequests = (items: Omit<ScrapedItemCreateParams, 'embeddings'>[]) => {
   const embeddingsRequests = chunkEmbeddingsRequestsByTokenSize(items, ({ text }) => text);
@@ -29,24 +34,16 @@ const reconcileEmbeddingsWithScrapedItems = (embeddingsResponses: UnwrappedPromi
   }));
 };
 
-const persistItems = async (scrapedItems: ScrapedItemCreateParams[][]) => {
-  return Promise.all(scrapedItems.flatMap((items) => {
-    return db.scrapedItems.createMany({
-      data: items,
-    }).catch((err) => {
-      console.log('error creating items', err.message, items.map(({ href }) => href));
-    });
-    // it seems like the createMany is working, and is probably more performant, but
-    // to troubleshoot duplicate href key errors, you can uncomment this and figure it out
-    // return items.flatMap((item) => {
-    //   return db.scrapedItems.create({
-    //     data: item,
-    //   }).catch((err) => {
-    //     console.log('error creating item', err, item);
-    //   });
-    // });
-  }));
-};
+const findExistingItemHrefs = (hrefs: string[]) => db.scrapedItems.findMany({
+  where: {
+    href: {
+      in: hrefs,
+    },
+  },
+  select: {
+    href: true,
+  },
+});
 
 const scrapeAndPersistRedditItems = async (phrase: string) => {
   // todo add telemetry here, especially to detect when markup changes and scraper logic needs to be rewritten
@@ -57,23 +54,14 @@ const scrapeAndPersistRedditItems = async (phrase: string) => {
     posts,
     comments,
   ] = await Promise.all([
-    scrapeRedditPosts(phrase),
+    searchRedditPosts(phrase),
     scrapeRedditComments(phrase),
+    // Promise.resolve([]),
   ]);
   const t1 = performance.now();
   console.log(`scraping reddit took ${t1 - t0} milliseconds.`);
-
-  const combined = [...posts ?? [], ...comments ?? []];
-  const existingItems = await db.scrapedItems.findMany({
-    where: {
-      href: {
-        in: combined.map(({ href }) => href),
-      },
-    },
-    select: {
-      href: true,
-    },
-  });
+  const combined = _.uniqBy([...posts ?? [], ...comments ?? []], (item) => item.href);
+  const existingItems = await findExistingItemHrefs(combined.map(({ href }) => href));
 
   const existingItemsHrefSet = new Set(existingItems.map(({ href }) => href));
   const filteredCombined = combined.filter(({ href }) => {
@@ -86,12 +74,19 @@ const scrapeAndPersistRedditItems = async (phrase: string) => {
 
   // todo notify user when there are new items
   // todo verify this joining logic... If query responses look weird, this could be why
+  const t2 = performance.now();
   const embeddingsResponses = await makeChunkedEmbeddingsRequests(filteredCombined);
-  const itemsWithEmbeddings = reconcileEmbeddingsWithScrapedItems(embeddingsResponses);
-  const fiveMbInsertionlimit = 5 * 1024 * 1024;
-  const chunkedInsertionData = chunkArrayByMaxBytes(itemsWithEmbeddings, fiveMbInsertionlimit);
+  const t3 = performance.now();
+  console.log(`getting embeddings took ${t3 - t2} milliseconds.`);
 
-  return Promise.all(chunkedInsertionData.flatMap(persistItems));
+  const chunkedInsertionData = chunkArrayByMaxBytes(
+    reconcileEmbeddingsWithScrapedItems(embeddingsResponses).flat(),
+    fiveMbInsertionlimit,
+  );
+
+  return Promise.all(
+    chunkedInsertionData.map(createManyScrapedItems),
+  );
 };
 
 export default scrapeAndPersistRedditItems;

@@ -12,16 +12,15 @@ export interface IButton {
   onClick?: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   disabled?: boolean;
   className?: string;
-  icon?: boolean;
   loading?: boolean;
   iconLeft?: 'plus' | 'file' | React.ReactNode;
   iconRight?: React.ReactNode;
   type?: 'submit' | 'button';
   variant?: Variant;
-  danger?: boolean;
   href?: string;
   as?: 'button' | 'div';
   size?: ButtonSize;
+  target?: '_blank';
 }
 
 const baseClassNames = (size: ButtonSize) => classNames(
@@ -56,6 +55,7 @@ const Button: React.FC<IButton> = ({
   loading,
   as = 'button',
   size = 'md',
+  target,
 }) => {
   const BaseComponent = as === 'button' ? BarebonesButton : BarebonesDiv;
 
@@ -104,7 +104,7 @@ const Button: React.FC<IButton> = ({
   );
 
   return href ? (
-    <Link href={href}>
+    <Link href={href} target={target}>
       {BodyContent}
     </Link>
   ) : (

@@ -21,7 +21,7 @@ const jsScenario = {
 const strengthParams = {
   block_ads: true,
   premium_proxy: true,
-  stealth_proxy: true,
+  stealth_proxy: false, // todo monitor this and see if we get blocked
 };
 
 export const redditScrapeConfig = {

@@ -1,7 +1,7 @@
-import getKeywordSearchResults from './lambdas/getKeywordSearchResults';
+import getKeyphraseFeedResults from './lambdas/getKeyphraseFeedResults';
 
 const rocksetService = {
-  getKeywordSearchResults,
+  getKeyphraseFeedResults,
 };
 
 export default rocksetService;

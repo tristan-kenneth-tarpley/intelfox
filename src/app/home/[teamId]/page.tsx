@@ -12,8 +12,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import rocksetService from '@/lib/services/rockset/rocksetService';
-import db from '@/lib/services/db/db';
 import Text from '@/components/ui/Text';
+import Button from '@/components/ui/Button';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { innerPadding } from './styles';
 import Navbar from './Navbar';
 
@@ -24,11 +25,7 @@ const TeamHome = async (props: PageProps) => {
   return (
     <TeamLoader teamId={teamId}>
       {async ({ team }) => {
-        const keyphrase = await db.trackedKeyPhrases.findFirst({ where: { teamId } });
-        const feedItems = await rocksetService.getKeywordSearchResults(JSON.stringify(keyphrase?.phraseEmbeddings ?? []));
-
-        console.log('feedItems', feedItems);
-
+        const feedItems = await rocksetService.getKeyphraseFeedResults(teamId);
         return (
           <div className="flex flex-col w-screen">
             <div className="sticky top-0 bg-zinc-950">
@@ -39,17 +36,20 @@ const TeamHome = async (props: PageProps) => {
             </div>
             <div className={classNames(innerPadding)}>
               <VStack align="center">
-                {feedItems?.slice(0, 10).map((item) => (
+                {feedItems?.map((item) => (
                   <div key={item.href} className="w-full md:w-2/3 lg:w-3/5">
                     <Card className="w-full">
                       <CardHeader>
                         <CardTitle>{item.type}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <Text>{item.text}</Text>
+                        <Heading level={6}>{item.text}</Heading>
+                        <Text>{item.bodyText}</Text>
+                        {/* <Text></Text> */}
                       </CardContent>
                       <CardFooter>
-                        <p>Card Footer</p>
+                        {/* todo this should be dynamic */}
+                        <Button iconLeft={<ArrowTopRightOnSquareIcon className="w-5 h-5" />} target="_blank" variant="secondary" href={`https://reddit.com/${item.href}`}></Button>
                       </CardFooter>
                     </Card>
                   </div>
