@@ -11,14 +11,10 @@ type ZeploOptionKey = typeof zeploOptionKeys[number];
 type ZeploOptions = Record<ZeploOptionKey, string>;
 
 const forwardRequestToZeplo = (url: string, requestOptions: RequestInit, zeploOptions?: ZeploOptions) => {
-  const parsedUrl = new URL(url);
-  const { hostname, pathname } = parsedUrl;
-  const forwardToUrl = `${hostname}${pathname}`;
-
-  console.log('final url to zeplo', `https://zeplo.to/${forwardToUrl}?${
+  console.log('final url to zeplo', `https://zeplo.to/${url}?${
     zeploOptions ? new URLSearchParams(zeploOptions).toString() : ''
   }`);
-  return fetch(`https://zeplo.to/${forwardToUrl}?${
+  return fetch(`https://zeplo.to/${url}?${
     zeploOptions ? new URLSearchParams(zeploOptions).toString() : ''
   }`, {
     ...requestOptions,
