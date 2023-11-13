@@ -3,7 +3,7 @@ import { Teams } from '@prisma/client/edge';
 
 const updateTeamById = (
   id: string,
-  updateData: Partial<Pick<Teams, 'description' | 'primaryDomain' | 'shortDescription' | 'name'>>,
+  updateData: Partial<Pick<Teams, 'description' | 'primaryDomain' | 'shortDescription' | 'name' | 'lastSyncedAt'>>,
 ) => {
   return db.teams.update({ where: { id }, data: updateData });
 };

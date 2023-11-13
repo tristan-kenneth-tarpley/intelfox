@@ -6,11 +6,7 @@ const createManyScrapedItems = async (scrapedItems: ScrapedItemCreateParams[]) =
   // to dedupe the nested array
   // if someone figures it out, you can use the chunkArrayByMaxBytes util to make sure payloads
   // are less than 5mb
-  return db.scrapedItems.createMany({
-    data: scrapedItems,
-  }).catch((err) => {
-    console.log('error creating item', err);
-  });
+  return Promise.allSettled(scrapedItems.map((item) => db.scrapedItems.create({ data: item })));
 };
 
 export default createManyScrapedItems;

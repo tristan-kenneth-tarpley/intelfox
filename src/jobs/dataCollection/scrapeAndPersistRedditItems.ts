@@ -6,9 +6,9 @@ import db from '@/lib/services/db/db';
 import { UnwrappedPromise } from '@/utils/types';
 import chunkArrayByMaxBytes from '@/utils/chunkArrayByMaxBytes';
 import searchRedditPosts from '@/app/api/data-collection/reddit/searchRedditPosts';
-import { chunkEmbeddingsRequestsByTokenSize } from '../aiCapabilities/chunkRequestsByMaxTokenSize';
-import { ScrapedItemCreateParams } from './types';
-import createManyScrapedItems from './createManyScrapedItems';
+import { chunkEmbeddingsRequestsByTokenSize } from '../../lib/logic/aiCapabilities/chunkRequestsByMaxTokenSize';
+import { ScrapedItemCreateParams } from '../../lib/logic/scraping/types';
+import createManyScrapedItems from '../../lib/logic/scraping/createManyScrapedItems';
 
 const fiveMbInsertionlimit = 5 * 1024 * 1024;
 
@@ -84,9 +84,10 @@ const scrapeAndPersistRedditItems = async (phrase: string) => {
     fiveMbInsertionlimit,
   );
 
-  return Promise.all(
+  await Promise.all(
     chunkedInsertionData.map(createManyScrapedItems),
   );
+  console.log(`scraping and persisting ${filteredCombined.length} reddit items took ${performance.now() - t0} milliseconds.`);
 };
 
 export default scrapeAndPersistRedditItems;

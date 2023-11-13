@@ -9,7 +9,7 @@ import { Teams } from '@prisma/client/edge';
 import { redirect } from 'next/navigation';
 import db from '@/lib/services/db/db';
 import splitStringOnCommas from '@/utils/splitStringOnCommas';
-import makeActionError from '../makeActionError';
+import makeRequestError from '../makeRequestError';
 
 const handleKeywordPageSubmission: FormStateHandler<{ team: Teams; message?: string }> = async (
   { team },
@@ -28,7 +28,7 @@ const handleKeywordPageSubmission: FormStateHandler<{ team: Teams; message?: str
   const allKeywords = _.uniq([...customKeywords, ...keywords]);
 
   if (allKeywords.length === 0) {
-    return makeActionError({
+    return makeRequestError({
       code: 400,
       message: 'You must provide at least one keyword',
       extra: { team },

@@ -16,7 +16,7 @@ const codes = errorCodes.map((x) => x.code);
 
 type Code = typeof codes[number];
 
-const makeActionError = ({
+const makeRequestError = ({
   code,
   message,
   extra,
@@ -33,4 +33,4 @@ const makeActionError = ({
   };
 };
 
-export default makeActionError;
+export default makeRequestError;

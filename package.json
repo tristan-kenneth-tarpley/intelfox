@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "vercel-dev": "vercel dev",
     "dev": "next dev",
     "build": "prisma generate --no-engine && next build",
     "start": "next start",

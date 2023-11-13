@@ -6,7 +6,7 @@ import { routes } from '../routes';
 const navigateToFirstTeamHome = async () => {
   const [clerkOrg] = await clerkClient.organizations.getOrganizationList();
 
-  if (!clerkOrg) {
+  if (!clerkOrg || !clerkOrg.id) {
     return redirect(routes.afterSignupUrl());
   }
 

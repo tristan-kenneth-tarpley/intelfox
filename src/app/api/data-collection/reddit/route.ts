@@ -1,4 +1,4 @@
-import scrapeAndPersistRedditItems from '@/lib/logic/scraping/scrapeAndPersistRedditItems';
+import scrapeAndPersistRedditItems from '@/jobs/dataCollection/scrapeAndPersistRedditItems';
 import redditAPIClient from '@/lib/services/reddit/redditAPIClient';
 
 export async function POST(request: Request) {

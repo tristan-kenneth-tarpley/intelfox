@@ -1,4 +1,6 @@
 export const appConfig = {
+  cronSecret: process.env.CRON_SECRET!,
+  nodeEnv: process.env.NODE_ENV!,
   scrapingBeeAPIKey: process.env.SCRAPING_BEE_API_KEY!,
   openAISecret: process.env.OPEN_AI_SECRET!,
   rocksetAPIEndpoint: process.env.ROCKSET_API_ENDPOINT!,
@@ -9,4 +11,6 @@ export const appConfig = {
   stripeSecretKey: process.env.STRIPE_SECRET_KEY!,
   nangoPublicKey: process.env.NEXT_PUBLIC_NANGO_PUBLIC_KEY!,
   nangoSecretKey: process.env.NANGO_SECRET_KEY,
+  selfUrl: process.env.SELF_URL!,
+  zeploSecret: process.env.ZEPLO_SECRET!,
 } as const;

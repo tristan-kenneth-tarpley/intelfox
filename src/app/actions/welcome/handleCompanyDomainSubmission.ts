@@ -9,9 +9,9 @@ import onboardNewTeam from '@/lib/logic/teams/onboardNewTeam';
 import db from '@/lib/services/db/db';
 import extractCompanyNameFromURL from '@/lib/logic/aiCapabilities/extractCompanyNameFromURL';
 import safeParseURL from '@/utils/safeParseURL';
-import makeActionError from '../makeActionError';
+import makeRequestError from '../makeRequestError';
 
-const unauthError = makeActionError({
+const unauthError = makeRequestError({
   code: 401,
   message: 'You must be logged in to create a team.',
 });
@@ -29,7 +29,7 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
   const finalUrl = parsedURL?.origin;
 
   if (!finalUrl) {
-    return makeActionError({ code: 400, message: 'Invalid URL' });
+    return makeRequestError({ code: 400, message: 'Invalid URL' });
   }
 
   const user = await clerkClient.users.getUser(reqAuth.userId);
