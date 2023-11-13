@@ -15,6 +15,9 @@ const forwardRequestToZeplo = (url: string, requestOptions: RequestInit, zeploOp
   const { hostname, pathname } = parsedUrl;
   const forwardToUrl = `${hostname}${pathname}`;
 
+  console.log('final url to zeplo', `https://zeplo.to/${forwardToUrl}?${
+    zeploOptions ? new URLSearchParams(zeploOptions).toString() : ''
+  }`);
   return fetch(`https://zeplo.to/${forwardToUrl}?${
     zeploOptions ? new URLSearchParams(zeploOptions).toString() : ''
   }`, {
