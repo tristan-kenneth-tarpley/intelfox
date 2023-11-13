@@ -1,6 +1,6 @@
-import { encoding_for_model } from 'tiktoken';
+import { encodingForModel } from 'js-tiktoken';
 
-const enc = encoding_for_model('gpt-3.5-turbo-16k');
+const enc = encodingForModel('gpt-3.5-turbo-16k');
 
 const estimateChatTokenSize = (text: string) => {
   return enc.encode(text).length;
