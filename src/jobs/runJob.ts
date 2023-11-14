@@ -5,9 +5,7 @@ const runJob = (
   job: (...args: any[]) => any,
   payload: Record<string, any>,
 ) => {
-  // const job = jobs[jobName];
   if (appConfig.nodeEnv === 'development') {
-    // run locally
     return job(payload as any);
   }
 
