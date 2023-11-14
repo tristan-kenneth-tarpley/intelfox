@@ -18,6 +18,7 @@ const forwardRequestToZeplo = (url: string, requestOptions: RequestInit, zeploOp
     zeploOptions ? new URLSearchParams(zeploOptions).toString() : ''
   }`, {
     ...requestOptions,
+    method: 'POST',
     headers: {
       ...requestOptions.headers,
       'X-Zeplo-Token': appConfig.zeploSecret,
