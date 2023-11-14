@@ -17,7 +17,7 @@ const runJob = (
       `https://${appConfig.selfUrl}/api/jobs/exec`,
       {
         method: 'POST',
-        body: JSON.stringify({ ...payload, jobName: job.name }),
+        body: JSON.stringify({ payload, jobName: job.name }),
         headers: {
           authorization: `Bearer ${appConfig.cronSecret}`,
         },
