@@ -9,6 +9,8 @@ const jobs = {
   scrapeAndPersistRedditItems,
 } as const;
 
+export const maxDuration = 120;
+
 export async function POST(request: NextRequest) {
   const { jobName, payload }: {
     jobName: keyof typeof jobs;
