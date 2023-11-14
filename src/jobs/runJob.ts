@@ -22,6 +22,7 @@ const runJob = (
   }
 
   if (appConfig.nodeEnv === 'production') {
+    console.log('running job', jobName, payload);
     return forwardRequestToZeplo(
       `https://${appConfig.selfUrl}/api/jobs/exec`,
       {
