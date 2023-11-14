@@ -1,3 +1,4 @@
+import syncTeamKeyPhrases from '@/jobs/applicationSyncing/syncTeamKeyPhrases';
 import runJob from '@/jobs/runJob';
 import db from '@/lib/services/db/db';
 
@@ -24,7 +25,7 @@ const runDailyTeamSync = async () => {
   const teams = await findTeamsNotSyncedInLast24Hours();
   console.log('teams', teams);
   if (teams.length) {
-    await Promise.all(teams.map(({ id }) => runJob('syncTeamKeyPhrases', { teamId: id })));
+    await Promise.all(teams.map(({ id }) => runJob(syncTeamKeyPhrases, { teamId: id })));
   }
 };
 

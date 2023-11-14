@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   const { query } = await request.json();
   console.log('starting');
   const t0 = performance.now();
-  await scrapeAndPersistRedditItems(query);
+  await scrapeAndPersistRedditItems({ phrase: query });
   const t1 = performance.now();
   console.log(`Scraping and persisting took ${t1 - t0} milliseconds.`);
 

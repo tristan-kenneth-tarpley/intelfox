@@ -1,33 +1,23 @@
 import { appConfig } from '@/config';
 import forwardRequestToZeplo from '@/lib/services/zeplo/forwardRequestToZeplo';
 
-import syncTeamKeyPhrases from './applicationSyncing/syncTeamKeyPhrases';
-import scrapeAndPersistRedditItems from './dataCollection/scrapeAndPersistRedditItems';
-
-const jobs = {
-  syncTeamKeyPhrases,
-  scrapeAndPersistRedditItems,
-} as const;
-
-export type JobName = keyof typeof jobs;
-
 const runJob = (
-  jobName: JobName,
+  job: (...args: any[]) => any,
   payload: Record<string, any>,
 ) => {
-  const job = jobs[jobName];
+  // const job = jobs[jobName];
   if (appConfig.nodeEnv === 'development') {
     // run locally
     return job(payload as any);
   }
 
   if (appConfig.nodeEnv === 'production') {
-    console.log('running job', jobName, payload);
+    console.log('running job', job.name, payload);
     return forwardRequestToZeplo(
       `https://${appConfig.selfUrl}/api/jobs/exec`,
       {
         method: 'POST',
-        body: JSON.stringify({ ...payload, jobName }),
+        body: JSON.stringify({ ...payload, jobName: job.name }),
         headers: {
           authorization: `Bearer ${appConfig.cronSecret}`,
         },

@@ -1,10 +1,18 @@
 import makeRequestError from '@/app/actions/makeRequestError';
 import { NextRequest } from 'next/server';
-import runJob, { JobName } from '@/jobs/runJob';
+import runJob from '@/jobs/runJob';
+
+import syncTeamKeyPhrases from '@/jobs/applicationSyncing/syncTeamKeyPhrases';
+import scrapeAndPersistRedditItems from '@/jobs/dataCollection/scrapeAndPersistRedditItems';
+
+const jobs = {
+  syncTeamKeyPhrases,
+  scrapeAndPersistRedditItems,
+} as const;
 
 export async function POST(request: NextRequest) {
   const { jobName, payload }: {
-    jobName: JobName;
+    jobName: keyof typeof jobs;
     payload: any;
   } = await request.json();
 
@@ -12,7 +20,8 @@ export async function POST(request: NextRequest) {
     return Response.json(makeRequestError({ code: 400, message: 'a valid jobName is required' }), { status: 400 });
   }
 
-  await runJob(jobName, payload);
+  const job = jobs[jobName];
+  await runJob(job, payload);
   // todo should prob add a jobId here from zeplo
   return Response.json({ status: 'success' });
 }

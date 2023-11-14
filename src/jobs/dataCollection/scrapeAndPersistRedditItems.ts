@@ -45,7 +45,7 @@ const findExistingItemHrefs = (hrefs: string[]) => db.scrapedItems.findMany({
   },
 });
 
-const scrapeAndPersistRedditItems = async (phrase: string) => {
+const scrapeAndPersistRedditItems = async ({ phrase }: { phrase: string }) => {
   // todo add telemetry here, especially to detect when markup changes and scraper logic needs to be rewritten
   // todo we'll want to add some throttling so we're not scraping more than a certain interval
   // e.g. a given keyword shouldn't be scraped more than every X hours
