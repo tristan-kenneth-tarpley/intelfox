@@ -10,7 +10,7 @@ const zeploOptionKeys = [
 type ZeploOptionKey = typeof zeploOptionKeys[number];
 type ZeploOptions = Record<ZeploOptionKey, string>;
 
-const forwardRequestToZeplo = (url: string, requestOptions: RequestInit, zeploOptions?: ZeploOptions) => {
+const forwardRequestToZeplo = (url: string, requestOptions: RequestInit, zeploOptions?: Partial<ZeploOptions>) => {
   return fetch(`https://zeplo.to/${url}?${
     zeploOptions ? new URLSearchParams(zeploOptions).toString() : ''
   }`, {

@@ -20,6 +20,9 @@ const runJob = (
           authorization: `Bearer ${appConfig.cronSecret}`,
         },
       },
+      {
+        _retry: '3|exponential|2',
+      },
     );
   }
 };
