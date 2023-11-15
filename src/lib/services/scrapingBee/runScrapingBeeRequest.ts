@@ -8,15 +8,15 @@ const runScrapingBeeRequest = async (
 ) => {
   try {
     const res = await backOff(() => getterFn(scrapingBee), {
-      numOfAttempts: 3,
+      numOfAttempts: 1,
     });
 
     const decoder = new TextDecoder();
     const text = res ? decoder.decode(res.data) : null;
 
     return text;
-  } catch (err) {
-    console.log('error running scraping bee request', err);
+  } catch (err: any) {
+    console.log('error running scraping bee request', err.message);
     return null;
   }
 };

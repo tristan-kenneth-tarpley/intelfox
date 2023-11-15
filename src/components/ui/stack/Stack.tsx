@@ -10,7 +10,7 @@ const Stack = ({
   direction = 'column',
 }: StackProps) => {
   return (
-    <div className={classNames('flex items-center', className, {
+    <div className={classNames('flex', className, {
       'flex-col': direction === 'column',
       'space-x-1': space === 1 && direction === 'row',
       'space-x-2': space === 2 && direction === 'row',

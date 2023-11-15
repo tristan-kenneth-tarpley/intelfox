@@ -3,13 +3,15 @@ import { NextRequest } from 'next/server';
 
 import syncTeamKeyPhrases from '@/jobs/applicationSyncing/syncTeamKeyPhrases';
 import scrapeAndPersistRedditItems from '@/jobs/dataCollection/scrapeAndPersistRedditItems';
+import runIntelReport from '@/jobs/reporting/runIntelReport';
 
 const jobs = {
   syncTeamKeyPhrases,
   scrapeAndPersistRedditItems,
+  runIntelReport,
 } as const;
 
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
   const { jobName, payload }: {

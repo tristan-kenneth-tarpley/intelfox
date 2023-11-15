@@ -9,6 +9,7 @@ const findOrCreateKeyPhrase = async ({
   const existingKeyPhrase = await db.trackedKeyPhrases.findFirst({
     where: {
       phrase,
+      teamId,
     },
   });
 

@@ -17,6 +17,7 @@ type ModeratedChatCompletionParams = Omit<OpenAI.ChatCompletionCreateParams, 'mo
 type EmbeddingCreateParams = Omit<OpenAI.EmbeddingCreateParams, 'model'> & { model?: OpenAI.EmbeddingCreateParams['model'] };
 
 const openAIClient = {
+  createChatCompletion: openai.chat.completions.create,
   getEmbeddings: (request: EmbeddingCreateParams) => openai.embeddings.create({ ...request, model: request.model ?? DefaultModels.embeddings }),
   createModeratedChatCompletion: async (request: ModeratedChatCompletionParams) => {
     const { messages, model = DefaultModels.chat } = request;

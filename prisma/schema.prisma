@@ -38,29 +38,43 @@ model ScrapedItems {
   updatedAt     DateTime  @updatedAt
 }
 
+enum URLType {
+  PRICING_PAGE
+  CAREERS_PAGE
+  CAPTERRA
+}
+
+type TeamURLs {
+  type URLType
+  url  String
+}
+
 model Teams {
-  id               String    @id @default(auto()) @map("_id") @db.ObjectId
-  clerkOrgId       String    @unique
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  clerkOrgId       String     @unique
   primaryDomain    String
   name             String
   description      String
   shortDescription String?
   createdByUserId  String
   lastSyncedAt     DateTime?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  urls             TeamURLs[]
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 
   @@index([lastSyncedAt])
 }
 
 model Competitors {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  domain           String   @unique
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  domain           String     @unique
   name             String
   description      String?
   shortDescription String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  urls             TeamURLs[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model CompetitorRelationships {
@@ -73,13 +87,22 @@ model CompetitorRelationships {
   @@index([teamId, competitorId])
 }
 
+enum KeyPhraseTrait {
+  BRANDED
+  SELF
+}
+
 model TrackedKeyPhrases {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  phrase           String   @unique
+  id               String           @id @default(auto()) @map("_id") @db.ObjectId
+  phrase           String
   phraseEmbeddings Float[]
   teamId           String
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  traits           KeyPhraseTrait[]
+
+  @@index([teamId])
+  @@index([phrase, teamId])
 }
 
 model BillingTargets {
@@ -91,4 +114,20 @@ model BillingTargets {
   billingPhone     String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+}
+
+model IntelReport {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  teamId           String
+  competitorId     String?
+  pros             String[]
+  cons             String[]
+  peopleGoodFor    String[]
+  peopleNotGoodFor String[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([teamId])
+  @@index([competitorId])
+  @@index([createdAt])
 }

@@ -35,26 +35,37 @@ const TeamHome = async (props: PageProps) => {
               <Heading level={1} displayAs={3}>{getHostnameFromDomain(team.primaryDomain)}</Heading>
             </div>
             <div className={classNames(innerPadding)}>
-              <VStack align="center">
-                {feedItems?.map((item) => (
-                  <div key={item.href} className="w-full md:w-2/3 lg:w-3/5">
-                    <Card className="w-full">
-                      <CardHeader>
-                        <CardTitle>{item.type}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <Heading level={6}>{item.text}</Heading>
-                        <Text>{item.bodyText}</Text>
-                        {/* <Text></Text> */}
-                      </CardContent>
-                      <CardFooter>
-                        {/* todo this should be dynamic */}
-                        <Button iconLeft={<ArrowTopRightOnSquareIcon className="w-5 h-5" />} target="_blank" variant="secondary" href={`https://reddit.com/${item.href}`}></Button>
-                      </CardFooter>
-                    </Card>
-                  </div>
-                ))}
-              </VStack>
+              <div className='grid grid-cols-2 gap-x-4 items-stretch'>
+                <VStack align="start">
+                  <Heading level={6}>Test</Heading>
+                </VStack>
+                {/* todo move this to constant */}
+                <div className="overflow-x-scroll w-full" style={{ maxHeight: 'calc(100vh - 160px)' }}>
+                  <VStack align="start" justify="start">
+                    <div className="sticky top-0 bg-zinc-950 w-full py-2">
+                      <Heading level={5}>Feed</Heading>
+                    </div>
+                    {feedItems?.map((item) => (
+                      <div key={item.href} className="w-full">
+                        <Card className="w-full">
+                          <CardHeader>
+                            <CardTitle>{item.type}</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <Heading level={6}>{item.text}</Heading>
+                            <Text className="whitespace-break-spaces">{item.bodyText}</Text>
+                            {/* <Text></Text> */}
+                          </CardContent>
+                          <CardFooter>
+                            {/* todo this should be dynamic */}
+                            <Button iconLeft={<ArrowTopRightOnSquareIcon className="w-5 h-5" />} target="_blank" variant="secondary" href={`https://reddit.com${item.href}`}></Button>
+                          </CardFooter>
+                        </Card>
+                      </div>
+                    ))}
+                  </VStack>
+                </div>
+              </div>
             </div>
           </div>
         );

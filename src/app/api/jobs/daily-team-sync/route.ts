@@ -23,7 +23,6 @@ const findTeamsNotSyncedInLast24Hours = async () => {
 
 const runDailyTeamSync = async () => {
   const teams = await findTeamsNotSyncedInLast24Hours();
-  console.log('teams', teams);
   if (teams.length) {
     await Promise.all(teams.map(({ id }) => runJob(syncTeamKeyPhrases, { teamId: id })));
   }

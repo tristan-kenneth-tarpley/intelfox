@@ -4,7 +4,7 @@ import estimateEmbeddingsTokenSize from '@/lib/services/openAI/estimateEmbedding
 
 const maxTokensByModel = {
   [DefaultModels.chat]: {
-    maxTokens: 14000,
+    maxTokens: 12000,
     estimatorFn: estimateChatTokenSize,
   },
   [DefaultModels.embeddings]: {

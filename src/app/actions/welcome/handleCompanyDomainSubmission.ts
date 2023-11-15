@@ -53,6 +53,7 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
     metaDescription,
     companyTeamNameFromURLChatCompletion,
   ] = await Promise.all([
+    // todo we should summarize their site here maybe?
     scrapeMetaDescriptionFromURL(finalUrl),
     extractCompanyNameFromURL(parsedURL.toString()).catch(() => null),
   ]);
