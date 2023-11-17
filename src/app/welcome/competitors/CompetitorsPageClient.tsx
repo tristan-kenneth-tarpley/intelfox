@@ -44,7 +44,7 @@ const CompetitorsPageClient = ({
       actions={[
         <FormStatusWrapper key="back">
           {({ pending }) => (
-            <Button disabled={pending} href={routes.welcomeKeywords({ t: team.id })} variant="secondary">
+            <Button disabled={pending} href={routes.welcomeAbout({ t: team.id })} variant="secondary">
               <ChevronLeftIcon className="h-5 w-5" />
             </Button>
           )}

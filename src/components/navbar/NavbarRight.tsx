@@ -1,9 +1,10 @@
 'use client';
 
-import HStack from '@/components/ui/stack/HStack';
-import { OrganizationSwitcher, UserButton, useOrganizationList } from '@clerk/nextjs';
-import { Teams } from '@prisma/client/edge';
 import { useEffect, useRef } from 'react';
+import TeamSwitcher from '@/components/TeamSwitcher';
+import HStack from '@/components/ui/stack/HStack';
+import { UserButton, useOrganizationList } from '@clerk/nextjs';
+import { Teams } from '@prisma/client/edge';
 
 const NavbarRight = ({
   team,
@@ -21,9 +22,9 @@ const NavbarRight = ({
   }, [setActiveOrganization, team.clerkOrgId]);
 
   return (
-    <HStack align='start'>
+    <HStack align='center'>
       {isMountedRef.current && (
-        <OrganizationSwitcher hidePersonal />
+        <TeamSwitcher team={team} />
       )}
       <UserButton />
     </HStack>

@@ -5,7 +5,7 @@ import { TrackedKeyPhrases } from '@prisma/client/edge';
 const findOrCreateKeyPhrase = async ({
   phrase,
   teamId,
-}: Pick<TrackedKeyPhrases, 'teamId' | 'phrase'>) => {
+}: Pick<TrackedKeyPhrases, 'teamId' | 'phrase' | 'traits'>) => {
   const existingKeyPhrase = await db.trackedKeyPhrases.findFirst({
     where: {
       phrase,

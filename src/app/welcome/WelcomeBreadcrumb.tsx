@@ -10,11 +10,11 @@ const steps = [
     href: '',
   },
   {
-    name: 'Key phrases',
+    name: 'Pick competitors',
     href: '',
   },
   {
-    name: 'Pick competitors',
+    name: 'Key phrases',
     href: '',
   },
 ] as const;

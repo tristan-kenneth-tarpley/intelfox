@@ -1,4 +1,5 @@
 import runScrapingBeeRequest from '@/lib/services/scrapingBee/runScrapingBeeRequest';
+import sleep from '@/utils/sleep';
 
 const extractRelevantTextFromURL = async (url: string, selector = 'body') => {
   const extractRules = {
@@ -9,17 +10,36 @@ const extractRelevantTextFromURL = async (url: string, selector = 'body') => {
   };
 
   // todo, retry with incrementally stronger proxy options
-  return runScrapingBeeRequest((client) => client.get({
-    url,
-    params: {
-      extract_rules: extractRules,
-      block_ads: true,
-      block_resources: false,
-      premium_proxy: true,
-      stealth_proxy: true,
-      country_code: 'us',
-    },
-  })).then((res) => {
+  return runScrapingBeeRequest(async (client) => {
+    const retries = Array.from({ length: 3 }, (_, i) => i + 1);
+
+    let res;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const retry of retries) {
+      if (retry > 0) {
+        // eslint-disable-next-line no-await-in-loop
+        await sleep(
+          ((retry || 1) ** 2) * 1000, // exponentially increasing backoff, multiplied by 1000 since it's in ms
+        );
+      }
+      // try the scraper with increasingly premium features.
+      // premium_proxy and stealth_proxy are not only more expensive but also take much longer.
+      // eslint-disable-next-line no-await-in-loop
+      res = await client.get({
+        url,
+        params: {
+          extract_rules: extractRules,
+          block_ads: true,
+          block_resources: false,
+          premium_proxy: retry > 0,
+          stealth_proxy: retry === 2,
+          country_code: 'us',
+        },
+      });
+    }
+
+    return res ?? null;
+  }).then((res) => {
     try {
       return JSON.parse(res ?? '{}').relevant_text as string;
     } catch (err) {

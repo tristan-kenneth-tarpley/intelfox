@@ -3,13 +3,11 @@
 import InputField from '@/components/ui/Input';
 import { useState } from 'react';
 
-const AboutInputField = ({ initialValue }: { initialValue: string }) => {
+const CompanyNameInputField = ({ initialValue }: { initialValue: string }) => {
   const [value, setValue] = useState(initialValue);
   return (
     <InputField
-      name="about_company"
-      textArea
-      style={{ minHeight: '200px' }}
+      name="company_name"
       className="w-full"
       value={value}
       required
@@ -18,4 +16,4 @@ const AboutInputField = ({ initialValue }: { initialValue: string }) => {
   );
 };
 
-export default AboutInputField;
+export default CompanyNameInputField;

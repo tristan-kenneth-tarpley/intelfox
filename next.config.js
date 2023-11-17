@@ -8,6 +8,11 @@ const nextConfig = {
         hostname: 'tailwindui.com',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+        port: '',
+      },
     ],
   },
   // todo remove when inbox 0

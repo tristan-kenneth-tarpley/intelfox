@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,9 +23,17 @@ export default function RootLayout({
     }}>
       <html lang="en">
         <body className={inter.className}>
-          <div className="bg-zinc-950 min-h-screen text-zinc-200 dark">
-            {children}
-          </div>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme="dark"
+            enableSystem={false}
+            forcedTheme={'dark'}
+            disableTransitionOnChange
+          >
+            <div className="bg-zinc-950 min-h-screen dark">
+              {children}
+            </div>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

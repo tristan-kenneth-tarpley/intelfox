@@ -35,6 +35,7 @@ const handleCompetitorsPageSubmission: FormStateHandler<{ team: Teams; message?:
       ...competitorDocuments.map(({ id, name }) => findOrCreateKeyPhrase({
         teamId: id,
         phrase: name,
+        traits: ['BRANDED'],
       })),
       ...competitorDocuments.map(({ id }) => findOrCreateCompetitorRelationship({
         competitorId: id,
@@ -43,7 +44,7 @@ const handleCompetitorsPageSubmission: FormStateHandler<{ team: Teams; message?:
     ],
   );
 
-  return redirect(routes.teamHome({ teamId: team.id }));
+  return redirect(routes.welcomeKeywords({ t: team.id }));
 };
 
 export default handleCompetitorsPageSubmission;

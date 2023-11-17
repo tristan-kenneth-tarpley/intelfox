@@ -1,7 +1,6 @@
 import { PageProps } from '@/app/types';
 import TeamLoader from '@/components/TeamLoader';
 import Heading from '@/components/ui/Heading';
-import getHostnameFromDomain from '@/utils/getHostnameFromDomain';
 import classNames from 'classnames';
 import VStack from '@/components/ui/stack/VStack';
 import {
@@ -15,8 +14,9 @@ import rocksetService from '@/lib/services/rockset/rocksetService';
 import Text from '@/components/ui/Text';
 import Button from '@/components/ui/Button';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
+import { WORKSPACE_HEIGHT } from '@/constants/dimensions';
 import { innerPadding } from './styles';
-import Navbar from './Navbar';
+import Navbar from '../../../components/navbar/Navbar';
 
 const TeamHome = async (props: PageProps) => {
   const { params } = props;
@@ -31,16 +31,12 @@ const TeamHome = async (props: PageProps) => {
             <div className="sticky top-0 bg-zinc-950">
               <Navbar team={team} />
             </div>
-            <div className={classNames(innerPadding, 'border-b border-solid border-zinc-800')}>
-              <Heading level={1} displayAs={3}>{getHostnameFromDomain(team.primaryDomain)}</Heading>
-            </div>
-            <div className={classNames(innerPadding)}>
+            <div style={{ maxHeight: WORKSPACE_HEIGHT }} className={classNames(innerPadding, 'overflow-hidden')}>
               <div className='grid grid-cols-2 gap-x-4 items-stretch'>
                 <VStack align="start">
                   <Heading level={6}>Test</Heading>
                 </VStack>
-                {/* todo move this to constant */}
-                <div className="overflow-x-scroll w-full" style={{ maxHeight: 'calc(100vh - 160px)' }}>
+                <div className="overflow-x-scroll w-full pb-12" style={{ maxHeight: WORKSPACE_HEIGHT }}>
                   <VStack align="start" justify="start">
                     <div className="sticky top-0 bg-zinc-950 w-full py-2">
                       <Heading level={5}>Feed</Heading>

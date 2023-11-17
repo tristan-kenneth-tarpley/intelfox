@@ -4,11 +4,11 @@ import { ScrapingBeeClient } from 'scrapingbee';
 import scrapingBee from './scrapingBeeClient';
 
 const runScrapingBeeRequest = async (
-  getterFn: (client: ScrapingBeeClient) => Promise<AxiosResponse<any, any>>,
+  getterFn: (client: ScrapingBeeClient) => Promise<AxiosResponse<any, any> | null>,
 ) => {
   try {
     const res = await backOff(() => getterFn(scrapingBee), {
-      numOfAttempts: 1,
+      numOfAttempts: 2,
     });
 
     const decoder = new TextDecoder();

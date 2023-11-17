@@ -7,7 +7,7 @@ import Checkbox from '@/components/ui/Checkbox';
 import { ChevronLeftIcon } from '@heroicons/react/20/solid';
 import { routes } from '@/app/routes';
 import { PPCKeywordAPIResponse, SEOKeywordsForDomainResponse } from '@/lib/services/spyfu/spyfuService';
-import handleKeywordPageSubmission from '@/app/actions/welcome/handleKeywordPageSubmission';
+import handleKeywordPageSubmission, { KeyphraseSubmission } from '@/app/actions/welcome/handleKeywordPageSubmission';
 import InputField from '@/components/ui/Input';
 import FormGroup from '@/components/ui/FormGroup';
 import { useMemo, useState } from 'react';
@@ -18,7 +18,8 @@ import Label from '@/components/ui/Label';
 import CheckboxContainer from '@/components/ui/CheckboxContainer';
 import WelcomeContainer from '../WelcomeContainer';
 
-// TODO - Use team 1-liner as a key phrase
+const stringifyKeyphrase = (definition: KeyphraseSubmission) => JSON.stringify(definition);
+
 const KeywordPageClient = ({
   team,
   ppcKeywords,
@@ -57,6 +58,11 @@ const KeywordPageClient = ({
     truncatedDomain,
   ]);
 
+  const selfKeyphrase = stringifyKeyphrase({
+    phrase: team.name,
+    traits: ['BRANDED', 'SELF'],
+  });
+
   return (
     <WelcomeContainer
       formAction={formAction}
@@ -68,7 +74,7 @@ const KeywordPageClient = ({
           {({ pending }) => (
             <Button
               disabled={pending}
-              href={routes.welcomeAbout({ t: team.id })}
+              href={routes.welcomeCompetitors({ t: team.id })}
               variant='secondary'
             >
               <ChevronLeftIcon className="h-5 w-5" />
@@ -87,16 +93,16 @@ const KeywordPageClient = ({
       )}
       <CheckboxContainer>
         <Checkbox
-          id={`int_kw_${truncatedDomain}`}
-          name={`int_kw_${truncatedDomain}`}
-          defaultChecked={trackedKeyPhrasesSet.size === 0}
+          id={selfKeyphrase}
+          name={selfKeyphrase}
+          defaultChecked={trackedKeyPhrasesSet.size === 0 || trackedKeyPhrasesSet.has(team.name)}
         />
-        <Label htmlFor={`int_kw_${truncatedDomain}`}>
-          {truncatedDomain}
+        <Label htmlFor={selfKeyphrase}>
+          {team.name}
         </Label>
       </CheckboxContainer>
       {prioritizedKeywords.map((keyword) => {
-        const id = `int_kw_${keyword}`;
+        const id = stringifyKeyphrase({ phrase: keyword, traits: [] });
         return (
           <CheckboxContainer key={keyword}>
             <Checkbox

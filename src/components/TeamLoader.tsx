@@ -1,5 +1,8 @@
 import findTeamById from '@/lib/logic/teams/findTeamById';
 import { Teams } from '@prisma/client/edge';
+import findTeamByClerkOrg from '@/lib/logic/teams/findTeamByClerkOrg';
+import { redirect } from 'next/navigation';
+import { routes } from '@/app/routes';
 import Text from './ui/Text';
 
 interface Props {
@@ -11,10 +14,17 @@ const TeamLoader = async ({
   teamId,
   children,
 }: Props) => {
-  const team = await findTeamById(teamId);
+  const isClerkOrg = teamId.startsWith('org_');
+  const team = isClerkOrg
+    ? await findTeamByClerkOrg(teamId)
+    : await findTeamById(teamId);
 
   if (!team) {
     return <Text>Team not found</Text>;
+  }
+
+  if (isClerkOrg) {
+    return redirect(routes.teamHome({ teamId: team.id }));
   }
 
   return <>{children({ team })}</>;

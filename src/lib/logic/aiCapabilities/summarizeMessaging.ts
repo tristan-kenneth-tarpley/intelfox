@@ -23,7 +23,7 @@ const summarizeMessaging = async (input: string) => {
     }
 
     return JSON.parse(reportString) as {
-      companyName: string[];
+      companyName: string;
       keyValueProps: string[];
       emotions: string[];
       personality: string[];

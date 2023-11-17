@@ -5,11 +5,19 @@ import _ from 'lodash';
 import { routes } from '@/app/routes';
 import { FormStateHandler } from '@/app/types';
 import openAIClient from '@/lib/services/openAI/client';
-import { Teams } from '@prisma/client/edge';
+import { Teams, TrackedKeyPhrases } from '@prisma/client/edge';
 import { redirect } from 'next/navigation';
 import db from '@/lib/services/db/db';
 import splitStringOnCommas from '@/utils/splitStringOnCommas';
+import isTruthy from '@/utils/isTruthy';
+import runJob from '@/jobs/runJob';
+import syncTeamKeyPhrases from '@/jobs/applicationSyncing/syncTeamKeyPhrases';
 import makeRequestError from '../makeRequestError';
+
+export interface KeyphraseSubmission {
+  traits: TrackedKeyPhrases['traits'];
+  phrase: string;
+}
 
 const handleKeywordPageSubmission: FormStateHandler<{ team: Teams; message?: string }> = async (
   { team },
@@ -19,13 +27,23 @@ const handleKeywordPageSubmission: FormStateHandler<{ team: Teams; message?: str
     return redirect(routes.welcome());
   }
 
-  const customKeywords = splitStringOnCommas(formData.get('custom_keywords')?.toString() ?? '');
+  const customKeywords = splitStringOnCommas(formData.get('custom_keywords')?.toString() ?? '')
+    .map((keyword) => {
+      const trimmed = keyword.trim();
+      return trimmed.startsWith('https://') || trimmed.startsWith('http://') ? trimmed : `https://${trimmed}`;
+    });
+  const submittedKeyPhrases = Array.from(formData.keys())
+    .map((key) => {
+      try {
+        return JSON.parse(decodeURIComponent(key)) as KeyphraseSubmission;
+      } catch (e) {
+        return null;
+      }
+    })
+    .filter(isTruthy);
 
-  const keywords = Array.from(formData.keys())
-    .filter((key) => key.startsWith('int_kw_'))
-    .map((key) => key.slice('int_kw_'.length));
-
-  const allKeywords = _.uniq([...customKeywords, ...keywords]);
+  const allPhrases = submittedKeyPhrases.map(({ phrase }) => phrase);
+  const allKeywords = _.uniq([...customKeywords, ...allPhrases]);
 
   if (allKeywords.length === 0) {
     return makeRequestError({
@@ -45,18 +63,19 @@ const handleKeywordPageSubmission: FormStateHandler<{ team: Teams; message?: str
 
   const allExistingKeyPhrasesSet = new Set(existingKeyPhrases.map(({ phrase }) => phrase));
 
-  const newKeyPhrases = allKeywords.filter((keyword) => !allExistingKeyPhrasesSet.has(keyword));
+  const newKeyPhrases = submittedKeyPhrases.filter((keyword) => !allExistingKeyPhrasesSet.has(keyword.phrase));
 
   if (newKeyPhrases.length > 0) {
     const keywordEmbeddings = await openAIClient.getEmbeddings({
-      input: newKeyPhrases,
+      input: newKeyPhrases.map(({ phrase }) => phrase),
     });
 
     const keyPhrases = newKeyPhrases
-      .map((phrase, index) => ({
+      .map(({ phrase, traits }, index) => ({
         phrase,
         phraseEmbeddings: keywordEmbeddings.data[index]?.embedding,
         teamId: team.id,
+        traits,
       }));
 
     await db.trackedKeyPhrases.createMany({
@@ -64,7 +83,8 @@ const handleKeywordPageSubmission: FormStateHandler<{ team: Teams; message?: str
     });
   }
 
-  return redirect(routes.welcomeCompetitors({ t: team.id }));
+  await runJob(syncTeamKeyPhrases, { teamId: team.id });
+  return redirect(routes.teamHome({ teamId: team.id }));
 };
 
 export default handleKeywordPageSubmission;

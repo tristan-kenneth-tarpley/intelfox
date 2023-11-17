@@ -5,6 +5,8 @@ export const routes = {
   root: () => '/',
   home,
   teamHome: ({ teamId }: { teamId: string }) => `/home/${teamId}`,
+  teamCompetitors: ({ teamId }: { teamId: string }) => `/home/${teamId}/competitors`,
+  teamKeyPhrases: ({ teamId }: { teamId: string }) => `/home/${teamId}/keyphrases`,
   welcome,
   afterSignupUrl: welcome,
   afterSigninUrl: home,
