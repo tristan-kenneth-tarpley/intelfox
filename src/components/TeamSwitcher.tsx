@@ -23,8 +23,9 @@ const TeamSwitcher = ({
 }) => {
   const router = useRouter();
   const clerk = useClerk();
-  const { organizationList } = useOrganizationList();
+  const { userMemberships } = useOrganizationList();
   const org = useOrganization();
+  console.log(userMemberships);
 
   return (
     <DropdownMenu>
@@ -51,7 +52,7 @@ const TeamSwitcher = ({
         </DropdownMenuItem>
         <DropdownMenuSeparator />
 
-        {organizationList?.map(({ organization }) => (
+        {userMemberships?.data?.map(({ organization }) => (
           <DropdownMenuItem
             key={organization.id}
             onClick={() => {

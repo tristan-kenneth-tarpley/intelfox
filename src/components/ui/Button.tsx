@@ -78,7 +78,7 @@ const Button: React.FC<IButton> = ({
           'text-zinc-900 ring-zinc-100 bg-zinc-100 border-zinc-100 hover:bg-zinc-300': variant === 'primary',
           'bg-zinc-800 text-zinc-200 hover:bg-zinc-700 ring-zinc-100 border-zinc-800': variant === 'secondary',
           'bg-transparent': ['ghost', 'outline'].includes(variant),
-          'border-zinc-800 hover:bg-zinc-800': variant === 'outline',
+          'border-zinc-800 hover:bg-zinc-800 ring-zinc-800': variant === 'outline',
           'border-transparent hover:bg-zinc-800': variant === 'ghost',
           'bg-red-700 border-red-700 hover:bg-red-800 hover:border-red-800 focus:ring-offset-red-800': variant === 'danger',
           'bg-green-700 border-green-700 hover:bg-green-800 hover:border-green-800 focus:ring-offset-green-800': variant === 'success',

@@ -16,11 +16,13 @@ import Button from '@/components/ui/Button';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { WORKSPACE_HEIGHT } from '@/constants/dimensions';
 import { innerPadding } from './styles';
-import Navbar from '../../../components/navbar/Navbar';
+import AuthenticatedNavbar from '../../../components/navbar/AuthenticatedNavbar';
 
 const TeamHome = async (props: PageProps) => {
   const { params } = props;
   const { teamId } = params;
+
+  // todo verify that user has permissions to view
 
   return (
     <TeamLoader teamId={teamId}>
@@ -29,7 +31,7 @@ const TeamHome = async (props: PageProps) => {
         return (
           <div className="flex flex-col w-screen">
             <div className="sticky top-0 bg-zinc-950">
-              <Navbar team={team} />
+              <AuthenticatedNavbar team={team} />
             </div>
             <div style={{ maxHeight: WORKSPACE_HEIGHT }} className={classNames(innerPadding, 'overflow-hidden')}>
               <div className='grid grid-cols-2 gap-x-4 items-stretch'>

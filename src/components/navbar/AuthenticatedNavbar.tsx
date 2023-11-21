@@ -4,7 +4,7 @@ import { routes } from '@/app/routes';
 import NavbarRight from './NavbarRight';
 import NavbarSkeleton from './NavbarSkeleton';
 
-const Navbar = ({
+const AuthenticatedNavbar = ({
   team,
 }: {
   team: Teams,
@@ -21,4 +21,4 @@ const Navbar = ({
   );
 };
 
-export default Navbar;
+export default AuthenticatedNavbar;

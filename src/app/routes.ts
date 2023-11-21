@@ -9,6 +9,8 @@ export const routes = {
   teamKeyPhrases: ({ teamId }: { teamId: string }) => `/home/${teamId}/keyphrases`,
   welcome,
   afterSignupUrl: welcome,
+  login: () => '/login',
+  signup: () => '/signup',
   afterSigninUrl: home,
   welcomeCompetitors: ({ t }: { t: string }) => `/welcome/competitors?${new URLSearchParams({ t }).toString()}`,
   welcomeKeywords: ({ t }: { t: string }) => `/welcome/keywords?${new URLSearchParams({ t }).toString()}`,

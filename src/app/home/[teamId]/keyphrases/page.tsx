@@ -17,7 +17,7 @@ import db from '@/lib/services/db/db';
 import Button from '@/components/ui/Button';
 import { TrashIcon } from '@heroicons/react/20/solid';
 import { innerPadding } from '../styles';
-import Navbar from '../../../../components/navbar/Navbar';
+import Navbar from '../../../../components/navbar/AuthenticatedNavbar';
 
 const KeyphrasesPage = ({ params }: PageProps) => {
   const { teamId } = params;

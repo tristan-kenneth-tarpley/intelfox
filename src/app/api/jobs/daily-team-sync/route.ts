@@ -1,6 +1,8 @@
 import syncTeamKeyPhrases from '@/jobs/applicationSyncing/syncTeamKeyPhrases';
 import runJob from '@/jobs/runJob';
 import db from '@/lib/services/db/db';
+import { NextRequest } from 'next/server';
+import jobsMiddleware from '../jobsMiddleware';
 
 const findTeamsNotSyncedInLast24Hours = async () => {
   return db.teams.findMany({
@@ -28,7 +30,12 @@ const runDailyTeamSync = async () => {
   }
 };
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  const middleware = jobsMiddleware(request);
+  if (middleware) {
+    return middleware;
+  }
+
   await runDailyTeamSync();
   return Response.json({ status: 'success' });
 }

@@ -1,4 +1,6 @@
 /* eslint-disable global-require */
+
+const palette = require('./palette');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
@@ -18,6 +20,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        ...palette,
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

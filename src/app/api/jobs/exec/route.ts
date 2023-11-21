@@ -4,6 +4,7 @@ import { NextRequest } from 'next/server';
 import syncTeamKeyPhrases from '@/jobs/applicationSyncing/syncTeamKeyPhrases';
 import scrapeAndPersistRedditItems from '@/jobs/dataCollection/scrapeAndPersistRedditItems';
 import runIntelReport from '@/jobs/reporting/runIntelReport';
+import jobsMiddleware from '../jobsMiddleware';
 
 const jobs = {
   syncTeamKeyPhrases,
@@ -14,6 +15,11 @@ const jobs = {
 export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
+  const middleware = jobsMiddleware(request);
+  if (middleware) {
+    return middleware;
+  }
+
   const { jobName, payload }: {
     jobName: keyof typeof jobs;
     payload: any;

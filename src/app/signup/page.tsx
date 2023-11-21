@@ -1,10 +1,16 @@
 import { SignUp } from '@clerk/nextjs';
+import CenterfoldContainer from '@/components/CenterfoldContainer';
 import { routes } from '../routes';
+import clerkAppearance from '../styles/clerkAppearance';
 
 export default function Page() {
   return (
-    <div className="container mx-auto my-auto flex justify-center">
-      <SignUp afterSignInUrl={routes.afterSigninUrl()} afterSignUpUrl={routes.afterSignupUrl()} />
-    </div>
+    <CenterfoldContainer>
+      <SignUp
+        appearance={clerkAppearance}
+        afterSignInUrl={routes.afterSigninUrl()}
+        afterSignUpUrl={routes.afterSignupUrl()}
+      />
+    </CenterfoldContainer>
   );
 }
