@@ -8,12 +8,12 @@ import { routes } from '../routes';
 
 const HomePage = () => {
   const router = useRouter();
-  const { userMemberships } = useOrganizationList();
+  const { userMemberships } = useOrganizationList({ userMemberships: true });
 
   useEffect(() => {
     if (userMemberships.data) {
       if (userMemberships.data.length > 0) {
-        router.push(routes.teamHome({ teamId: userMemberships.data[0].id }));
+        router.push(routes.teamHome({ teamId: userMemberships.data[0].organization.id }));
       } else {
         router.push(routes.afterSignupUrl());
       }

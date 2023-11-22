@@ -1,9 +1,11 @@
 import { routes } from '@/app/routes';
+import { SignedIn, SignedOut } from '@clerk/nextjs';
 import Button from '../ui/Button';
 import HStack from '../ui/stack/HStack';
 import NavbarSkeleton from './NavbarSkeleton';
+import UserButton from '../UserButton';
 
-const LoggedOutNavbar = () => {
+const MarketingPageNavbar = () => {
   return (
     <NavbarSkeleton
       links={[
@@ -13,12 +15,18 @@ const LoggedOutNavbar = () => {
       ]}
       rightContent={(
         <HStack>
-          <Button href={routes.login()} variant="outline">Login</Button>
-          <Button href={routes.signup()}>Signup</Button>
+          <SignedIn>
+            <Button variant="outline" href={routes.home()}>Dashboard</Button>
+            <UserButton />
+          </SignedIn>
+          <SignedOut>
+            <Button href={routes.login()} variant="outline">Login</Button>
+            <Button href={routes.signup()}>Signup</Button>
+          </SignedOut>
         </HStack>
       )}
     />
   );
 };
 
-export default LoggedOutNavbar;
+export default MarketingPageNavbar;

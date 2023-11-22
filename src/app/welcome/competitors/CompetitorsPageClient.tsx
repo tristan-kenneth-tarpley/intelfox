@@ -14,7 +14,7 @@ import Checkbox from '@/components/ui/Checkbox';
 import Label from '@/components/ui/Label';
 import FormGroup from '@/components/ui/FormGroup';
 import InputField from '@/components/ui/Input';
-import WarningAlert from '@/components/ui/WarningAlert';
+import CalloutSection from '@/components/ui/CalloutSection';
 import handleCompetitorsPageSubmission from '@/app/actions/welcome/handleCompetitorsPageSubmission';
 import getHostnameFromDomain from '@/utils/getHostnameFromDomain';
 import WelcomeContainer from '../WelcomeContainer';
@@ -55,10 +55,12 @@ const CompetitorsPageClient = ({
           )}
         </FormStatusWrapper>,
       ]}
-    >
-      {state.message && (
-        <WarningAlert header="There were issues with the form" message={state.message} />
+      dialog={(
+        state.message ? (
+          <CalloutSection header="There were issues with the form" message={state.message} />
+        ) : null
       )}
+    >
       <div className="grid grid-cols-2 gap-y-2">
         {competitors
           .filter((competitor) => competitor.domain !== getHostnameFromDomain(team.primaryDomain))

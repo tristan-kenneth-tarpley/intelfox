@@ -44,6 +44,8 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
     },
   });
 
+  console.log('found an existing team');
+
   if (existingTeam) {
     return redirect(routes.welcomeAbout({ t: existingTeam.id }));
   }

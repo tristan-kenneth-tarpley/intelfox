@@ -16,7 +16,7 @@ import Button from '@/components/ui/Button';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { WORKSPACE_HEIGHT } from '@/constants/dimensions';
 import { innerPadding } from './styles';
-import AuthenticatedNavbar from '../../../components/navbar/AuthenticatedNavbar';
+import ApplicationHomeNavbar from '../../../components/navbar/ApplicationHomeNavbar';
 
 const TeamHome = async (props: PageProps) => {
   const { params } = props;
@@ -31,7 +31,7 @@ const TeamHome = async (props: PageProps) => {
         return (
           <div className="flex flex-col w-screen">
             <div className="sticky top-0 bg-zinc-950">
-              <AuthenticatedNavbar team={team} />
+              <ApplicationHomeNavbar team={team} />
             </div>
             <div style={{ maxHeight: WORKSPACE_HEIGHT }} className={classNames(innerPadding, 'overflow-hidden')}>
               <div className='grid grid-cols-2 gap-x-4 items-stretch'>
@@ -52,6 +52,8 @@ const TeamHome = async (props: PageProps) => {
                           <CardContent>
                             <Heading level={6}>{item.text}</Heading>
                             <Text className="whitespace-break-spaces">{item.bodyText}</Text>
+                            {/* todo, visually distinguish comments from posts */}
+                            <Text className="whitespace-break-spaces">{item.parentText}</Text>
                             {/* <Text></Text> */}
                           </CardContent>
                           <CardFooter>

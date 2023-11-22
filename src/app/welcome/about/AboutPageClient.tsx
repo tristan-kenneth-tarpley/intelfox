@@ -5,7 +5,7 @@ import Button from '@/components/ui/Button';
 import { useFormState } from 'react-dom';
 import handleAboutPageSubmission from '@/app/actions/welcome/handleAboutPageSubmission';
 import FormStatusWrapper from '@/components/FormStatusWrapper';
-import WarningAlert from '@/components/ui/WarningAlert';
+import CalloutSection from '@/components/ui/CalloutSection';
 import FormGroup from '@/components/ui/FormGroup';
 import WelcomeContainer from '../WelcomeContainer';
 import AboutInputField from './AboutInputField';
@@ -33,10 +33,12 @@ const AboutPageClient = ({
           )}
         </FormStatusWrapper>,
       ]}
-    >
-      {state.message && (
-        <WarningAlert header="There were issues with the form" message={state.message} />
+      dialog={(
+        state.message ? (
+          <CalloutSection header="There were issues with the form" message={state.message} />
+        ) : null
       )}
+    >
       <FormGroup className="w-full" label="Company name">
         <CompanyNameInputField initialValue={team.name} />
       </FormGroup>

@@ -1,14 +1,11 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
-import LoggedOutNavbar from '@/components/navbar/LoggedOutNavbar';
-import maybeNavigateToFirstTeamHome from './navigationHelpers/navigateToFirstTeamHome';
+import MarketingPageNavbar from '@/components/navbar/MarketingPageNavbar';
 
 const Home = async () => {
-  await maybeNavigateToFirstTeamHome();
-
   return (
     <div>
-      <LoggedOutNavbar />
+      <MarketingPageNavbar />
       <div className="relative isolate overflow-hidden bg-zinc-950">
         <svg
           className="absolute inset-0 -z-10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"

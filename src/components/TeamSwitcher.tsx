@@ -2,7 +2,9 @@
 
 import { useClerk, useOrganization, useOrganizationList } from '@clerk/nextjs';
 import Image from 'next/image';
-import { ChevronUpDownIcon, PlusIcon, Cog8ToothIcon } from '@heroicons/react/20/solid';
+import {
+  ChevronUpDownIcon, PlusIcon, Cog8ToothIcon, CheckIcon,
+} from '@heroicons/react/20/solid';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -15,6 +17,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Teams } from '@prisma/client/edge';
 import { routes } from '@/app/routes';
+import clerkAppearance from '@/app/styles/clerkAppearance';
+import HStack from './ui/stack/HStack';
 
 const TeamSwitcher = ({
   team,
@@ -23,9 +27,8 @@ const TeamSwitcher = ({
 }) => {
   const router = useRouter();
   const clerk = useClerk();
-  const { userMemberships } = useOrganizationList();
+  const { userMemberships } = useOrganizationList({ userMemberships: true });
   const org = useOrganization();
-  console.log(userMemberships);
 
   return (
     <DropdownMenu>
@@ -46,7 +49,7 @@ const TeamSwitcher = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>{team.name}</DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => clerk.openOrganizationProfile()} className="flex items-center space-x-2">
+        <DropdownMenuItem onClick={() => clerk.openOrganizationProfile({ appearance: clerkAppearance })} className="flex items-center space-x-2">
           <Cog8ToothIcon className="h-4 w-4" />
           <span>Manage team</span>
         </DropdownMenuItem>
@@ -60,9 +63,9 @@ const TeamSwitcher = ({
             }}
             className='flex items-center space-x-2'
           >
-            <div>
-              {organization.name}
-            </div>
+            <HStack justify='between' className="w-full">
+              {organization.name} {organization.id === team.clerkOrgId ? <CheckIcon className="h-4 w-4" /> : null}
+            </HStack>
           </DropdownMenuItem>
         ))}
 
@@ -70,7 +73,7 @@ const TeamSwitcher = ({
         <DropdownMenuItem
           className="font-bold flex items-center space-x-2"
           onClick={() => {
-            clerk.openCreateOrganization();
+            clerk.openCreateOrganization({ appearance: clerkAppearance });
           }}
         >
           <PlusIcon className="h-4 w-4" />

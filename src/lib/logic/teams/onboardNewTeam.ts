@@ -17,11 +17,11 @@ const onboardNewTeam = async ({
     createdBy: createdByUserId,
   });
 
-  await clerkClient.organizations.createOrganizationMembership({
-    organizationId: organization.id,
-    userId: createdByUserId,
-    role: 'admin',
-  });
+  // await clerkClient.organizations.createOrganizationMembership({
+  //   organizationId: organization.id,
+  //   userId: createdByUserId,
+  //   role: 'admin',
+  // });
 
   const team = await db.teams.create({
     data: {

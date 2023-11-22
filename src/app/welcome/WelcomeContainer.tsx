@@ -10,6 +10,7 @@ const WelcomeContainer = ({
   subheading,
   children,
   actions,
+  dialog,
   formAction,
 }: {
   activeName: WelcomeBreadcrumbActiveName;
@@ -17,6 +18,7 @@ const WelcomeContainer = ({
   subheading: string;
   children: React.ReactNode;
   actions?: React.ReactNode[];
+  dialog?: React.ReactNode;
   formAction: FormAction;
 }) => {
   return (
@@ -35,6 +37,7 @@ const WelcomeContainer = ({
             <ActionContainer>
               {actions}
             </ActionContainer>
+            {dialog && dialog}
           </div>
         </form>
       </div>

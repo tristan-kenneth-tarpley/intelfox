@@ -25,11 +25,16 @@ const createChatCompletionReducer = async (input: string[], {
     }],
   });
 
+  const handleError = (error: any) => {
+    console.error(error);
+    return null;
+  };
+
   if (requests.length === 1) {
     console.log('requesting single chunk');
     return openAIClient.createModeratedChatCompletion(
       makeParams(requests[0].join('\n')),
-    ).then(pluckFirstChoice);
+    ).then(pluckFirstChoice).catch(handleError);
   }
 
   // todo, if only one chunk, just make one openAI request
@@ -37,7 +42,7 @@ const createChatCompletionReducer = async (input: string[], {
     console.log(`requesting chunk ${index} of ${requests.length}`);
     return openAIClient.createModeratedChatCompletion(
       makeParams(request.join('\n')),
-    ).then(pluckFirstChoice);
+    ).then(pluckFirstChoice).catch(handleError);
   }));
 
   console.log('requesting final chunk');
@@ -50,7 +55,7 @@ const createChatCompletionReducer = async (input: string[], {
         content: response,
       })),
     ],
-  }).then(pluckFirstChoice);
+  }).then(pluckFirstChoice).catch(handleError);
 };
 
 export default createChatCompletionReducer;

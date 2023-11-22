@@ -3,8 +3,9 @@
 import { useEffect, useRef } from 'react';
 import TeamSwitcher from '@/components/TeamSwitcher';
 import HStack from '@/components/ui/stack/HStack';
-import { UserButton, useOrganizationList } from '@clerk/nextjs';
+import { useOrganizationList } from '@clerk/nextjs';
 import { Teams } from '@prisma/client/edge';
+import UserButton from '../UserButton';
 
 const NavbarRight = ({
   team,

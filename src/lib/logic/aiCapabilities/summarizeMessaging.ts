@@ -22,6 +22,7 @@ const summarizeMessaging = async (input: string) => {
       return null;
     }
 
+    console.log('reportString', reportString);
     return JSON.parse(reportString) as {
       companyName: string;
       keyValueProps: string[];

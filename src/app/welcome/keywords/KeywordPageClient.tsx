@@ -11,7 +11,7 @@ import handleKeywordPageSubmission, { KeyphraseSubmission } from '@/app/actions/
 import InputField from '@/components/ui/Input';
 import FormGroup from '@/components/ui/FormGroup';
 import { useMemo, useState } from 'react';
-import WarningAlert from '@/components/ui/WarningAlert';
+import CalloutSection from '@/components/ui/CalloutSection';
 import truncateDomain from '@/utils/truncateDomain';
 import FormStatusWrapper from '@/components/FormStatusWrapper';
 import Label from '@/components/ui/Label';
@@ -87,10 +87,10 @@ const KeywordPageClient = ({
           )}
         </FormStatusWrapper>,
       ]}
+      dialog={state.message ? (
+        <CalloutSection header="There were issues with the form" message={state.message} />
+      ) : null}
     >
-      {state.message && (
-        <WarningAlert header="There were issues with the form" message={state.message} />
-      )}
       <CheckboxContainer>
         <Checkbox
           id={selfKeyphrase}
