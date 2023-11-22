@@ -10,6 +10,7 @@ import findOrInitializeCompetitor from '@/lib/logic/competitors/findOrInitialize
 import splitStringOnCommas from '@/utils/splitStringOnCommas';
 import findOrCreateCompetitorRelationship from '@/lib/logic/competitors/findOrCreateCompetitorRelationship';
 import findOrCreateKeyPhrase from '@/lib/logic/keyPhrases/findOrCreateKeyPhrase';
+import postCompetitorToAirtable from '@/lib/logic/teams/postCompetitorToAirtable';
 
 const handleCompetitorsPageSubmission: FormStateHandler<{ team: Teams; message?: string }> = async (
   { team },
@@ -28,6 +29,10 @@ const handleCompetitorsPageSubmission: FormStateHandler<{ team: Teams; message?:
   const competitorDomains = _.uniq([...customCompetitors, ...competitors]);
   const competitorDocuments = await Promise.all(
     competitorDomains.map(findOrInitializeCompetitor),
+  );
+
+  await Promise.all(
+    competitorDocuments.map((competitor) => postCompetitorToAirtable(team, competitor)),
   );
 
   await Promise.all(

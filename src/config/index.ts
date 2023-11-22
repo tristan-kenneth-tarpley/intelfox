@@ -1,4 +1,5 @@
 export const appConfig = {
+  airtableSecretKey: process.env.AIRTABLE_API_KEY!,
   cronSecret: process.env.CRON_SECRET!,
   nodeEnv: process.env.NODE_ENV!,
   scrapingBeeAPIKey: process.env.SCRAPING_BEE_API_KEY!,

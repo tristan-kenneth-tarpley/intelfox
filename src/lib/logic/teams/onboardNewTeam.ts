@@ -2,6 +2,7 @@ import { Teams } from '@prisma/client/edge';
 import { clerkClient } from '@clerk/nextjs';
 import db from '@/lib/services/db/db';
 import stripeService from '@/lib/services/stripe/stripeService';
+import postNewTeamToAirtable from './postNewTeamToAirtable';
 
 const onboardNewTeam = async ({
   primaryDomain,
@@ -32,6 +33,8 @@ const onboardNewTeam = async ({
       createdByUserId,
     },
   });
+
+  await postNewTeamToAirtable(team);
 
   const stripeCustomer = await stripeService.customers.create({
     name: organization.name,

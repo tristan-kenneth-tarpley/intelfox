@@ -20,7 +20,7 @@ const clerkAppearance = {
       'placeholder:text-zinc-400 text-zinc-200 text-sm',
       'hover:bg-zinc-900 duration-100',
     ),
-    card: 'border-zinc-700 border',
+    card: 'border-zinc-800 border rounded-xl',
   },
 } as const;
 

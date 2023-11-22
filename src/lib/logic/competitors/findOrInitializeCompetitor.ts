@@ -1,9 +1,11 @@
 import db from '@/lib/services/db/db';
 import safeParseURL from '@/utils/safeParseURL';
+import maybeAddProtocolToURL from '@/utils/maybeAddProtocolToURL';
 import scrapeMetaDescriptionFromURL from '../scraping/scrapeMetaDescriptionFromURL';
 import extractCompanyNameFromURL from '../aiCapabilities/extractCompanyNameFromURL';
 
-const findOrInitializeCompetitor = async (domain: string) => {
+const findOrInitializeCompetitor = async (domainParam: string) => {
+  const domain = maybeAddProtocolToURL(domainParam);
   const [
     metaDescription,
     companyTeamNameFromURLChatCompletion,

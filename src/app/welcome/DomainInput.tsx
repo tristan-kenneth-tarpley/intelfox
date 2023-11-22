@@ -16,9 +16,10 @@ const DomainInput = ({ initialValue }: { initialValue: string }) => {
         required
         value={domain}
         onChange={(e) => {
+          const { value } = e.target;
           if (
-            domain.length > 'https://'.length
-            && !domain.startsWith('https://')
+            value.length > 'https://'.length
+            && !value.startsWith('https://')
           ) {
             setDomain(`https://${e.target.value}`);
           } else {
