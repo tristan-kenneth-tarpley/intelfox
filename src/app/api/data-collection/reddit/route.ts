@@ -1,5 +1,5 @@
 // import scrapeAndPersistRedditItems from '@/jobs/dataCollection/scrapeAndPersistRedditItems';
-import summarizeMessaging from '@/lib/logic/aiCapabilities/summarizeMessaging';
+import summarizeMessaging from '@/lib/logic/aiCapabilities/messaging/summarizeMessaging';
 // import summarizeCareersPage from '@/lib/logic/aiCapabilities/summarizeCareersPage';
 // import summarizePricing from '@/lib/logic/aiCapabilities/summarizePricing';
 // import summarizeProductTraits from '@/lib/logic/aiCapabilities/summarizeProductTraits';

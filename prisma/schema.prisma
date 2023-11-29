@@ -116,6 +116,33 @@ model BillingTargets {
   updatedAt        DateTime @updatedAt
 }
 
+type MessagingPersonality {
+  trait       String
+  description String
+}
+
+enum EmailCategory {
+  promotion
+  info
+  announcement
+  alert
+}
+
+type EmailMessagingProfile {
+  title       String
+  summary     String
+  category    EmailCategory
+  personality MessagingPersonality[]
+}
+
+model EmailSummaries {
+  id               String                @id @default(auto()) @map("_id") @db.ObjectId
+  competitorId     String
+  date             DateTime
+  messagingProfile EmailMessagingProfile
+  subject          String
+}
+
 model IntelReport {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   teamId           String
