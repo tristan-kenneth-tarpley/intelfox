@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     where: {
       domain: competitorDomain,
     },
-  });
+  }).catch(() => null);
 
   if (!competitor) {
     return Response.json({ status: `failed, could not find a competitor for ${toEmails}` });
