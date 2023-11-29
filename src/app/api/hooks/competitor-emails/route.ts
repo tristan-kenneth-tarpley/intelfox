@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
   };
 
   const bodySummarization = await summarizeEmailMessaging(bodyPlain);
+  console.log('requesting for toEmails', toEmails);
   const addressAfterPlusSign = toEmails.split('+')[1];
 
   const competitor = await db.competitors.findFirstOrThrow({
