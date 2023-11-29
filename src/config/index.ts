@@ -14,4 +14,5 @@ export const appConfig = {
   nangoSecretKey: process.env.NANGO_SECRET_KEY,
   selfUrl: process.env.SELF_URL!,
   zeploSecret: process.env.ZEPLO_SECRET!,
+  zapierWebhookSecret: process.env.ZAPIER_WEBHOOK_SECRET!,
 } as const;

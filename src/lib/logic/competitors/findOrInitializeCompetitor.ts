@@ -24,7 +24,6 @@ const findOrInitializeCompetitor = async (domainParam: string) => {
     update: {
       domain,
     },
-    // todo need to gather data about the domain
     create: {
       domain,
       name,

@@ -8,6 +8,7 @@ export default authMiddleware({
     '/',
     '/api/data-collection/reddit',
     /^\/api\/jobs(?:\/([^\/#\?]+?))[\/#\?]?$/i,
+    /^\/api\/hooks(?:\/([^\/#\?]+?))[\/#\?]?$/i,
     '/login',
     '/signup',
   ],

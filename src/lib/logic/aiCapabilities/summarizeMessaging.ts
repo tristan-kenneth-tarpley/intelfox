@@ -23,6 +23,7 @@ const summarizeMessaging = async (input: string) => {
     }
 
     console.log('reportString', reportString);
+    // add rationale/reasoning to each of these points
     return JSON.parse(reportString) as {
       companyName: string;
       keyValueProps: string[];

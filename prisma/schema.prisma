@@ -120,6 +120,7 @@ model IntelReport {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   teamId           String
   competitorId     String?
+  // todo update 
   pros             String[]
   cons             String[]
   peopleGoodFor    String[]

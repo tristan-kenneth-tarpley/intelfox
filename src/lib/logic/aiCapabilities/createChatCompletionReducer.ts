@@ -2,6 +2,7 @@ import openAIClient from '@/lib/services/openAI/client';
 import pluckFirstChoice from '@/lib/services/openAI/pluckFirstChoice';
 import { chunkChatRequestsByTokenSize } from './chunkRequestsByMaxTokenSize';
 
+// todo should use functions api to return json, should be more reliable
 const createChatCompletionReducer = async (input: string[], {
   baseSystemMessage,
   reconciliationMessage,

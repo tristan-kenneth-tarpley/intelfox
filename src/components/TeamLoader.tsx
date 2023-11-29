@@ -22,7 +22,6 @@ const TeamLoader = async ({
     ? await findTeamByClerkOrg(teamId)
     : await findTeamById(teamId);
 
-  // todo verify that user has permissions to view this team
   if (!team) {
     return <Text>Team not found</Text>;
   }

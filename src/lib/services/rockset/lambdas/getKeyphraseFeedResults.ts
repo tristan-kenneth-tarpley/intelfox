@@ -3,7 +3,7 @@ import {
 } from '@prisma/client/edge';
 import withRocksetAPI from '../withRocksetAPI';
 
-type KeyPhraseFeedResult =
+export type KeyPhraseFeedResult =
   { similarity: number } &
   Pick<TrackedKeyPhrases, 'phrase'> &
   Pick<ScrapedItems, | 'text'
