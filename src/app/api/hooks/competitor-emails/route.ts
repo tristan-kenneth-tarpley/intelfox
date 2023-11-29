@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   const bodySummarization = await summarizeEmailMessaging(bodyPlain);
   const addressAfterPlusSign = toEmails.split('+')[1];
 
-  const competitor = await db.competitors.findFirst({
+  const competitor = await db.competitors.findFirstOrThrow({
     where: {
       domain: addressAfterPlusSign,
     },

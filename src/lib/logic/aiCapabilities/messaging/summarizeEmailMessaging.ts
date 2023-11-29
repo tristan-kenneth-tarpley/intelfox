@@ -5,7 +5,7 @@ const jsonShape = [
   '{',
   '  "title": <<pick a title from the email to use as the headline>>',
   '  "personality": <<array of the following shape: {trait: <<the personality trait the company is trying to exude>>, description: <<a 1-2 sentence description of how this personality trait is shown>>}>>',
-  '  "summary": <<string, a short, 1-2 paragraph summary of the content of the email>>',
+  '  "summary": <<string, a short, 1-2 paragraph summary of the content of the email spoken from the perspective of the recipient describing it to a colleague>>',
   '  "category": <<string, one of "promotion" | "info" | "announcement" | "alert">>',
   '}',
 ].join('\n');

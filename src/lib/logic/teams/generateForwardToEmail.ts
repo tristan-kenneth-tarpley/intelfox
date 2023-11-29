@@ -9,9 +9,7 @@ const generateForwardToEmail = (domain: string): string | null => {
   }
 
   return `${baseEmailSlug}+${
-    url.hostname
-      .split('.')[0]
-      .toLowerCase()
+    url.hostname.toLowerCase()
   }@gmail.com`;
 };
 
