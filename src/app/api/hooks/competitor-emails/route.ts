@@ -3,6 +3,12 @@ import summarizeEmailMessaging from '@/lib/logic/aiCapabilities/messaging/summar
 import db from '@/lib/services/db/db';
 import hooksMiddleware from '../hooksMiddleware';
 
+const extractDomainFromUrl = (url: string) => {
+  const splitOnPlus = url.split('+')[1];
+
+  return splitOnPlus.split('@')[0];
+};
+
 export async function POST(request: NextRequest) {
   const middleware = hooksMiddleware(request);
   if (middleware) {
@@ -20,12 +26,12 @@ export async function POST(request: NextRequest) {
   };
 
   const bodySummarization = await summarizeEmailMessaging(bodyPlain);
-  console.log('requesting for toEmails', toEmails);
-  const addressAfterPlusSign = toEmails.split('+')[1];
+  const competitorDomain = extractDomainFromUrl(toEmails);
+  console.log('requesting for toEmails', toEmails, competitorDomain);
 
   const competitor = await db.competitors.findFirstOrThrow({
     where: {
-      domain: addressAfterPlusSign,
+      domain: competitorDomain,
     },
   });
 
