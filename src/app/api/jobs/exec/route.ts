@@ -3,13 +3,21 @@ import { NextRequest } from 'next/server';
 
 import syncTeamKeyPhrases from '@/jobs/applicationSyncing/syncTeamKeyPhrases';
 import scrapeAndPersistRedditItems from '@/jobs/dataCollection/scrapeAndPersistRedditItems';
-import runIntelReport from '@/jobs/reporting/runIntelReport';
+import runMarketIntelReport from '@/jobs/reporting/runMarketIntelReport';
+import runCareersPageReport from '@/jobs/reporting/runCareersPageReport';
+import runWebpageMessagingReport from '@/jobs/reporting/runWebpageMessagingReport';
+import runPricingPageReport from '@/jobs/reporting/runPricingPageReport';
+import prepIntelReportForTeam from '@/jobs/prepIntelReportForTeam';
 import jobsMiddleware from '../jobsMiddleware';
 
 const jobs = {
+  prepIntelReportForTeam,
   syncTeamKeyPhrases,
   scrapeAndPersistRedditItems,
-  runIntelReport,
+  runMarketIntelReport,
+  runCareersPageReport,
+  runWebpageMessagingReport,
+  runPricingPageReport,
 } as const;
 
 export const maxDuration = 300;

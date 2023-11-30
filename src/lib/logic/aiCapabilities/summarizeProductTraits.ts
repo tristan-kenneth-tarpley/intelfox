@@ -1,4 +1,5 @@
-import { IntelReport } from '@prisma/client/edge';
+import { MarketIntelReport } from '@prisma/client/edge';
+import safeParseJSON from '@/utils/safeParseJSON';
 import createChatCompletionReducer from './createChatCompletionReducer';
 
 const jsonShape = [
@@ -24,13 +25,13 @@ const summarizeProductTraits = async (input: string) => {
       return null;
     }
 
-    return JSON.parse(reportString) as Pick<
-    IntelReport,
+    return safeParseJSON<Pick<
+    MarketIntelReport,
     | 'peopleGoodFor'
     | 'peopleNotGoodFor'
     | 'pros'
     | 'cons'
-    >;
+    >>(reportString);
   });
 };
 

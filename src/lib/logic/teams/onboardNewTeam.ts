@@ -34,6 +34,7 @@ const onboardNewTeam = async ({
     },
   });
 
+  // create a competitor entry for this team too
   await postNewTeamToAirtable(team);
 
   const stripeCustomer = await stripeService.customers.create({

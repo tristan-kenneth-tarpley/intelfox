@@ -4,7 +4,7 @@ import extractRelevantTextFromURL from '@/lib/logic/scraping/extractRelevantText
 import findTeamById from '@/lib/logic/teams/findTeamById';
 import db from '@/lib/services/db/db';
 
-const runIntelReport = async ({
+const runMarketIntelReport = async ({
   teamId,
   competitorId = null,
 }: {
@@ -36,7 +36,7 @@ const runIntelReport = async ({
     return null;
   }
 
-  return db.intelReport.create({
+  return db.marketIntelReport.create({
     data: {
       ...productReport,
       teamId,
@@ -45,4 +45,4 @@ const runIntelReport = async ({
   });
 };
 
-export default runIntelReport;
+export default runMarketIntelReport;

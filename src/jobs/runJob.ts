@@ -1,7 +1,7 @@
 import { appConfig } from '@/config';
 import forwardRequestToZeplo from '@/lib/services/zeplo/forwardRequestToZeplo';
 
-const runJob = (
+const runJob = async (
   job: (...args: any[]) => any,
   payload: Record<string, any>,
 ) => {

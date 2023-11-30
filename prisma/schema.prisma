@@ -39,6 +39,7 @@ model ScrapedItems {
 }
 
 enum URLType {
+  HOMEPAGE
   PRICING_PAGE
   CAREERS_PAGE
   CAPTERRA
@@ -57,10 +58,13 @@ model Teams {
   description      String
   shortDescription String?
   createdByUserId  String
-  lastSyncedAt     DateTime?
   urls             TeamURLs[]
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
+
+  lastSyncedAt   DateTime?
+  lastPreppedAt  DateTime?
+  lastReportedAt DateTime? // todo we can maybe infer this, but use this for now
 
   @@index([lastSyncedAt])
 }
@@ -72,6 +76,7 @@ model Competitors {
   description      String?
   shortDescription String?
   urls             TeamURLs[]
+  // maybe need a nextSyncDueAt field here
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -145,7 +150,48 @@ model EmailSummaries {
   updatedAt        DateTime              @updatedAt
 }
 
-model IntelReport {
+model PricingPageReport {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  teamId         String
+  competitorId   String?
+  pricingSummary String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+type GenericMessagingProfile {
+  summary       String
+  personality   MessagingPersonality[]
+  companyName   String
+  keyValueProps String[]
+}
+
+model MessagingProfile {
+  id               String                  @id @default(auto()) @map("_id") @db.ObjectId
+  teamId           String
+  competitorId     String?
+  messagingProfile GenericMessagingProfile
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+}
+
+type JobListing {
+  title      String
+  location   String?
+  department String?
+}
+
+model JobListingsReport {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  competitorId String?
+  teamId       String
+  listings     JobListing[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MarketIntelReport {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   teamId           String
   competitorId     String?

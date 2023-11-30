@@ -1,4 +1,5 @@
 import { EmailMessagingProfile } from '@prisma/client/edge';
+import safeParseJSON from '@/utils/safeParseJSON';
 import createChatCompletionReducer from '../createChatCompletionReducer';
 
 const jsonShape = [
@@ -23,8 +24,7 @@ const summarizeEmailMessaging = async (input: string) => {
     }
 
     console.log('reportString', reportString);
-    // add rationale/reasoning to each of these points
-    return JSON.parse(reportString) as EmailMessagingProfile;
+    return safeParseJSON<EmailMessagingProfile>(reportString);
   });
 };
 

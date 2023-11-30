@@ -35,7 +35,7 @@ const openAIClient = {
     } catch (error: any) {
       logger.error(`${LOG_PREFIXES.openAI} Error getting chat response: ${error.message}`);
 
-      const { status } = error.response;
+      const { status } = error;
       if (status === 400) {
         throw new AppError('OpenAITokenLimitError');
       } else if (status === 429) {

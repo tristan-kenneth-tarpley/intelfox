@@ -1,3 +1,5 @@
+import { GenericMessagingProfile } from '@prisma/client/edge';
+import safeParseJSON from '@/utils/safeParseJSON';
 import createChatCompletionReducer from '../createChatCompletionReducer';
 
 const jsonShape = [
@@ -23,15 +25,7 @@ const summarizeMessaging = async (input: string) => {
 
     console.log('reportString', reportString);
     // add rationale/reasoning to each of these points
-    return JSON.parse(reportString) as {
-      companyName: string;
-      keyValueProps: string[];
-      personality: {
-        trait: string;
-        description: string;
-      }[];
-      summary: string;
-    };
+    return safeParseJSON<GenericMessagingProfile>(reportString);
   });
 };
 

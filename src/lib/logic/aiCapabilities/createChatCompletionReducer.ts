@@ -21,7 +21,7 @@ const createChatCompletionReducer = async (input: string[], {
   const makeParams = (content: string) => ({
     stream: false,
     temperature: 0,
-    max_tokens: 15000,
+    // max_tokens: 15000,
     messages: [...baseMessages, {
       role: 'user' as const,
       content,

@@ -1,3 +1,5 @@
+import { JobListing } from '@prisma/client/edge';
+import safeParseJSON from '@/utils/safeParseJSON';
 import createChatCompletionReducer from './createChatCompletionReducer';
 
 const jsonFormat = [
@@ -25,13 +27,9 @@ const summarizeCareersPage = async (input: string) => {
       return null;
     }
 
-    return JSON.parse(reportString) as {
-      listings: Array<{
-        title: string;
-        location: string;
-        department: string;
-      }>
-    };
+    return safeParseJSON<{
+      listings: JobListing[];
+    }>(reportString);
   });
 };
 
