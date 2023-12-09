@@ -8,7 +8,8 @@ const AdminNavbar = () => {
   return (
     <NavbarSkeleton
       links={[
-        <Button key={1} href={routes.home()} variant='ghost'>Home</Button>,
+        <Button key={1} href={routes.home()} variant='ghost'>App home</Button>,
+        <Button key={1} href={routes.admin()} variant='ghost'>Admin home</Button>,
       ]}
       rightContent={(
         <HStack align="center">

@@ -18,7 +18,7 @@ export default function Select({
 }: {
   options: Option[];
   selected?: Option;
-  onChange: (id: Option) => void,
+  onChange?: (id: Option) => void,
 }) {
   return (
     <SelectPrimitive>
@@ -30,7 +30,7 @@ export default function Select({
           <SelectItem
             key={id}
             value={id}
-            onClick={() => onChange({ id, name })}
+            onClick={() => onChange?.({ id, name })}
           >
             {name}
           </SelectItem>

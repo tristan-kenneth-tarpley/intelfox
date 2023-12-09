@@ -16,6 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useRouter } from 'next/navigation';
+import { routes } from '../routes';
 
 export const columns: ColumnDef<Teams>[] = [
   {
@@ -61,6 +63,7 @@ export const columns: ColumnDef<Teams>[] = [
 ];
 
 const TeamsTable = ({ teams }: { teams: Teams[] }) => {
+  const router = useRouter();
   const table = useReactTable({
     data: teams,
     columns,
@@ -94,6 +97,8 @@ const TeamsTable = ({ teams }: { teams: Teams[] }) => {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
+                onClick={() => router.push(routes.teamAdminPage({ teamId: row.getValue('id') }))}
+                className="cursor-pointer"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

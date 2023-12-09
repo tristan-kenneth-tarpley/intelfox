@@ -2,8 +2,9 @@ import classNames from 'classnames';
 import { CSSProperties } from 'react';
 
 interface Props {
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  value: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  value?: string;
+  defaultValue?: string;
   placeholder?: string;
   className?: string;
   type?: 'text' | 'password' | 'email' | 'number' | 'url';
@@ -15,6 +16,7 @@ interface Props {
 
 const InputField = ({
   value,
+  defaultValue,
   onChange,
   placeholder,
   className,
@@ -36,6 +38,7 @@ const InputField = ({
     textArea ? (
       <textarea
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
         placeholder={placeholder}
         className={classes}
@@ -47,6 +50,7 @@ const InputField = ({
     ) : (
       <input
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
         type={type}
         placeholder={placeholder}

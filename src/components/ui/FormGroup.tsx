@@ -18,7 +18,9 @@ const FormGroup: React.FC<{
   style,
 }) => (
   <div
-    className={classNames('my-4 w-full', className)}
+    className={classNames('w-full', className, {
+      'my-4': className?.includes('my-'),
+    })}
     style={style}
   >
     <label
