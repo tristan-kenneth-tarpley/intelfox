@@ -9,6 +9,7 @@ const buildUrl = (path: string[], query?: Record<string, string>) => {
 export const routes = {
   admin: () => '/admin',
   teamAdminPage: ({ teamId }: { teamId: string }) => buildUrl(['admin', 'teams', teamId]),
+  teamCompetitorPage: ({ competitorId }: { competitorId: string }) => buildUrl(['admin', 'competitors', competitorId]),
   root: () => '/',
   home,
   teamHome: ({ teamId }: { teamId: string }) => `/home/${teamId}`,

@@ -39,6 +39,8 @@ const prepIntelReportForTeam = async ({ teamId }: { teamId: string }) => {
     throw new Error(`Team not found for id ${teamId}`);
   }
 
+  console.log('team', team, team.id, team.urls);
+
   // todo fallback to primaryDomain if we don't have HOMEPAGE
   await Promise.all(team.urls.map((teamUrl) => handleUrl(teamUrl, { teamId })));
   await competitors.flatMap(async ({ urls, id }) => {

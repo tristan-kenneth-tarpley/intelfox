@@ -69,6 +69,7 @@ const Button: React.FC<IButton> = ({
       type={type}
       onClick={disabled ? noop : onClick}
       disabled={disabled || loading}
+      aria-disabled={disabled || loading}
       className={classNames(
         className,
         baseClassNames(size),

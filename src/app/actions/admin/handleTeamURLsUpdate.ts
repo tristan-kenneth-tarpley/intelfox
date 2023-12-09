@@ -5,6 +5,7 @@ import findTeamById from '@/lib/logic/teams/findTeamById';
 import { URLType } from '@prisma/client/edge';
 import { allUrlTypes } from '@/lib/logic/teams/teamConstants';
 import updateTeamById from '@/lib/logic/teams/updateTeamById';
+import { revalidatePath } from 'next/cache';
 import makeRequestError from '../makeRequestError';
 
 const handleTeamURLsUpdate: FormStateHandler<{ teamId: string; message?: string }> = async ({
@@ -26,6 +27,7 @@ const handleTeamURLsUpdate: FormStateHandler<{ teamId: string; message?: string 
     );
 
   await updateTeamById(teamId, { urls });
+  revalidatePath(`/admin/teams/${teamId}`);
 
   return { message: 'URLs updated!' };
 };

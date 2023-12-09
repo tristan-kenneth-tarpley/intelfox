@@ -6,7 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Teams } from '@prisma/client/edge';
+import { Competitors, Teams } from '@prisma/client/edge';
 
 import {
   Table,
@@ -17,20 +17,19 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useRouter } from 'next/navigation';
+import Button from '@/components/ui/Button';
+import VStack from '@/components/ui/stack/VStack';
 import { routes } from '../routes';
+import NewCompetitorPopoverForm from './NewCompetitorPopoverForm';
 
-export const columns: ColumnDef<Teams>[] = [
+export const columns: ColumnDef<Competitors>[] = [
   {
     accessorKey: 'id',
     header: 'id',
   },
   {
-    accessorKey: 'clerkOrgId',
-    header: 'clerkOrgId',
-  },
-  {
-    accessorKey: 'primaryDomain',
-    header: 'primaryDomain',
+    accessorKey: 'domain',
+    header: 'domain',
   },
   {
     accessorKey: 'name',
@@ -40,28 +39,12 @@ export const columns: ColumnDef<Teams>[] = [
     accessorKey: 'description',
     header: 'description',
   },
-  {
-    accessorKey: 'createdAt',
-    header: 'createdAt',
-  },
-  {
-    accessorKey: 'lastSyncedAt',
-    header: 'lastSyncedAt',
-  },
-  {
-    accessorKey: 'lastPreppedAt',
-    header: 'lastPreppedAt',
-  },
-  {
-    accessorKey: 'lastReportedAt',
-    header: 'lastReportedAt',
-  },
 ];
 
-const TeamsTable = ({ teams }: { teams: Teams[] }) => {
+const CompetitorsTable = ({ competitors, team }: { competitors: Competitors[]; team: Teams }) => {
   const router = useRouter();
   const table = useReactTable({
-    data: teams,
+    data: competitors,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -93,7 +76,7 @@ const TeamsTable = ({ teams }: { teams: Teams[] }) => {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
-                onClick={() => router.push(routes.teamAdminPage({ teamId: row.getValue('id') }))}
+                onClick={() => router.push(routes.teamCompetitorPage({ competitorId: row.getValue('id') }))}
                 className="cursor-pointer"
               >
                 {row.getVisibleCells().map((cell) => (
@@ -106,7 +89,7 @@ const TeamsTable = ({ teams }: { teams: Teams[] }) => {
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                <VStack className="mx-auto"><span>No competitors.</span> <NewCompetitorPopoverForm team={team} /></VStack>
               </TableCell>
             </TableRow>
           )}
@@ -116,4 +99,4 @@ const TeamsTable = ({ teams }: { teams: Teams[] }) => {
   );
 };
 
-export default TeamsTable;
+export default CompetitorsTable;

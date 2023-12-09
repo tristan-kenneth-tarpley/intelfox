@@ -3,6 +3,7 @@
 import { FormStateHandler } from '@/app/types';
 import findTeamById from '@/lib/logic/teams/findTeamById';
 import updateTeamById from '@/lib/logic/teams/updateTeamById';
+import { revalidatePath } from 'next/cache';
 import makeRequestError from '../makeRequestError';
 
 const handleTeamUpdate: FormStateHandler<{ teamId: string; message?: string }> = async (
@@ -24,6 +25,8 @@ const handleTeamUpdate: FormStateHandler<{ teamId: string; message?: string }> =
     description,
     primaryDomain,
   });
+
+  revalidatePath(`/admin/teams/${teamId}`);
 
   return { message: 'team updated!' };
 };
