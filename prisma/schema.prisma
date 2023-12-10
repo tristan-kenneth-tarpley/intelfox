@@ -142,7 +142,8 @@ type EmailMessagingProfile {
 
 model EmailSummaries {
   id               String                @id @default(auto()) @map("_id") @db.ObjectId
-  competitorId     String
+  competitorId     String?
+  teamId           String
   date             DateTime
   messagingProfile EmailMessagingProfile
   subject          String

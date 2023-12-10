@@ -2,11 +2,9 @@ import OpenAI from 'openai';
 
 import logger from '@/lib/logger';
 import { AppError, LOG_PREFIXES } from '@/lib/logic/errors';
-import { appConfig } from '@/config';
+import { ChatCompletion } from 'openai/resources/index.mjs';
 
-const openai = new OpenAI({
-  apiKey: appConfig.openAISecret,
-});
+const openai = new OpenAI();
 
 export const DefaultModels = {
   chat: 'gpt-3.5-turbo-16k',
@@ -31,7 +29,8 @@ const openAIClient = {
 
     try {
       const response = await openai.chat.completions.create({ ...request, model });
-      return response;
+      // if you need the stream type, create a new method that's strongly typed
+      return response as ChatCompletion;
     } catch (error: any) {
       logger.error(`${LOG_PREFIXES.openAI} Error getting chat response: ${error.message}`);
 

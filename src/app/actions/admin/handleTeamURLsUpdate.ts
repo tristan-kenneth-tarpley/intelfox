@@ -18,7 +18,7 @@ const handleTeamURLsUpdate: FormStateHandler<{
   const team = await findTeamById(teamId);
 
   if (!team) {
-    return makeRequestError({ code: 410, message: 'Team not found' });
+    return makeRequestError({ code: 410, message: 'Team not found', extra: { teamId } });
   }
 
   const urls = Array.from(formData.keys())
@@ -33,7 +33,7 @@ const handleTeamURLsUpdate: FormStateHandler<{
   await updateTeamById(teamId, { urls });
   revalidatePath(routes.teamAdminPage({ teamId }));
 
-  return { message: 'URLs updated!' };
+  return { message: 'URLs updated!', teamId };
 };
 
 export default handleTeamURLsUpdate;

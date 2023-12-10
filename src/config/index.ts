@@ -3,7 +3,7 @@ export const appConfig = {
   cronSecret: process.env.CRON_SECRET!,
   nodeEnv: process.env.NODE_ENV!,
   scrapingBeeAPIKey: process.env.SCRAPING_BEE_API_KEY!,
-  openAISecret: process.env.OPEN_AI_SECRET!,
+  openAISecret: process.env.OPENAI_API_KEY!,
   rocksetAPIEndpoint: process.env.ROCKSET_API_ENDPOINT!,
   rocksetAPIKey: process.env.ROCKSET_API_KEY!,
   spyfuAppId: process.env.SPYFU_APP_ID!,
