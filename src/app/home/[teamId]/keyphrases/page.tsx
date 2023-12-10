@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import db from '@/lib/services/db/db';
 import Button from '@/components/ui/Button';
 import { TrashIcon } from '@heroicons/react/20/solid';
-import { innerPadding } from '../styles';
+import { innerPadding } from '../../../styles';
 import Navbar from '../../../../components/navbar/ApplicationHomeNavbar';
 
 const KeyphrasesPage = ({ params }: PageProps) => {

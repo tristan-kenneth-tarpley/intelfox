@@ -21,7 +21,7 @@ const AdminPage = async () => {
         <div className="w-1/2">
           <TeamSearchForm />
         </div>
-        <div className='grid  max-w-[80vw] overflow-scroll'>
+        <div className='grid max-w-[80vw] overflow-scroll'>
           <TeamsTable teams={teams} />
         </div>
       </VStack>

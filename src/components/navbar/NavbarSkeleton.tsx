@@ -1,4 +1,4 @@
-import { padding } from '@/app/home/[teamId]/styles';
+import { padding } from '@/app/styles';
 import { NAVBAR_HEIGHT } from '@/constants/dimensions';
 import Logo from '../Logo';
 import HStack from '../ui/stack/HStack';

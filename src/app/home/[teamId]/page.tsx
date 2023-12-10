@@ -16,7 +16,7 @@ import Button from '@/components/ui/Button';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { WORKSPACE_HEIGHT } from '@/constants/dimensions';
 import findCompetitorsByTeamId from '@/lib/logic/competitors/findCompetitorsByTeamId';
-import { innerPadding } from './styles';
+import { innerPadding } from '../../styles';
 import ApplicationHomeNavbar from '../../../components/navbar/ApplicationHomeNavbar';
 import SubNav from './SubNav';
 import FeedResults from './FeedResults';
