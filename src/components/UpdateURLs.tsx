@@ -1,50 +1,54 @@
 'use client';
 
 import _ from 'lodash';
-import Button from '@/components/ui/Button';
-import { Teams, URLType } from '@prisma/client/edge';
+import { TeamURLs, URLType } from '@prisma/client/edge';
 import { useMemo, useState } from 'react';
-import FormGroup from '@/components/ui/FormGroup';
-import VStack from '@/components/ui/stack/VStack';
-import InputField from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
-import HStack from '@/components/ui/stack/HStack';
-import { XMarkIcon } from '@heroicons/react/20/solid';
-import { useFormState } from 'react-dom';
-import handleTeamURLsUpdate from '@/app/actions/admin/handleTeamURLsUpdate';
-import FormStatusWrapper from '@/components/FormStatusWrapper';
-import CalloutSection from '@/components/ui/CalloutSection';
 import { allUrlTypes } from '@/lib/logic/teams/teamConstants';
+import { XMarkIcon } from '@heroicons/react/20/solid';
+import CalloutSection from './ui/CalloutSection';
+import VStack from './ui/stack/VStack';
+import Button from './ui/Button';
+import HStack from './ui/stack/HStack';
+import FormGroup from './ui/FormGroup';
+import InputField from './ui/Input';
+import Select from './ui/Select';
+import FormStatusWrapper from './FormStatusWrapper';
 
-const UpdateTeamUrls = ({ team }: { team: Teams }) => {
-  const [state, formAction] = useFormState(handleTeamURLsUpdate, { teamId: team.id });
-
-  const [teamUrls, setTeamUrls] = useState(team.urls);
-  const currentURLTypes = teamUrls.map((url) => url.type);
+const UpdateURLs = ({
+  message,
+  urls: initialUrls,
+  action,
+}: {
+  urls: TeamURLs[];
+  message?: string;
+  action: (payload: FormData) => void,
+}) => {
+  const [urls, setURLs] = useState(initialUrls);
+  const currentURLTypes = urls.map((url) => url.type);
   const remainingTypes = _.difference(allUrlTypes, currentURLTypes);
 
   const handleURLRemoval = (type: URLType) => {
-    setTeamUrls(teamUrls.filter((url) => url.type !== type));
+    setURLs(urls.filter((url) => url.type !== type));
   };
 
   const hasUnsavedChanges = useMemo(() => {
-    return !_.isEqual(team.urls, teamUrls);
-  }, [team.urls, teamUrls]);
+    return !_.isEqual(initialUrls, urls);
+  }, [initialUrls, urls]);
 
   return (
-    <form action={formAction}>
-      {state.message && <CalloutSection header='URLs updated' message={state.message} />}
+    <form action={action}>
+      {message && <CalloutSection header='URLs updated' message={message} />}
       <VStack align='start' space={4}>
         <VStack align="start" className="w-full">
           <Button
             type="button"
-            onClick={() => setTeamUrls([...teamUrls, { type: remainingTypes[0], url: '' }])}
+            onClick={() => setURLs([...urls, { type: remainingTypes[0], url: '' }])}
             disabled={remainingTypes.length === 0}
             variant="outline"
           >
             Add URL
           </Button>
-          {teamUrls.map((url) => (
+          {urls.map((url) => (
             <HStack key={url.type} align="start" justify="between" className="w-full">
               <VStack className="pl-4 border-l border-l-zinc-700" space={1}>
                 <FormGroup label="URL" className='m-0'>
@@ -52,7 +56,7 @@ const UpdateTeamUrls = ({ team }: { team: Teams }) => {
                     name={url.type}
                     value={url.url}
                     onChange={(e) => {
-                      setTeamUrls(teamUrls.map((x) => {
+                      setURLs(urls.map((x) => {
                         if (x.type === e.target.name) {
                           return {
                             ...x,
@@ -82,7 +86,7 @@ const UpdateTeamUrls = ({ team }: { team: Teams }) => {
           {({ pending }) => (
             <Button
               loading={pending}
-              disabled={!hasUnsavedChanges || !teamUrls.every((url) => url.url)}
+              disabled={!hasUnsavedChanges || !urls.every((url) => url.url)}
             >
               Save changes
             </Button>
@@ -93,4 +97,4 @@ const UpdateTeamUrls = ({ team }: { team: Teams }) => {
   );
 };
 
-export default UpdateTeamUrls;
+export default UpdateURLs;

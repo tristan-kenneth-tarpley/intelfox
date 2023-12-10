@@ -31,6 +31,10 @@ const onboardNewTeam = async ({
       clerkOrgId: organization.id,
       description,
       createdByUserId,
+      urls: [{
+        type: 'HOMEPAGE',
+        url: primaryDomain,
+      }],
     },
   });
 

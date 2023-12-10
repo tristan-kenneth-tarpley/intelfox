@@ -1,24 +1,24 @@
 'use server';
 
 import { FormStateHandler } from '@/app/types';
-import findTeamById from '@/lib/logic/teams/findTeamById';
 import { URLType } from '@prisma/client/edge';
 import { allUrlTypes } from '@/lib/logic/teams/teamConstants';
-import updateTeamById from '@/lib/logic/teams/updateTeamById';
 import { revalidatePath } from 'next/cache';
+import findCompetitorById from '@/lib/logic/competitors/findCompetitorById';
+import updateCompetitorById from '@/lib/logic/competitors/updateCompetitorById';
 import { routes } from '@/app/routes';
 import makeRequestError from '../makeRequestError';
 
-const handleTeamURLsUpdate: FormStateHandler<{
-  teamId: string;
+const handleCompetitorsURLsUpdate: FormStateHandler<{
+  competitorId: string;
   message?: string;
 }> = async ({
-  teamId,
+  competitorId,
 }, formData) => {
-  const team = await findTeamById(teamId);
+  const competitor = await findCompetitorById(competitorId);
 
-  if (!team) {
-    return makeRequestError({ code: 410, message: 'Team not found' });
+  if (!competitor) {
+    return makeRequestError({ code: 410, message: 'Competitor not found' });
   }
 
   const urls = Array.from(formData.keys())
@@ -30,10 +30,10 @@ const handleTeamURLsUpdate: FormStateHandler<{
       }),
     );
 
-  await updateTeamById(teamId, { urls });
-  revalidatePath(routes.teamAdminPage({ teamId }));
+  await updateCompetitorById(competitorId, { urls });
+  revalidatePath(routes.adminCompetitorPage({ competitorId }));
 
   return { message: 'URLs updated!' };
 };
 
-export default handleTeamURLsUpdate;
+export default handleCompetitorsURLsUpdate;

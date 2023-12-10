@@ -8,14 +8,17 @@ import { useFormState } from 'react-dom';
 import Text from '@/components/ui/Text';
 import InputField from '@/components/ui/Input';
 import VStack from '@/components/ui/stack/VStack';
-import createCompetitor from '../actions/admin/createCompetitor';
+import FormStatusWrapper from '@/components/FormStatusWrapper';
+import createCompetitorAction from '../actions/admin/createCompetitorAction';
 
 const NewCompetitorPopoverForm = ({ team }: { team: Teams }) => {
-  const [state, formAction] = useFormState(createCompetitor, { teamId: team.id });
+  const [state, formAction] = useFormState(createCompetitorAction, { teamId: team.id, admin: true });
 
   return (
     <Popover>
-      <PopoverTrigger><Button>Create competitor</Button></PopoverTrigger>
+      <PopoverTrigger>
+        <Button>Create competitor</Button>
+      </PopoverTrigger>
       <PopoverContent>
         {state.message && <Text>{state.message}</Text>}
         <form action={formAction}>
@@ -24,9 +27,13 @@ const NewCompetitorPopoverForm = ({ team }: { team: Teams }) => {
               <InputField name="name" />
             </FormGroup>
             <FormGroup className='w-full' label="Competitor domain">
-              <InputField name="domain" />
+              <InputField type="url" name="domain" />
             </FormGroup>
-            <Button>Save</Button>
+            <FormStatusWrapper>
+              {({ pending }) => (
+                <Button loading={pending}>Save</Button>
+              )}
+            </FormStatusWrapper>
           </VStack>
         </form>
       </PopoverContent>

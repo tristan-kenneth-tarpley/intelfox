@@ -17,7 +17,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/ui/Button';
 import VStack from '@/components/ui/stack/VStack';
 import { routes } from '../routes';
 import NewCompetitorPopoverForm from './NewCompetitorPopoverForm';
@@ -76,7 +75,7 @@ const CompetitorsTable = ({ competitors, team }: { competitors: Competitors[]; t
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
-                onClick={() => router.push(routes.teamCompetitorPage({ competitorId: row.getValue('id') }))}
+                onClick={() => router.push(routes.adminCompetitorPage({ competitorId: row.getValue('id') }))}
                 className="cursor-pointer"
               >
                 {row.getVisibleCells().map((cell) => (

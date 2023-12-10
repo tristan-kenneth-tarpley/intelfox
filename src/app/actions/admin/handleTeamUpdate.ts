@@ -4,6 +4,7 @@ import { FormStateHandler } from '@/app/types';
 import findTeamById from '@/lib/logic/teams/findTeamById';
 import updateTeamById from '@/lib/logic/teams/updateTeamById';
 import { revalidatePath } from 'next/cache';
+import { routes } from '@/app/routes';
 import makeRequestError from '../makeRequestError';
 
 const handleTeamUpdate: FormStateHandler<{ teamId: string; message?: string }> = async (
@@ -26,7 +27,7 @@ const handleTeamUpdate: FormStateHandler<{ teamId: string; message?: string }> =
     primaryDomain,
   });
 
-  revalidatePath(`/admin/teams/${teamId}`);
+  revalidatePath(routes.teamAdminPage({ teamId }));
 
   return { message: 'team updated!' };
 };

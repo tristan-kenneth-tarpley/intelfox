@@ -12,10 +12,11 @@ import humanizeTimeAgo from '@/utils/humanizeTimeAgo';
 import Heading from '@/components/ui/Heading';
 import findCompetitorsByTeamId from '@/lib/logic/competitors/findCompetitorsByTeamId';
 import TeamSearchForm from '../../TeamSearchForm';
-import UpdateTeamForm from './UpdateTeamForm';
-import UpdateTeamUrls from './UpdateTeamUrls';
+import UpdateTeamForm from '../../../../components/UpdateTeamForm';
+import UpdateTeamUrls from '../../../../components/UpdateTeamUrls';
 import ReportActions from './ReportActions';
 import CompetitorsTable from '../../CompetitorsTable';
+import NewCompetitorPopoverForm from '../../NewCompetitorPopoverForm';
 
 const TeamAdminPage = async ({ params }: PageProps) => {
   await validateAdminUserAndMaybeRedirect();
@@ -50,7 +51,7 @@ const TeamAdminPage = async ({ params }: PageProps) => {
           </VStack>
           <ReportActions team={team} />
         </div>
-        <div className="w-full grid grid-cols-2 gap-4">
+        <div className="w-full grid grid-cols-2 gap-8">
           <Card className="w-full">
             <CardHeader>
               <CardTitle>{team.name}</CardTitle>
@@ -70,7 +71,19 @@ const TeamAdminPage = async ({ params }: PageProps) => {
             </Card>
           </div>
           <div className="col-span-2 max-h-[300px]">
-            <CompetitorsTable competitors={competitors} team={team} />
+            <Card className="w-full">
+              <CardHeader>
+                <CardTitle>Competitors</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-2 w-full flex justify-end">
+                  {competitors.length > 0 && (
+                    <NewCompetitorPopoverForm team={team} />
+                  )}
+                </div>
+                <CompetitorsTable competitors={competitors} team={team} />
+              </CardContent>
+            </Card>
           </div>
           <div className="col-span-2">
             <Card className="w-full">
