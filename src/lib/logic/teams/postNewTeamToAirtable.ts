@@ -8,7 +8,7 @@ const postNewTeamToAirtable = async (team: Teams) => {
       [fields.companyName]: team.name,
       [fields.companyId]: team.id,
       [fields.client]: true,
-      [fields.emailAddress]: generateForwardToEmail(team.primaryDomain) ?? undefined,
+      [fields.emailAddress]: generateForwardToEmail(team.primaryDomain, 'team') ?? undefined,
     },
   }]);
 };

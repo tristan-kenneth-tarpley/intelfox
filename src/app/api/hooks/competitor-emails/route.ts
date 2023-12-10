@@ -3,7 +3,7 @@ import summarizeEmailMessaging from '@/lib/logic/aiCapabilities/messaging/summar
 import db from '@/lib/services/db/db';
 import hooksMiddleware from '../hooksMiddleware';
 
-const extractDomainFromUrl = (url: string) => {
+const extractSlugFromUrl = (url: string) => {
   const splitOnPlus = url.split('+')[1];
 
   return splitOnPlus.split('@')[0];
@@ -26,26 +26,36 @@ export async function POST(request: NextRequest) {
   };
 
   const bodySummarization = await summarizeEmailMessaging(bodyPlain);
-  const competitorDomain = extractDomainFromUrl(toEmails);
-  console.log('requesting for toEmails', toEmails, competitorDomain);
+  const slug = extractSlugFromUrl(toEmails);
+  const prefix = slug.slice(0, 2); // t_ for a team, c_ for a competitor
+  const domain = slug.slice(prefix.length);
 
-  const competitor = await db.competitors.findFirstOrThrow({
-    where: {
-      domain: competitorDomain,
-    },
-  }).catch(() => null);
+  const entity = prefix === 't_'
+    ? await db.teams.findFirstOrThrow({
+      where: {
+        primaryDomain: domain,
+      },
+    }).catch(() => null)
+    : prefix === 'c_'
+      ? await db.competitors.findFirstOrThrow({
+        where: {
+          domain,
+        },
+      }).catch(() => null)
+      : null;
 
-  if (!competitor) {
-    return Response.json({ status: `failed, could not find a competitor for ${toEmails}` });
+  if (!entity) {
+    return Response.json({ status: `failed, could not find a competitor or team for ${toEmails}` });
   }
 
   if (!bodySummarization) {
     return Response.json({ status: `failed, could not summarize email for ${toEmails}` });
   }
 
+  const entityKey = prefix === 't_' ? 'teamId' : 'competitorId' as const;
   await db.emailSummaries.create({
     data: {
-      competitorId: competitor.id,
+      [entityKey]: entity.id,
       date: new Date(date),
       subject,
       messagingProfile: bodySummarization,

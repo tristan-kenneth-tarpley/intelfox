@@ -9,7 +9,7 @@ const postCompetitorToAirtable = async (team: Teams, competitor: Competitors) =>
       [fields.companyId]: competitor.id,
       [fields.client]: false,
       [fields.competitorOf]: team.id,
-      [fields.emailAddress]: generateForwardToEmail(competitor.domain) ?? undefined,
+      [fields.emailAddress]: generateForwardToEmail(competitor.domain, 'competitor') ?? undefined,
     },
   }]);
 };
