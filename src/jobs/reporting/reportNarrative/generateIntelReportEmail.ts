@@ -21,9 +21,7 @@ const handleRequest = ({
     `You are a market intelligence analyst for a company called ${team.name} with the following description:`,
     team.description,
     `The following content was found online about ${competitor ? `a competitor called ${competitor.name}` : 'your company'}.`,
-    'Compile a concise intelligence report for your team to review in the following format:',
-    'just use your best judgment for now with format, just keep it concise', // todo define format
-    'Call out changes in strategy, dissonance between how they present themselves and how the market views them, as well as opportunities to gain an advantage on competitors in the market.',
+    'Answer the questions asked from a 3rd party, neutral perspective.',
   ].join('\n');
 
   return openAIClient.createModeratedChatCompletion({
@@ -37,12 +35,19 @@ const handleRequest = ({
 
 const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findLastNReportsByEntityId>>) => {
   return [
+    // todo, we should ask these questions upstream when we scrape then pass the raw text here, or ask for differences between the last two months
+    // joinOnNewLine([
+    //   'Given the following summary of the pricing page, answer the following questions in one paragraph or less:',
+    //   '- how do they segment their pricing?',
+    //   '- Which features are paywalled?',
+    //   '- Is there a free plan?',
+    //   ...reports.pricingPageReport.map(({ pricingSummary }, i) => `collected ${i === 0 ? 'this month' : 'last month'}: ${pricingSummary}`),
+    // ]),
+    // todo don't need to pass to OAI
+    // we should pass this as context to the rest of the prompts
+    // instead, compare how team positions vs. how competitor positions
     joinOnNewLine([
-      'Pricing page report:',
-      ...reports.pricingPageReport.map(({ pricingSummary }, i) => `collected ${i === 0 ? 'this month' : 'last month'}: ${pricingSummary}`),
-    ]),
-    joinOnNewLine([
-      'Pricing page report:',
+      'Website messaging report:',
       ...reports.messagingProfile.map(({
         messagingProfile: {
           summary,
@@ -56,6 +61,8 @@ const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findL
         `personality: ${personality.map(({ trait, description }) => `${trait}: ${description}`).join(', ')}`,
       ])),
     ]),
+    // todo, maybe can we ask "what does this say about their priorities/strategy?"
+    // compare to last month
     joinOnNewLine([
       'Open job postings:',
       ...reports.jobListingsReport.map(({ listings }, i) => joinOnNewLine([
@@ -82,24 +89,27 @@ const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findL
         `people not good for: ${peopleNotGoodFor.join(', ')}`,
       ])),
     ]),
-    joinOnNewLine([
-      'Summaries of marketing emails sent in the past 30 days:',
-      ...reports.emailSummaries.map(({
-        subject,
-        messagingProfile: {
-          title,
-          summary,
-          category,
-          personality,
-        },
-      }) => joinOnNewLine([
-        `subject: ${subject}`,
-        `title: ${title}`,
-        `summary: ${summary}`,
-        `category: ${category}`,
-        `personality: ${personality.map(({ trait, description }) => `${trait}: ${description}`).join(', ')}`,
-      ])),
-    ]),
+    // todo don't need to pass to OAI
+    // just print our summaries
+    // maybeeee use OAI to stack rank or pick 3 that are most relevant
+    // joinOnNewLine([
+    //   'Summaries of marketing emails sent in the past 30 days:',
+    //   ...reports.emailSummaries.map(({
+    //     subject,
+    //     messagingProfile: {
+    //       title,
+    //       summary,
+    //       category,
+    //       personality,
+    //     },
+    //   }) => joinOnNewLine([
+    //     `subject: ${subject}`,
+    //     `title: ${title}`,
+    //     `summary: ${summary}`,
+    //     `category: ${category}`,
+    //     `personality: ${personality.map(({ trait, description }) => `${trait}: ${description}`).join(', ')}`,
+    //   ])),
+    // ]),
   ];
 };
 
@@ -113,30 +123,18 @@ const makeCompletions = async ({
   reports: UnwrappedPromise<ReturnType<typeof findLastNReportsByEntityId>>,
 }) => {
   const completionArgs = prepareCompletionArgs(reports);
-  const [
-    pricingCompletion,
-    messagingCompletion,
-    jobListingsCompletion,
-    marketIntelCompletion,
-    emailSummariesCompletion,
-  ] = await Promise.all(completionArgs.map((reportText) => handleRequest({
+  const completions = await Promise.all(completionArgs.map((reportText) => handleRequest({
     team,
     competitor,
     reportText,
   })));
 
-  console.log(`combining them all at the end for ${competitor ? `competitor: ${competitor.name}` : 'team'}`);
-  return handleRequest({
-    team,
-    reportText: joinOnNewLine([
-      'compile the following reports into one cohesive report:',
-      pricingCompletion,
-      messagingCompletion,
-      jobListingsCompletion,
-      marketIntelCompletion,
-      emailSummariesCompletion,
-    ].filter(isTruthy)),
-  });
+  return [
+    ...completions,
+    reports.pricingPageReport[0]?.pricingSummary, // todo compare to last month and do better code
+  ]
+    .filter(isTruthy)
+    .flat();
 };
 
 const generateReportForTeam = async ({ team }: { team: Teams }) => {
@@ -158,15 +156,17 @@ const generateIntelReportEmail = async ({ teamId }: { teamId: string }) => {
 
   const competitors = await findCompetitorsByTeamId(teamId);
   const teamReport = await generateReportForTeam({ team });
+  console.log('teamReport received');
   const competitorReports = await Promise.all(competitors.map((competitor) => generateReportForCompetitor({ team, competitor })));
+  console.log('competitorReports received');
 
   // todo also look for scraped reddit items here
   return joinOnNewLine([
-    'Team report:',
-    teamReport,
+    'Report:',
+    teamReport.join('\n\n'),
     ...competitorReports.map((report, i) => joinOnNewLine([
       `Competitor report ${i + 1}:`,
-      report,
+      report.join('\n\n'),
     ].filter(isTruthy))),
   ].filter(isTruthy));
 };

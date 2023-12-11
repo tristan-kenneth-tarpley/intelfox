@@ -1,13 +1,18 @@
+import joinOnNewLine from '@/utils/joinOnNewLine';
 import createChatCompletionReducer from './createChatCompletionReducer';
 
 const summarizePricing = async (input: string) => {
   return createChatCompletionReducer(input?.split(' ') ?? [], {
-    baseSystemMessage: [
-      'Summarize the following pricing page into one to two paragraphs.',
-      'Include prices, features, and any other relevant information.',
-      'Describe the billing cycles, for example whether it is a subscription service, a la carte, consulting, etc.',
-    ].join('\n'),
-    reconciliationMessage: 'Consolidate all of the following summaries into one to two readable paragraphs summarizing the pricing of this company.',
+    baseSystemMessage: joinOnNewLine([
+      'Given the following summary of the pricing page, answer the following questions in one paragraph or less:',
+      '- how do they segment their pricing?',
+      '- what are the pricing amounts for each segment?',
+      '- Which features are paywalled?',
+      '- Is there a free plan?',
+    ]),
+    reconciliationMessage: joinOnNewLine([
+      'Consolidate all of the following summaries', // todo structure as json
+    ]),
   });
 };
 

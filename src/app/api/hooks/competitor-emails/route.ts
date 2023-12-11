@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
   const entityKey = prefix === 't_' ? 'teamId' : 'competitorId' as const;
   await db.emailSummaries.create({
     data: {
+      // todo store raw email text
       [entityKey]: entity.id,
       date: new Date(date),
       subject,
