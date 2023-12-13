@@ -33,13 +33,27 @@ export async function POST(request: NextRequest) {
   const entity = prefix === 't_'
     ? await db.teams.findFirstOrThrow({
       where: {
-        primaryDomain: domain,
+        OR: [
+          {
+            primaryDomain: domain,
+          },
+          {
+            primaryDomain: `https://${domain}`,
+          },
+        ],
       },
     }).catch(() => null)
     : prefix === 'c_'
       ? await db.competitors.findFirstOrThrow({
         where: {
-          domain,
+          OR: [
+            {
+              domain,
+            },
+            {
+              domain: `https://${domain}`,
+            },
+          ],
         },
       }).catch(() => null)
       : null;

@@ -17,6 +17,7 @@ const handleRequest = ({
   competitor?: Competitors;
   reportText: string;
 }) => {
+  // todo include more global context here, then only focus on emails, job postings, and pricing page in report
   const systemMessages = [
     `You are a market intelligence analyst for a company called ${team.name} with the following description:`,
     team.description,
@@ -64,7 +65,7 @@ const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findL
     // todo, maybe can we ask "what does this say about their priorities/strategy?"
     // compare to last month
     joinOnNewLine([
-      'Open job postings:',
+      'Compare the prior 2 collections of job listing, including what is different:',
       ...reports.jobListingsReport.map(({ listings }, i) => joinOnNewLine([
         `collected ${i === 0 ? 'this month' : 'last month'}: ${listings.length} job listings`,
         ...listings.map(({ title, department, location }) => joinOnNewLine([

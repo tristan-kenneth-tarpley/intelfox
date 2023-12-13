@@ -53,7 +53,7 @@ type TeamURLs {
 model Teams {
   id               String     @id @default(auto()) @map("_id") @db.ObjectId
   clerkOrgId       String     @unique
-  primaryDomain    String
+  primaryDomain    String     @unique
   name             String
   description      String
   shortDescription String?

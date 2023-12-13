@@ -35,6 +35,7 @@ const prepIntelReportForTeam = async ({ teamId }: { teamId: string }) => {
   const team = await findTeamById(teamId);
   const competitors = await findCompetitorsByTeamId(teamId);
 
+  // todo, here we probably want to score/analyze some reddit posts (scrapedItems)
   if (!team) {
     throw new Error(`Team not found for id ${teamId}`);
   }
