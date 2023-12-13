@@ -18,10 +18,10 @@ export default function Select({
 }: {
   options: Option[];
   selected?: Option;
-  onChange?: (id: Option) => void,
+  onChange?: (id: string) => void,
 }) {
   return (
-    <SelectPrimitive>
+    <SelectPrimitive onValueChange={(e) => onChange?.(e)}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder={selectedValue?.name} defaultValue={selectedValue?.name} />
       </SelectTrigger>
@@ -30,7 +30,6 @@ export default function Select({
           <SelectItem
             key={id}
             value={id}
-            onClick={() => onChange?.({ id, name })}
           >
             {name}
           </SelectItem>

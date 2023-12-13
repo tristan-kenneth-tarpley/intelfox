@@ -9,6 +9,8 @@ const extractSlugFromUrl = (url: string) => {
   return splitOnPlus.split('@')[0];
 };
 
+export const maxDuration = 300;
+
 export async function POST(request: NextRequest) {
   const middleware = hooksMiddleware(request);
   if (middleware) {

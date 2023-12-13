@@ -48,7 +48,8 @@ const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findL
     // we should pass this as context to the rest of the prompts
     // instead, compare how team positions vs. how competitor positions
     joinOnNewLine([
-      'Website messaging report:',
+      'The following is an analysis of how the company positions itself on their website.',
+      'Summarize the following characteristics in less than one paragraph:',
       ...reports.messagingProfile.map(({
         messagingProfile: {
           summary,
@@ -76,7 +77,8 @@ const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findL
       ])),
     ]),
     joinOnNewLine([
-      'Summarization from a product review site:',
+      'The following is an analysis of how the market views the company',
+      'Summarize the following characteristics in less than one paragraph:',
       ...reports.marketIntelReport.map(({
         pros,
         cons,

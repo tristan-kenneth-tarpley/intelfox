@@ -72,6 +72,17 @@ const UpdateURLs = ({
                   <Select
                     selected={{ name: url.type, id: url.type }}
                     options={allUrlTypes.map((type) => ({ name: type, id: type }))}
+                    onChange={(e) => {
+                      setURLs(urls.map((x) => {
+                        if (x.type === url.type) {
+                          return {
+                            ...x,
+                            type: e as URLType,
+                          };
+                        }
+                        return x;
+                      }));
+                    }}
                   />
                 </FormGroup>
               </VStack>

@@ -25,6 +25,7 @@ const makeRequestError = ({
   message: string,
   extra?: any,
 }) => {
+  console.error('request error!', { code, message, extra });
   return {
     code,
     name: errorNamesByCode[code],
