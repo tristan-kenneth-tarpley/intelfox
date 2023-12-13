@@ -19,12 +19,16 @@ const handleUrl = (teamUrl: TeamURLs, basePayload: {
 
   switch (teamUrl.type) {
     case 'HOMEPAGE':
+      console.log('requesting HOMEPAGE');
       return runJob(runWebpageMessagingReport, payload);
     case 'PRICING_PAGE':
+      console.log('requesting PRICING_PAGE');
       return runJob(runPricingPageReport, payload);
     case 'CAREERS_PAGE':
+      console.log('requesting CAREERS');
       return runJob(runCareersPageReport, payload);
     case 'CAPTERRA':
+      console.log('requesting CAPTERRA');
       return runJob(runMarketIntelReport, payload);
     default:
       return null;
@@ -40,7 +44,7 @@ const prepIntelReportForTeam = async ({ teamId }: { teamId: string }) => {
     throw new Error(`Team not found for id ${teamId}`);
   }
 
-  console.log('team', team, team.id, team.urls);
+  console.log('competitors', competitors[0].id, competitors[0]?.urls);
 
   // todo fallback to primaryDomain if we don't have HOMEPAGE
   await Promise.all(team.urls.map((teamUrl) => handleUrl(teamUrl, { teamId })));

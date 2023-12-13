@@ -1,7 +1,7 @@
 import summarizeWebsiteMessaging from '@/lib/logic/aiCapabilities/summarizeWebsiteMessaging';
 import db from '@/lib/services/db/db';
 
-const runWebpageMessagingReport = async ({ url, teamId, competitorId }: { url: string; teamId: string; competitorId?: string }) => {
+const runWebpageMessagingReport = async ({ url, teamId, competitorId }: { url: string; teamId?: string; competitorId?: string }) => {
   const pageSummary = await summarizeWebsiteMessaging(url);
 
   if (!pageSummary) {
@@ -10,8 +10,7 @@ const runWebpageMessagingReport = async ({ url, teamId, competitorId }: { url: s
 
   return db.messagingProfile.create({
     data: {
-      competitorId,
-      teamId,
+      [competitorId ? 'competitorId' : 'teamId']: competitorId ?? teamId,
       messagingProfile: pageSummary,
     },
   });

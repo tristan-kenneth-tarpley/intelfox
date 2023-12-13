@@ -153,7 +153,7 @@ model EmailSummaries {
 
 model PricingPageReport {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  teamId         String
+  teamId         String?
   competitorId   String?
   pricingSummary String
   createdAt      DateTime @default(now())
@@ -169,7 +169,7 @@ type GenericMessagingProfile {
 
 model MessagingProfile {
   id               String                  @id @default(auto()) @map("_id") @db.ObjectId
-  teamId           String
+  teamId           String?
   competitorId     String?
   messagingProfile GenericMessagingProfile
   createdAt        DateTime                @default(now())
@@ -185,16 +185,19 @@ type JobListing {
 model JobListingsReport {
   id           String       @id @default(auto()) @map("_id") @db.ObjectId
   competitorId String?
-  teamId       String
+  teamId       String?
   listings     JobListing[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([teamId])
+  @@index([competitorId])
 }
 
 model MarketIntelReport {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  teamId           String
+  teamId           String?
   competitorId     String?
   // todo update 
   pros             String[]

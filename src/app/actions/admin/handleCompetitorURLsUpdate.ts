@@ -3,7 +3,7 @@
 import { FormStateHandler } from '@/app/types';
 import { URLType } from '@prisma/client/edge';
 import { allUrlTypes } from '@/lib/logic/teams/teamConstants';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache';
 import findCompetitorById from '@/lib/logic/competitors/findCompetitorById';
 import updateCompetitorById from '@/lib/logic/competitors/updateCompetitorById';
 import { routes } from '@/app/routes';
@@ -15,6 +15,7 @@ const handleCompetitorsURLsUpdate: FormStateHandler<{
 }> = async ({
   competitorId,
 }, formData) => {
+  noStore();
   const competitor = await findCompetitorById(competitorId);
 
   if (!competitor) {

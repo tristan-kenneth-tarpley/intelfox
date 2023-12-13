@@ -3,7 +3,7 @@
 import { FormStateHandler } from '@/app/types';
 import findTeamById from '@/lib/logic/teams/findTeamById';
 import updateTeamById from '@/lib/logic/teams/updateTeamById';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache';
 import { routes } from '@/app/routes';
 import makeRequestError from '../makeRequestError';
 
@@ -11,6 +11,7 @@ const handleTeamUpdate: FormStateHandler<{ teamId: string; message?: string }> =
   { teamId },
   formData,
 ) => {
+  noStore();
   const name = formData.get('name')?.toString();
   const description = formData.get('description')?.toString();
   const primaryDomain = formData.get('primaryDomain')?.toString();

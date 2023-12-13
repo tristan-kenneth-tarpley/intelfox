@@ -5,7 +5,7 @@ import findTeamById from '@/lib/logic/teams/findTeamById';
 import { URLType } from '@prisma/client/edge';
 import { allUrlTypes } from '@/lib/logic/teams/teamConstants';
 import updateTeamById from '@/lib/logic/teams/updateTeamById';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache';
 import { routes } from '@/app/routes';
 import makeRequestError from '../makeRequestError';
 
@@ -15,6 +15,7 @@ const handleTeamURLsUpdate: FormStateHandler<{
 }> = async ({
   teamId,
 }, formData) => {
+  noStore();
   const team = await findTeamById(teamId);
 
   if (!team) {

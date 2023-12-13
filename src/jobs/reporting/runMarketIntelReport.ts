@@ -8,18 +8,20 @@ const runMarketIntelReport = async ({
   teamId,
   competitorId = null,
 }: {
-  teamId: string,
+  teamId?: string,
   competitorId?: string | null,
 }) => {
-  const team = await findTeamById(teamId);
+  // todo we don't need to handle the team here
+  const team = teamId ? await findTeamById(teamId) : null;
   const competitor = competitorId ? await findCompetitorById(competitorId) : null;
 
-  if (!team || (competitorId && !competitor)) {
-    // todo add telemetry and handle gracefully
+  const entity = competitor ?? team;
+
+  if (!entity) {
+    // todo add telemetry
     return null;
   }
 
-  const entity = competitor ?? team;
   const targetUrl = entity.urls?.find((url) => url.type === 'CAPTERRA');
   if (!targetUrl) {
     return null;

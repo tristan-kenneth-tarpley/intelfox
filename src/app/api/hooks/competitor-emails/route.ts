@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
+  // todo, get the raw html and upload to s3 for future querying
   const {
     bodyPlain, date, subject, toEmails,
   } = body as {
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
       // todo store raw email text
       [entityKey]: entity.id,
       date: new Date(date),
-      subject,
+      subject: subject.startsWith('Fwd:') ? subject.slice('Fwd: '.length) : subject,
       messagingProfile: bodySummarization,
     },
   });

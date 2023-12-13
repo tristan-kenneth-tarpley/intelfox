@@ -17,11 +17,12 @@ const handleRequest = ({
   competitor?: Competitors;
   reportText: string;
 }) => {
+  const name = competitor?.name ?? team.name;
   // todo include more global context here, then only focus on emails, job postings, and pricing page in report
   const systemMessages = [
-    `You are a market intelligence analyst for a company called ${team.name} with the following description:`,
-    team.description,
-    `The following content was found online about ${competitor ? `a competitor called ${competitor.name}` : 'your company'}.`,
+    `You are a market intelligence analyst for a company called ${name} with the following description:`,
+    competitor?.description ?? team.description,
+    `The following content was found online about ${name}.`,
     'Answer the questions asked from a 3rd party, neutral perspective.',
   ].join('\n');
 
@@ -35,6 +36,9 @@ const handleRequest = ({
 };
 
 const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findLastNReportsByEntityId>>) => {
+  console.log({
+    careers: reports.jobListingsReport[0]?.listings.length,
+  });
   return [
     // todo, we should ask these questions upstream when we scrape then pass the raw text here, or ask for differences between the last two months
     // joinOnNewLine([
@@ -62,11 +66,12 @@ const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findL
         `key value props: ${keyValueProps.join(', ')}`,
         `personality: ${personality.map(({ trait, description }) => `${trait}: ${description}`).join(', ')}`,
       ])),
+      'Start your response with MESSAGING PROFILE: {{response}}',
     ]),
     // todo, maybe can we ask "what does this say about their priorities/strategy?"
     // compare to last month
-    joinOnNewLine([
-      'Compare the prior 2 collections of job listing, including what is different:',
+    reports.jobListingsReport[0]?.listings.length ? joinOnNewLine([
+      'Compare the prior 2 months of job listings, including what is different:',
       ...reports.jobListingsReport.map(({ listings }, i) => joinOnNewLine([
         `collected ${i === 0 ? 'this month' : 'last month'}: ${listings.length} job listings`,
         ...listings.map(({ title, department, location }) => joinOnNewLine([
@@ -75,7 +80,8 @@ const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findL
           `location: ${location}`,
         ])),
       ])),
-    ]),
+      'Start your response with CAREERS REPORT: {{response}}',
+    ]) : null,
     joinOnNewLine([
       'The following is an analysis of how the market views the company',
       'Summarize the following characteristics in less than one paragraph:',
@@ -91,6 +97,7 @@ const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findL
         `people good for: ${peopleGoodFor.join(', ')}`,
         `people not good for: ${peopleNotGoodFor.join(', ')}`,
       ])),
+      'Start your response with MARKET INTEL REPORT: {{response}}',
     ]),
     // todo don't need to pass to OAI
     // just print our summaries
@@ -113,7 +120,7 @@ const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findL
     //     `personality: ${personality.map(({ trait, description }) => `${trait}: ${description}`).join(', ')}`,
     //   ])),
     // ]),
-  ];
+  ].filter(isTruthy);
 };
 
 const makeCompletions = async ({
@@ -140,14 +147,66 @@ const makeCompletions = async ({
     .flat();
 };
 
+// todo combine logic in these two functions
 const generateReportForTeam = async ({ team }: { team: Teams }) => {
   const teamReports = await findLastNReportsByEntityId({ teamId: team.id }, { n: 2 });
-  return makeCompletions({ team, reports: teamReports });
+  const completions = await makeCompletions({ team, reports: teamReports });
+
+  console.log('teamReports', teamReports);
+  return [
+    ...completions,
+    '\n\nPricing report:',
+    teamReports.pricingPageReport[0]?.pricingSummary,
+    '\n\nEmails:',
+    ...teamReports.emailSummaries.map(({
+      subject,
+      messagingProfile: {
+        title,
+        summary,
+        category,
+        personality,
+      },
+    }) => joinOnNewLine([
+      `subject: ${subject}`,
+      `title: ${title}`,
+      `summary: ${summary}`,
+      `category: ${category}`,
+      `personality: ${personality.map(({ trait, description }) => `${trait}: ${description}`).join(', ')}`,
+    ])),
+  ];
 };
 
 const generateReportForCompetitor = async ({ team, competitor }: { team: Teams; competitor: Competitors }) => {
   const competitorReports = await findLastNReportsByEntityId({ competitorId: competitor.id }, { n: 2 });
-  return makeCompletions({ team, competitor, reports: competitorReports });
+  const completions = await makeCompletions({ team, competitor, reports: competitorReports });
+  return [
+    ...completions,
+    '\n\nCareers:',
+    competitorReports.jobListingsReport[0]?.listings.map(
+      ({ title, department, location }) => joinOnNewLine([
+        `title: ${title}`, `department: ${department}`, `location: ${location}`,
+      ]),
+    ),
+
+    '\n\nPricing report:',
+    competitorReports.pricingPageReport[0]?.pricingSummary,
+    '\n\nEmails:',
+    ...competitorReports.emailSummaries.map(({
+      subject,
+      messagingProfile: {
+        title,
+        summary,
+        category,
+        personality,
+      },
+    }) => joinOnNewLine([
+      `subject: ${subject}`,
+      `title: ${title}`,
+      `summary: ${summary}`,
+      `category: ${category}`,
+      `personality: ${personality.map(({ trait, description }) => `${trait}: ${description}`).join(', ')}`,
+    ])),
+  ];
 };
 
 const generateIntelReportEmail = async ({ teamId }: { teamId: string }) => {
