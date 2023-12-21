@@ -17,8 +17,6 @@ const handleTeamSearchSubmission: FormStateHandler<{ message?: string }> = async
     return null;
   });
 
-  console.log('team', team);
-
   if (team) {
     return redirect(routes.teamAdminPage({ teamId: team.id }));
   }

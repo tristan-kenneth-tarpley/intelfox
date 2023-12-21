@@ -15,4 +15,5 @@ export const appConfig = {
   selfUrl: process.env.SELF_URL!,
   zeploSecret: process.env.ZEPLO_SECRET!,
   zapierWebhookSecret: process.env.ZAPIER_WEBHOOK_SECRET!,
+  sendGridApiKey: process.env.SENDGRID_API_KEY!,
 } as const;

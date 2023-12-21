@@ -1,3 +1,4 @@
+import pickRelevantScrapedItems from '@/lib/logic/aiCapabilities/pickRelevantScrapedItems';
 import findCompetitorsByTeamId from '@/lib/logic/competitors/findCompetitorsByTeamId';
 import findLastNReportsByEntityId from '@/lib/logic/reporting/findLastNReportsByEntityId';
 import findTeamById from '@/lib/logic/teams/findTeamById';
@@ -36,9 +37,6 @@ const handleRequest = ({
 };
 
 const prepareCompletionArgs = (reports: UnwrappedPromise<ReturnType<typeof findLastNReportsByEntityId>>) => {
-  console.log({
-    careers: reports.jobListingsReport[0]?.listings.length,
-  });
   return [
     // todo, we should ask these questions upstream when we scrape then pass the raw text here, or ask for differences between the last two months
     // joinOnNewLine([
@@ -139,9 +137,21 @@ const makeCompletions = async ({
     reportText,
   })));
 
+  const relevantScrapedItems = reports.scrapedItemsReport?.length
+    ? await pickRelevantScrapedItems(reports.scrapedItemsReport, team)
+    : null;
+
+  console.log(
+    'has relevantScrapedItems',
+    relevantScrapedItems?.slice(0, 10),
+  );
+
+  // todo log whichever items we return so that we don't return them again
+
   return [
     ...completions,
     reports.pricingPageReport[0]?.pricingSummary, // todo compare to last month and do better code
+    relevantScrapedItems?.map(({ text }) => text), // todo do better code and don't return this stuff as an array... Also need to add links for these
   ]
     .filter(isTruthy)
     .flat();
@@ -152,7 +162,6 @@ const generateReportForTeam = async ({ team }: { team: Teams }) => {
   const teamReports = await findLastNReportsByEntityId({ teamId: team.id }, { n: 2 });
   const completions = await makeCompletions({ team, reports: teamReports });
 
-  console.log('teamReports', teamReports);
   return [
     ...completions,
     '\n\nPricing report:',
@@ -218,9 +227,7 @@ const generateIntelReportEmail = async ({ teamId }: { teamId: string }) => {
 
   const competitors = await findCompetitorsByTeamId(teamId);
   const teamReport = await generateReportForTeam({ team });
-  console.log('teamReport received');
   const competitorReports = await Promise.all(competitors.map((competitor) => generateReportForCompetitor({ team, competitor })));
-  console.log('competitorReports received');
 
   // todo also look for scraped reddit items here
   return joinOnNewLine([

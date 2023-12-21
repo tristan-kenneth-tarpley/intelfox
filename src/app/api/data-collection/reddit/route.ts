@@ -13,7 +13,6 @@ export async function POST(request: Request) {
   const combined = relevantText
     ? await summarizeMessaging(relevantText)
     : null;
-  console.log('combined', combined);
   // console.log('starting');
   // const t0 = performance.now();
   // await scrapeAndPersistRedditItems({ phrase: query });
@@ -24,11 +23,9 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  console.log('gotcha');
   const { searchParams } = new URL(request.url ?? '');
   const redditClient = await redditAPIClient();
   const results = await redditClient.search({ query: searchParams.get('query') ?? '' });
-  console.log('results', results.data.data.children[0]);
 
   return Response.json({ results: results.data.data.children });
 }

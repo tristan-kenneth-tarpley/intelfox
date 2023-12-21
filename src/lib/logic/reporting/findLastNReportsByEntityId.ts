@@ -1,4 +1,5 @@
 import db from '@/lib/services/db/db';
+import rocksetService from '@/lib/services/rockset/rocksetService';
 
 const findLastNReportsByEntityId = async ({
   teamId,
@@ -17,18 +18,20 @@ const findLastNReportsByEntityId = async ({
     take: n,
   } as const;
 
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   const [
     emailSummaries,
     pricingPageReport,
     messagingProfile,
     jobListingsReport,
     marketIntelReport,
+    scrapedItemsReport,
   ] = await Promise.all([
     db.emailSummaries.findMany({
       where: {
         ...where,
         createdAt: {
-          gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+          gte: thirtyDaysAgo,
         },
       },
       orderBy,
@@ -37,6 +40,9 @@ const findLastNReportsByEntityId = async ({
     db.messagingProfile.findMany(query),
     db.jobListingsReport.findMany(query),
     db.marketIntelReport.findMany(query),
+    teamId
+      ? rocksetService.getKeyphraseFeedResults(teamId)
+      : Promise.resolve(null),
   ]);
 
   return {
@@ -47,6 +53,7 @@ const findLastNReportsByEntityId = async ({
     messagingProfile,
     jobListingsReport,
     marketIntelReport,
+    scrapedItemsReport,
   };
 };
 

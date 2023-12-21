@@ -86,7 +86,7 @@ const UpdateURLs = ({
                   />
                 </FormGroup>
               </VStack>
-              <Button type="button" onClick={() => handleURLRemoval(url.type)} variant="danger">
+              <Button size="sm" type="button" onClick={() => handleURLRemoval(url.type)} variant="danger">
                 <XMarkIcon className="w-4 h-4" />
               </Button>
             </HStack>

@@ -1,6 +1,7 @@
 import {
   ScrapedItems, TrackedKeyPhrases,
 } from '@prisma/client/edge';
+import isTruthy from '@/utils/isTruthy';
 import withRocksetAPI from '../withRocksetAPI';
 
 export type KeyPhraseFeedResult =
@@ -14,7 +15,9 @@ export type KeyPhraseFeedResult =
   | 'type'
   | 'itemCreatedAt'>;
 
-const getKeyphraseFeedResults = async (teamId: string): Promise<KeyPhraseFeedResult[] | null> => {
+const getKeyphraseFeedResults = async (
+  teamId: string,
+): Promise<KeyPhraseFeedResult[] | null> => {
   const response = await withRocksetAPI((api) => api.queryLambdas
     .executeQueryLambda('commons', 'intelfox-keyword-fulltext-search', '73b158a1d05cc4c2', {
       parameters: [
@@ -23,7 +26,9 @@ const getKeyphraseFeedResults = async (teamId: string): Promise<KeyPhraseFeedRes
           type: 'string',
           value: teamId,
         },
-      ],
+
+        // todo, add some filtering in rockset to only query what the user has not seen/dismissed
+      ].filter(isTruthy),
     })
     .catch((err) => {
       console.error(err);

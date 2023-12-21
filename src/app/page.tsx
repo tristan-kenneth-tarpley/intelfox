@@ -1,6 +1,10 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import MarketingPageNavbar from '@/components/navbar/MarketingPageNavbar';
+import sgMail from '@sendgrid/mail';
+import { appConfig } from '@/config';
+
+sgMail.setApiKey(appConfig.sendGridApiKey);
 
 const Home = async () => {
   return (

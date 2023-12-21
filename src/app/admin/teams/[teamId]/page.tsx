@@ -11,6 +11,7 @@ import {
 import humanizeTimeAgo from '@/utils/humanizeTimeAgo';
 import Heading from '@/components/ui/Heading';
 import findCompetitorsByTeamId from '@/lib/logic/competitors/findCompetitorsByTeamId';
+import UpdateTeamTrackedKeyPhrases from '@/components/UpdateTeamTrackedKeyPhrases/UpdateTeamTrackedKeyPhrases';
 import TeamSearchForm from '../../TeamSearchForm';
 import UpdateTeamForm from '../../../../components/UpdateTeamForm';
 import UpdateTeamUrls from '../../../../components/UpdateTeamUrls';
@@ -51,7 +52,7 @@ const TeamAdminPage = async ({ params }: PageProps) => {
           </VStack>
           <ReportActions team={team} />
         </div>
-        <div className="w-full grid grid-cols-2 gap-8">
+        <div className="w-full grid md:grid-cols-3 gap-8">
           <Card className="w-full">
             <CardHeader>
               <CardTitle>{team.name}</CardTitle>
@@ -60,18 +61,26 @@ const TeamAdminPage = async ({ params }: PageProps) => {
               <UpdateTeamForm team={team} />
             </CardContent>
           </Card>
-          <div>
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle>Edit URLs</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <UpdateTeamUrls team={team} />
-              </CardContent>
-            </Card>
-          </div>
-          <div className="col-span-2 max-h-[300px]">
-            <Card className="w-full">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Edit URLs</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <UpdateTeamUrls team={team} />
+            </CardContent>
+          </Card>
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Edit tracked key phrases</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <UpdateTeamTrackedKeyPhrases team={team} />
+            </CardContent>
+          </Card>
+        </div>
+        <VStack className="w-full">
+          <div className="max-h-[300px] w-full">
+            <Card>
               <CardHeader>
                 <CardTitle>Competitors</CardTitle>
               </CardHeader>
@@ -85,17 +94,15 @@ const TeamAdminPage = async ({ params }: PageProps) => {
               </CardContent>
             </Card>
           </div>
-          <div className="col-span-2">
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle>Reports</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {/* <UpdateTeamUrls team={team} /> */}
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Reports</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {/* <UpdateTeamUrls team={team} /> */}
+            </CardContent>
+          </Card>
+        </VStack>
       </VStack>
     </div>
   );

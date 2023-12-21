@@ -1,5 +1,6 @@
 'use client';
 
+import handleDailyTeamSyncSubmission from '@/app/actions/admin/handleDailyTeamSyncSubmission';
 import handleGenerateIntelReportCommand from '@/app/actions/admin/handleGenerateIntelReportCommand';
 import handlePrepIntelReportCommand from '@/app/actions/admin/handlePrepIntelReportCommand';
 import FormStatusWrapper from '@/components/FormStatusWrapper';
@@ -14,9 +15,17 @@ import { useFormState } from 'react-dom';
 const ReportActions = ({ team }: { team: Teams }) => {
   const [prepState, prepFormAction] = useFormState(handlePrepIntelReportCommand, { teamId: team.id });
   const [generateState, generateFormAction] = useFormState(handleGenerateIntelReportCommand, { teamId: team.id });
+  const [teamSyncState, teamSyncFormAction] = useFormState(handleDailyTeamSyncSubmission, { teamId: team.id });
 
   return (
     <VStack align="start">
+      <form action={teamSyncFormAction}>
+        <FormStatusWrapper>
+          {({ pending }) => (
+            <Button loading={pending} type="submit" variant="outline">Scrape Reddit</Button>
+          )}
+        </FormStatusWrapper>
+      </form>
       <form action={prepFormAction}>
         <FormStatusWrapper>
           {({ pending }) => (
@@ -38,6 +47,7 @@ const ReportActions = ({ team }: { team: Teams }) => {
       </form>
 
       {prepState.message && <CalloutSection header={prepState.title ?? 'Report prepped'} message={prepState.message} theme={'success'} />}
+      {teamSyncState.message && <CalloutSection header={'Daily sync has started'} message={teamSyncState.message} theme={'success'} />}
       {generateState.reportText && (
         <Popover>
           <PopoverTrigger>
