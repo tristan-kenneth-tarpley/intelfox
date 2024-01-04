@@ -12,6 +12,7 @@ const getTrackedKeyPhrasesByTeam = async (teamId: string): Promise<Omit<TrackedK
       teamId: true,
       createdAt: true,
       updatedAt: true,
+      traits: true,
     },
   }) as any;
 };

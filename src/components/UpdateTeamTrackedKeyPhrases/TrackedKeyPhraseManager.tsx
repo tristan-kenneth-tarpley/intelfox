@@ -6,8 +6,8 @@ import { Teams, TrackedKeyPhrases } from '@prisma/client/edge';
 import { useMemo, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { KeyPhraseTraits } from '@/lib/logic/keyPhrases/constants';
-import { useFormState } from 'react-dom';
 import handleKeyPhraseSubmission from '@/app/actions/handleKeyPhraseSubmission';
+import createKeyPhrase from '@/app/actions/createKeyPhrase';
 import VStack from '../ui/stack/VStack';
 import HStack from '../ui/stack/HStack';
 import Button from '../ui/Button';
@@ -16,7 +16,7 @@ import CheckboxContainer from '../ui/CheckboxContainer';
 import Checkbox from '../ui/Checkbox';
 import Label from '../ui/Label';
 import InputField from '../ui/Input';
-import ToastOnFormCompletion from '../ui/ToastOnFormCompletion';
+import { useToast } from '../ui/use-toast';
 
 const TrackedKeyPhraseManager = ({
   keyPhrases: originalKeyPhrases,
@@ -25,37 +25,41 @@ const TrackedKeyPhraseManager = ({
   keyPhrases: Omit<TrackedKeyPhrases, 'phraseEmbeddings' | 'createdAt' | 'updatedAt'>[];
   team: Teams;
 }) => {
-  const [formState, formAction] = useFormState(handleKeyPhraseSubmission, { teamId: team.id });
+  const [isAddingNewKeyPhrase, setIsAddingNewKeyPhrase] = useState(false);
   const [keyPhrases, setKeyPhrases] = useState(originalKeyPhrases);
 
   const hasUnsavedChanges = useMemo(() => {
     return !_.isEqual(originalKeyPhrases, keyPhrases);
   }, [originalKeyPhrases, keyPhrases]);
 
-  const handleAddKeyPhrase = () => {
+  const handleAddKeyPhrase = async () => {
+    setIsAddingNewKeyPhrase(true);
+    const newKeyPhrase = await createKeyPhrase({ phrase: '', teamId: team.id });
     setKeyPhrases([
       ...keyPhrases,
-      {
-        id: `change-me-${Math.random()}`,
-        phrase: '',
-        traits: [],
-        teamId: team.id,
-      },
+      newKeyPhrase,
     ]);
+    setIsAddingNewKeyPhrase(false);
   };
 
+  const { toast } = useToast();
+
   return (
-    <form action={formAction}>
+    <form action={async () => {
+      const { message } = await handleKeyPhraseSubmission({ teamId: team.id, keyPhrases });
+      toast({ description: message, title: 'Key phrases updated' });
+    }}>
       <div className="mb-4">
         <Button
           onClick={handleAddKeyPhrase}
           variant="outline"
           type="button"
+          loading={isAddingNewKeyPhrase}
         >
           Add key phrase
         </Button>
       </div>
-      <ToastOnFormCompletion title="Key phrases submitted" message={formState.message} />
+
       <VStack>
         {keyPhrases.map(({ phrase, id, traits }) => (
           <HStack key={id} className="w-full" align="start" justify='between'>
@@ -63,23 +67,52 @@ const TrackedKeyPhraseManager = ({
               <InputField
                 placeholder='key phrase'
                 value={phrase}
+                name={id}
+                onChange={(e) => {
+                  setKeyPhrases(keyPhrases.map((keyPhrase) => {
+                    if (keyPhrase.id === id) {
+                      return {
+                        ...keyPhrase,
+                        phrase: e.target.value,
+                      };
+                    }
+
+                    return keyPhrase;
+                  }));
+                }}
               />
               <div>
                 {Object.values(KeyPhraseTraits).map((trait) => (
                   <CheckboxContainer key={trait}>
                     <Checkbox
                       id={`${id}-${trait}`}
-                      name={trait}
-                      defaultChecked={traits?.includes(trait)}
+                      name={`${id}-${trait}`}
+                      checked={traits?.includes(trait)}
+                      onChange={(e) => {
+                        setKeyPhrases(keyPhrases.map((keyPhrase) => {
+                          if (keyPhrase.id === id) {
+                            return {
+                              ...keyPhrase,
+                              traits: e.target.checked
+                                ? _.uniq([...(keyPhrase.traits ?? []), trait])
+                                : keyPhrase.traits?.filter((t) => t !== trait),
+                            };
+                          }
+
+                          return keyPhrase;
+                        }));
+                      }}
                     />
-                    <Label htmlFor={trait}>
+                    <Label htmlFor={`${id}-${trait}`}>
                       {trait.toLowerCase()}
                     </Label>
                   </CheckboxContainer>
                 ))}
               </div>
             </VStack>
-            <Button type="button" size="sm" variant="danger">
+            <Button onClick={() => {
+              setKeyPhrases(keyPhrases.filter((keyPhrase) => keyPhrase.id !== id));
+            }} type="button" size="sm" variant="danger">
               <XMarkIcon className="w-4 h-4" />
             </Button>
           </HStack>

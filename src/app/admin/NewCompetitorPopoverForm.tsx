@@ -17,7 +17,7 @@ const NewCompetitorPopoverForm = ({ team }: { team: Teams }) => {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button>Create competitor</Button>
+        <Button as="div">Create competitor</Button>
       </PopoverTrigger>
       <PopoverContent>
         {state.message && <Text>{state.message}</Text>}

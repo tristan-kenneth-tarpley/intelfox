@@ -52,7 +52,7 @@ const TeamAdminPage = async ({ params }: PageProps) => {
           </VStack>
           <ReportActions team={team} />
         </div>
-        <div className="w-full grid md:grid-cols-3 gap-8">
+        <div className="w-full grid lg:grid-cols-3 gap-8">
           <Card className="w-full">
             <CardHeader>
               <CardTitle>{team.name}</CardTitle>
