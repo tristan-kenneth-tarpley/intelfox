@@ -32,6 +32,7 @@ const pickRelevantScrapedItems = async (items: KeyPhraseFeedResult[], team: Team
       'Consolidate the reports into a single JSON array in the following format:',
       format,
     ]),
+    responseType: 'json_object',
   });
 
   console.log('scraped items response', response);

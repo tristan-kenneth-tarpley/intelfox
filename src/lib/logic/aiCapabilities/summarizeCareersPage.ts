@@ -16,6 +16,7 @@ const jsonFormat = [
 
 const summarizeCareersPage = async (input: string) => {
   return createChatCompletionReducer(input?.split(' ') ?? [], {
+    responseType: 'json_object',
     baseSystemMessage: [
       'Summarize the job listings available as displayed on the following careers page.',
       'Return in the following json format:',

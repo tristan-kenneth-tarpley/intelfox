@@ -1,4 +1,4 @@
-import openAIClient from '@/lib/services/openAI/client';
+import openAIClient, { ModeratedChatCompletionParams } from '@/lib/services/openAI/client';
 import pluckFirstChoice from '@/lib/services/openAI/pluckFirstChoice';
 import { chunkChatRequestsByTokenSize } from './chunkRequestsByMaxTokenSize';
 
@@ -6,9 +6,11 @@ import { chunkChatRequestsByTokenSize } from './chunkRequestsByMaxTokenSize';
 const createChatCompletionReducer = async (input: string[], {
   baseSystemMessage,
   reconciliationMessage,
+  responseType,
 }: {
   baseSystemMessage: string,
   reconciliationMessage: string,
+  responseType?: 'json_object'
 }) => {
   const requests = chunkChatRequestsByTokenSize(input, (item) => item);
   const baseMessages = [
@@ -18,9 +20,10 @@ const createChatCompletionReducer = async (input: string[], {
     },
   ];
 
-  const makeParams = (content: string) => ({
+  const makeParams = (content: string): ModeratedChatCompletionParams => ({
     stream: false,
     temperature: 0,
+    response_format: responseType ? { type: 'json_object' } : undefined,
     // max_tokens: 15000,
     messages: [...baseMessages, {
       role: 'user' as const,

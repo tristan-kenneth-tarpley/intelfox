@@ -19,7 +19,7 @@ const getKeyphraseFeedResults = async (
   teamId: string,
 ): Promise<KeyPhraseFeedResult[] | null> => {
   const response = await withRocksetAPI((api) => api.queryLambdas
-    .executeQueryLambda('commons', 'intelfox-keyword-fulltext-search', '73b158a1d05cc4c2', {
+    .executeQueryLambda('commons', 'intelfox-keyword-fulltext-search', '08ab32855a1ff8ca', {
       parameters: [
         {
           name: 'teamId',

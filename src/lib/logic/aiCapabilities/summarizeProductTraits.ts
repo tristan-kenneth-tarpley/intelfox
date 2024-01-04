@@ -20,6 +20,7 @@ const summarizeProductTraits = async (input: string) => {
       jsonShape,
     ].join('\n'),
     reconciliationMessage: `Consolidate all of the following json objects into a single json object with the following shape: ${jsonShape}.`,
+    responseType: 'json_object',
   }).then((reportString) => {
     if (!reportString) {
       return null;

@@ -7,11 +7,11 @@ import { ChatCompletion } from 'openai/resources/index.mjs';
 const openai = new OpenAI();
 
 export const DefaultModels = {
-  chat: 'gpt-3.5-turbo-16k',
+  chat: 'gpt-3.5-turbo-1106',
   embeddings: 'text-embedding-ada-002',
 } as const;
 
-type ModeratedChatCompletionParams = Omit<OpenAI.ChatCompletionCreateParams, 'model'> & { model?: OpenAI.ChatCompletionCreateParams['model'] };
+export type ModeratedChatCompletionParams = Omit<OpenAI.ChatCompletionCreateParams, 'model'> & { model?: OpenAI.ChatCompletionCreateParams['model'] };
 type EmbeddingCreateParams = Omit<OpenAI.EmbeddingCreateParams, 'model'> & { model?: OpenAI.EmbeddingCreateParams['model'] };
 
 const openAIClient = {
