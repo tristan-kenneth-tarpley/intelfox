@@ -10,7 +10,10 @@ const UpdateTeamTrackedKeyPhrases = async ({
   const trackedKeyPhrases = await getTrackedKeyPhrasesByTeam(team.id);
 
   return (
-    <TrackedKeyPhraseManager keyPhrases={trackedKeyPhrases} />
+    <TrackedKeyPhraseManager
+      keyPhrases={trackedKeyPhrases}
+      team={team}
+    />
   );
 };
 

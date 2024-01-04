@@ -1,9 +1,12 @@
 import { appConfig } from '@/config';
 import forwardRequestToZeplo from '@/lib/services/zeplo/forwardRequestToZeplo';
 
-const runJob = async (
-  job: (...args: any[]) => any,
-  payload: Record<string, any>,
+type IsSingleObjectParameter<T> = T extends (param: infer U) => any ?
+  U extends object ? true : false : false;
+
+const runJob = async <TJobFn extends (arg: any) => any>(
+  job: IsSingleObjectParameter<TJobFn> extends true ? TJobFn : never,
+  payload: IsSingleObjectParameter<TJobFn> extends true ? Parameters<TJobFn>[0] : never,
 ) => {
   if (appConfig.nodeEnv === 'development') {
     return job(payload as any);

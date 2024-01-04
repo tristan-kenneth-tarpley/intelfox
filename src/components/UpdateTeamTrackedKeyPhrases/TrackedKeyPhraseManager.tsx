@@ -2,55 +2,73 @@
 
 import _ from 'lodash';
 
-import { TrackedKeyPhrases } from '@prisma/client/edge';
+import { Teams, TrackedKeyPhrases } from '@prisma/client/edge';
 import { useMemo, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { KeyPhraseTraits } from '@/lib/logic/keyPhrases/constants';
+import { useFormState } from 'react-dom';
+import handleKeyPhraseSubmission from '@/app/actions/handleKeyPhraseSubmission';
 import VStack from '../ui/stack/VStack';
 import HStack from '../ui/stack/HStack';
-import Text from '../ui/Text';
 import Button from '../ui/Button';
 import FormStatusWrapper from '../FormStatusWrapper';
 import CheckboxContainer from '../ui/CheckboxContainer';
 import Checkbox from '../ui/Checkbox';
 import Label from '../ui/Label';
+import InputField from '../ui/Input';
+import ToastOnFormCompletion from '../ui/ToastOnFormCompletion';
 
 const TrackedKeyPhraseManager = ({
   keyPhrases: originalKeyPhrases,
+  team,
 }: {
-  keyPhrases: Omit<TrackedKeyPhrases, 'phraseEmbeddings'>[];
+  keyPhrases: Omit<TrackedKeyPhrases, 'phraseEmbeddings' | 'createdAt' | 'updatedAt'>[];
+  team: Teams;
 }) => {
+  const [formState, formAction] = useFormState(handleKeyPhraseSubmission, { teamId: team.id });
   const [keyPhrases, setKeyPhrases] = useState(originalKeyPhrases);
 
   const hasUnsavedChanges = useMemo(() => {
     return !_.isEqual(originalKeyPhrases, keyPhrases);
   }, [originalKeyPhrases, keyPhrases]);
 
-  // const handleAddKeyPhrase = () => {
-  //   setKeyPhrases([
-  //     ...keyPhrases,
-  //     {
-  //       id: `change-me${Math.random()}`,
-  //       phrase: '',
-  //     },
-  //   ]);
-  // };
+  const handleAddKeyPhrase = () => {
+    setKeyPhrases([
+      ...keyPhrases,
+      {
+        id: `change-me-${Math.random()}`,
+        phrase: '',
+        traits: [],
+        teamId: team.id,
+      },
+    ]);
+  };
 
   return (
-    <form action={undefined}>
+    <form action={formAction}>
       <div className="mb-4">
-        <Button variant="outline">Add key phrase</Button>
+        <Button
+          onClick={handleAddKeyPhrase}
+          variant="outline"
+          type="button"
+        >
+          Add key phrase
+        </Button>
       </div>
+      <ToastOnFormCompletion title="Key phrases submitted" message={formState.message} />
       <VStack>
         {keyPhrases.map(({ phrase, id, traits }) => (
           <HStack key={id} className="w-full" align="start" justify='between'>
             <VStack space={2} align="start">
-              <Text>{phrase}</Text>
+              <InputField
+                placeholder='key phrase'
+                value={phrase}
+              />
               <div>
                 {Object.values(KeyPhraseTraits).map((trait) => (
                   <CheckboxContainer key={trait}>
                     <Checkbox
-                      id={trait}
+                      id={`${id}-${trait}`}
                       name={trait}
                       defaultChecked={traits?.includes(trait)}
                     />
@@ -61,7 +79,7 @@ const TrackedKeyPhraseManager = ({
                 ))}
               </div>
             </VStack>
-            <Button size="sm" variant="danger">
+            <Button type="button" size="sm" variant="danger">
               <XMarkIcon className="w-4 h-4" />
             </Button>
           </HStack>
@@ -71,6 +89,7 @@ const TrackedKeyPhraseManager = ({
         <FormStatusWrapper>
           {({ pending }) => (
             <Button
+              type="submit"
               loading={pending}
               disabled={!hasUnsavedChanges}
             >

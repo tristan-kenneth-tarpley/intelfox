@@ -1,6 +1,7 @@
 import { dark } from '@clerk/themes';
 import type { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
+import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { inter } from './styles/fonts';
@@ -28,9 +29,10 @@ export default function RootLayout({
             forcedTheme={'dark'}
             disableTransitionOnChange
           >
-            <div className="bg-zinc-950 min-h-screen dark">
+            <main className="bg-zinc-950 min-h-screen dark">
               {children}
-            </div>
+            </main>
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>

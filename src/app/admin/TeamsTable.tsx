@@ -16,10 +16,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { routes } from '../routes';
 
-export const columns: ColumnDef<Teams>[] = [
+const columns: ColumnDef<Teams>[] = [
   {
     accessorKey: 'id',
     header: 'id',
@@ -39,6 +39,8 @@ export const columns: ColumnDef<Teams>[] = [
   {
     accessorKey: 'description',
     header: 'description',
+    size: 400,
+    enableResizing: true,
   },
   {
     accessorKey: 'createdAt',
@@ -59,7 +61,6 @@ export const columns: ColumnDef<Teams>[] = [
 ];
 
 const TeamsTable = ({ teams }: { teams: Teams[] }) => {
-  const router = useRouter();
   const table = useReactTable({
     data: teams,
     columns,
@@ -74,7 +75,7 @@ const TeamsTable = ({ teams }: { teams: Teams[] }) => {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead style={{ minWidth: header.column.getSize() }} key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -93,14 +94,15 @@ const TeamsTable = ({ teams }: { teams: Teams[] }) => {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
-                onClick={() => router.push(routes.teamAdminPage({ teamId: row.getValue('id') }))}
                 className="cursor-pointer"
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell style={{ minWidth: cell.column.getSize() }} key={cell.id}>
+                      <Link className='h-full' prefetch={false} href={routes.teamAdminPage({ teamId: row.getValue('id') })}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </Link>
+                    </TableCell>
+                  ))}
               </TableRow>
             ))
           ) : (
