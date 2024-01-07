@@ -6,9 +6,15 @@ import safeParseJSON from '@/utils/safeParseJSON';
 import createChatCompletionReducer from './createChatCompletionReducer';
 
 const format = joinOnNewLine([
-  'Array<{',
+  '{results: {',
   '  index: <<number, the index of the post as supplied in the context>>',
-  '}>',
+  '}[]}',
+  'For example:',
+  '{results: [{',
+  '  index: 0',
+  '}, {',
+  '  index: 2',
+  '}]}',
 ]);
 
 // todo test
@@ -37,12 +43,12 @@ const pickRelevantScrapedItems = async (items: KeyPhraseFeedResult[], team: Team
 
   console.log('scraped items response', response);
   const parsedResponse = response
-    ? safeParseJSON<{ index: number }[]>(response)
+    ? safeParseJSON<{ results: { index: number }[] }>(response)
     : null;
 
-  console.log('parsed response', parsedResponse?.length ?? 'null');
+  console.log('parsed response', parsedResponse?.results.length ?? 'null');
 
-  return parsedResponse?.map(({ index }) => items[index]).filter(isTruthy) ?? null;
+  return parsedResponse?.results.map(({ index }) => items[index]).filter(isTruthy) ?? null;
 };
 
 export default pickRelevantScrapedItems;

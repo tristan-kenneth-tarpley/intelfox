@@ -24,6 +24,7 @@ const findOrCreateKeyPhrase = async ({
       phrase,
       phraseEmbeddings: embeddingsResponse.data[0].embedding,
       teamId,
+      traits: [],
     },
   });
 

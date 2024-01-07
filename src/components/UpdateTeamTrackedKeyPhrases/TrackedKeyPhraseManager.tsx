@@ -17,6 +17,7 @@ import Checkbox from '../ui/Checkbox';
 import Label from '../ui/Label';
 import InputField from '../ui/Input';
 import { useToast } from '../ui/use-toast';
+import FormGroup from '../ui/FormGroup';
 
 const TrackedKeyPhraseManager = ({
   keyPhrases: originalKeyPhrases,
@@ -26,19 +27,30 @@ const TrackedKeyPhraseManager = ({
   team: Teams;
 }) => {
   const [isAddingNewKeyPhrase, setIsAddingNewKeyPhrase] = useState(false);
+  const [newKeyPhraseLoading, setNewKeyPhraseLoading] = useState(false);
+  const [newKeyPhrase, setNewKeyPhrase] = useState('');
+
   const [keyPhrases, setKeyPhrases] = useState(originalKeyPhrases);
 
   const hasUnsavedChanges = useMemo(() => {
     return !_.isEqual(originalKeyPhrases, keyPhrases);
   }, [originalKeyPhrases, keyPhrases]);
 
-  const handleAddKeyPhrase = async () => {
-    setIsAddingNewKeyPhrase(true);
-    const newKeyPhrase = await createKeyPhrase({ phrase: '', teamId: team.id });
+  const handleAddKeyPhrase = async (phrase: string) => {
+    setNewKeyPhraseLoading(true);
+    const newKeyPhraseResponse = await createKeyPhrase({ phrase, teamId: team.id });
+    console.log('newKeyPhraseResponse', newKeyPhraseResponse);
     setKeyPhrases([
       ...keyPhrases,
-      newKeyPhrase,
+      newKeyPhraseResponse,
     ]);
+    setNewKeyPhraseLoading(false);
+    setIsAddingNewKeyPhrase(false);
+    setNewKeyPhrase('');
+  };
+
+  const resetNewKeyPhrase = () => {
+    setNewKeyPhrase('');
     setIsAddingNewKeyPhrase(false);
   };
 
@@ -49,18 +61,47 @@ const TrackedKeyPhraseManager = ({
       const { message } = await handleKeyPhraseSubmission({ teamId: team.id, keyPhrases });
       toast({ description: message, title: 'Key phrases updated' });
     }}>
-      <div className="mb-4">
-        <Button
-          onClick={handleAddKeyPhrase}
-          variant="outline"
-          type="button"
-          loading={isAddingNewKeyPhrase}
-        >
-          Add key phrase
-        </Button>
-      </div>
-
+      {!isAddingNewKeyPhrase && (
+        <div className="mb-4">
+          <Button
+            onClick={() => setIsAddingNewKeyPhrase(true)}
+            variant="outline"
+            type="button"
+            loading={newKeyPhraseLoading}
+          >
+            Add key phrase
+          </Button>
+        </div>
+      )}
       <VStack>
+        {isAddingNewKeyPhrase && (
+          <HStack justify='between' className="w-full">
+            <FormGroup className='border-b border-zinc-700 pb-4' label="new key phrase">
+              <InputField
+                value={newKeyPhrase}
+                onChange={(e) => setNewKeyPhrase(e.target.value)}
+              />
+            </FormGroup>
+            <HStack>
+              <Button
+                onClick={resetNewKeyPhrase}
+                variant="ghost"
+                size="sm"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                loading={newKeyPhraseLoading}
+                disabled={!newKeyPhrase}
+                onClick={() => handleAddKeyPhrase(newKeyPhrase)}
+              >
+                Save
+              </Button>
+            </HStack>
+          </HStack>
+        )}
         {keyPhrases.map(({ phrase, id, traits }) => (
           <HStack key={id} className="w-full" align="start" justify='between'>
             <VStack space={2} align="start">

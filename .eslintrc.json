@@ -13,6 +13,7 @@
     "max-len": "off",
     "no-nested-ternary": "off",
     "typescript-eslint/quotes": "off",
-    "arrow-body-style": "off"
+    "arrow-body-style": "off",
+    "@typescript-eslint/quotes": "off"
   }
 }

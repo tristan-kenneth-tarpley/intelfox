@@ -211,3 +211,15 @@ model MarketIntelReport {
   @@index([competitorId])
   @@index([createdAt])
 }
+
+// todo this could end up being a lot more flexible/generic, but for now, just log it
+model SeenScrapedItems {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  teamId        String
+  scrapedItemId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([teamId])
+}
