@@ -12,6 +12,7 @@ const handleTeamSearchSubmission: FormStateHandler<{ message?: string }> = async
 ) => {
   const query = formData.get('query')?.toString() ?? '';
 
+  console.log('query', query);
   const team = await findTeamByMultipleFields(query).catch((err) => {
     console.log(err);
     return null;
