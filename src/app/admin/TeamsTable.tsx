@@ -2,8 +2,10 @@
 
 import {
   ColumnDef,
+  SortingState,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import { Teams } from '@prisma/client/edge';
@@ -17,21 +19,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import Link from 'next/link';
+import { useState } from 'react';
+import { ChevronUpIcon } from '@radix-ui/react-icons';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import HStack from '@/components/ui/stack/HStack';
 import { routes } from '../routes';
 
 const columns: ColumnDef<Teams>[] = [
-  {
-    accessorKey: 'id',
-    header: 'id',
-  },
-  {
-    accessorKey: 'clerkOrgId',
-    header: 'clerkOrgId',
-  },
-  {
-    accessorKey: 'primaryDomain',
-    header: 'primaryDomain',
-  },
   {
     accessorKey: 'name',
     header: 'name',
@@ -41,6 +35,10 @@ const columns: ColumnDef<Teams>[] = [
     header: 'description',
     size: 400,
     enableResizing: true,
+  },
+  {
+    accessorKey: 'primaryDomain',
+    header: 'primaryDomain',
   },
   {
     accessorKey: 'createdAt',
@@ -58,13 +56,27 @@ const columns: ColumnDef<Teams>[] = [
     accessorKey: 'lastReportedAt',
     header: 'lastReportedAt',
   },
+  {
+    accessorKey: 'id',
+    header: 'id',
+  },
+  {
+    accessorKey: 'clerkOrgId',
+    header: 'clerkOrgId',
+  },
 ];
 
 const TeamsTable = ({ teams }: { teams: Teams[] }) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     data: teams,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
   });
 
   return (
@@ -75,12 +87,22 @@ const TeamsTable = ({ teams }: { teams: Teams[] }) => {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead style={{ minWidth: header.column.getSize() }} key={header.id}>
+                  <TableHead onClick={header.column.getToggleSortingHandler()} style={{ minWidth: header.column.getSize() }} key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
+                      : (
+                      <HStack>
+                        <span>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                        </span>
+                        {{
+                          asc: <ChevronUpIcon className="w-4 h-4" />,
+                          desc: <ChevronDownIcon className="w-4 h-4" />,
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </HStack>
                       )}
                   </TableHead>
                 );
