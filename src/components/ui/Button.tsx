@@ -57,7 +57,7 @@ const Button: React.FC<IButton> = ({
   size = 'md',
   target,
 }) => {
-  const BaseComponent = as === 'button' ? BarebonesButton : BarebonesDiv;
+  const BaseComponent = as === 'button' && !href ? BarebonesButton : BarebonesDiv;
 
   const extraProps = as === 'div' ? { tabIndex: 0, role: 'button' } : {};
 
@@ -105,7 +105,7 @@ const Button: React.FC<IButton> = ({
   );
 
   return href ? (
-    <Link href={href} target={target}>
+    <Link className={className} href={href} target={target}>
       {BodyContent}
     </Link>
   ) : (

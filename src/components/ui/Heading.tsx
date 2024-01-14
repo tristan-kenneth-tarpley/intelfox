@@ -26,7 +26,7 @@ const Heading: React.FC<HeadingProps> = ({
 
   return (
     // @ts-expect-error TypeScript doesn't like this
-    <Tag className={classNames('text-zinc-200', displayClasses[displayAs ?? level], className)}>
+    <Tag className={classNames(displayClasses[displayAs ?? level], className)}>
       {children}
     </Tag>
   );

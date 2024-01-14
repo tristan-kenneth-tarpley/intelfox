@@ -69,6 +69,14 @@ module.exports = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: 0 },
         },
+        hero: {
+          '0%': {
+            transform: `rotate(0) translateZ(0)`,
+          },
+          '100%': {
+            transform: `rotate(1turn) translateZ(0)`,
+          },
+        },
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -78,6 +86,7 @@ module.exports = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        hero: 'hero 50s ease-in-out infinite forwards',
       },
     },
   },

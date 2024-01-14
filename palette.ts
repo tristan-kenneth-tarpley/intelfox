@@ -40,4 +40,19 @@ const red = {
   950: '#450a0a',
 };
 
-export { orange, zinc, red };
+const fuchsia = {
+  50: "#F5B2E1",
+  100: "#F09BD6",
+  200: "#EB7EC9",
+  300: "#E661BC",
+  400: "#E43AAD",
+  500: "#E935C1",
+  600: "#E328B0",
+  700: "#DC1B9F",
+  800: "#D60E8E",
+  900: "#D0007C",
+};
+
+export {
+  orange, zinc, red, fuchsia,
+};

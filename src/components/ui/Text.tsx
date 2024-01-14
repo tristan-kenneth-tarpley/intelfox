@@ -7,11 +7,12 @@ const Text = ({
 }: {
   children: React.ReactNode;
   className?: string;
-  size?: 'sm' | 'xs'
+  size?: 'base' | 'sm' | 'xs'
 }) => (
   <p className={classNames(
     'text-zinc-300',
     {
+      'text-base': size === 'base',
       'text-sm': size === 'sm',
       'text-xs': size === 'xs',
     },
