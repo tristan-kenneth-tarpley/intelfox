@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import Link from 'next/link';
 import { noop } from 'lodash';
+import Spinner from './Spinner';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'outline' | 'danger' | 'link' | 'success';
 
@@ -90,13 +91,7 @@ const Button: React.FC<IButton> = ({
       {...extraProps}
     >
       {loading && (
-        <div
-          style={{ borderTopColor: 'transparent' }}
-          className={classNames(
-            'w-4 h-4 border-2 border-solid rounded-full animate-spin border-zinc-200',
-            { 'border-zinc-200': variant !== 'primary', 'border-zinc-700': variant === 'primary' },
-          )}
-        />
+        <Spinner variant={variant === 'primary' ? 'dark' : 'light'} />
       )}
       {iconLeft && iconLeft}
       {children && <span>{children}</span>}

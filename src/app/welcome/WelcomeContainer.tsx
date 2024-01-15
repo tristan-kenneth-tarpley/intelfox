@@ -11,6 +11,7 @@ const WelcomeContainer = ({
   children,
   actions,
   dialog,
+  onSubmit,
   formAction,
 }: {
   activeName: WelcomeBreadcrumbActiveName;
@@ -19,6 +20,7 @@ const WelcomeContainer = ({
   children: React.ReactNode;
   actions?: React.ReactNode[];
   dialog?: React.ReactNode;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   formAction: FormAction;
 }) => {
   return (
@@ -29,9 +31,18 @@ const WelcomeContainer = ({
           <Heading level={1} displayAs={3}>{heading}</Heading>
           <Text>{subheading}</Text>
         </div>
-        <form action={formAction}>
+        <form
+          onSubmit={(e) => {
+            if (!onSubmit) {
+              return;
+            }
+            e.preventDefault();
+            onSubmit?.(e);
+          }}
+          action={onSubmit ? undefined : formAction}
+        >
           <div className="flex flex-col space-y-4">
-            <div className="w-full flex items-stretch flex-col space-y-2">
+            <div className="w-full flex items-stretch flex-col space-y-4">
               {children}
             </div>
             <ActionContainer>

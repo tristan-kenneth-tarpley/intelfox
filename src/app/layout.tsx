@@ -4,6 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import QueryClientProvider from '@/components/QueryClientProvider';
 import { inter } from './styles/fonts';
 
 export const metadata: Metadata = {
@@ -22,18 +23,20 @@ export default function RootLayout({
     }}>
       <html lang="en">
         <body className={inter.className}>
-          <ThemeProvider
-            attribute='class'
-            defaultTheme="dark"
-            enableSystem={false}
-            forcedTheme={'dark'}
-            disableTransitionOnChange
-          >
-            <main className="bg-zinc-950 min-h-screen dark">
-              {children}
-            </main>
-            <Toaster />
-          </ThemeProvider>
+          <QueryClientProvider>
+            <ThemeProvider
+              attribute='class'
+              defaultTheme="dark"
+              enableSystem={false}
+              forcedTheme={'dark'}
+              disableTransitionOnChange
+            >
+              <main className="bg-zinc-950 min-h-screen dark">
+                {children}
+              </main>
+              <Toaster />
+            </ThemeProvider>
+          </QueryClientProvider>
         </body>
       </html>
     </ClerkProvider>

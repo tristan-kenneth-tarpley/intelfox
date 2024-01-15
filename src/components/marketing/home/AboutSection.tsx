@@ -45,8 +45,8 @@ const features = [
 ];
 
 const COPY = {
-  header: `Know thy enemy`,
-  introText: `Intelfox curates a list of relevant discussions, questions, and posts from popular platforms like Reddit, X, and Quora. By engaging directly with potential customers, you'll have an exclusive invite to a party where everyone is ready to buy`,
+  header: `Know your enemy`,
+  introText: `Intelfox curates a list of relevant discussions, questions, and posts from popular platforms like Reddit and Twitter/X. By engaging directly with potential customers, you'll have an exclusive invite to a party where everyone is ready to buy`,
 } as const;
 
 const AboutSection = () => {

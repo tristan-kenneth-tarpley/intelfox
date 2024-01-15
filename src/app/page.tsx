@@ -5,6 +5,7 @@ import HeroLeft from '@/components/marketing/home/HeroLeft';
 import MarketingPageNavbar from '@/components/navbar/MarketingPageNavbar';
 import AboutSection from '@/components/marketing/home/AboutSection';
 import PricingSection from '@/components/marketing/home/PricingSection';
+// import { ChevronDownIcon } from '@radix-ui/react-icons';
 
 const Hero = () => {
   return (
@@ -16,6 +17,9 @@ const Hero = () => {
         <HeroLeft />
         <HeroRight />
       </div>
+      {/* <div className="absolute bottom-20 mx-auto">
+        <ChevronDownIcon className="text-zinc-200 h-5 w-5" />
+      </div> */}
     </div>
   );
 };

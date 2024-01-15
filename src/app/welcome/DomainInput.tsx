@@ -1,9 +1,15 @@
 'use client';
 
 import InputField from '@/components/ui/Input';
-import { useState } from 'react';
+import { RefObject, useState } from 'react';
 
-const DomainInput = ({ initialValue }: { initialValue: string }) => {
+const DomainInput = ({
+  initialValue,
+  inputRef,
+}: {
+  initialValue: string;
+  inputRef: RefObject<HTMLInputElement>;
+}) => {
   const [domain, setDomain] = useState(initialValue);
 
   return (
@@ -15,6 +21,7 @@ const DomainInput = ({ initialValue }: { initialValue: string }) => {
         name="company_url"
         required
         value={domain}
+        inputRef={inputRef}
         onChange={(e) => {
           const { value } = e.target;
           if (

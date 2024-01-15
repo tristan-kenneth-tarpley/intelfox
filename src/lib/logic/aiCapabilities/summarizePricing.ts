@@ -1,5 +1,8 @@
+'use server';
+
 import joinOnNewLine from '@/utils/joinOnNewLine';
 import createChatCompletionReducer from './createChatCompletionReducer';
+import { URL_INVALID } from './constants';
 
 const summarizePricing = async (input: string) => {
   return createChatCompletionReducer(input?.split(' ') ?? [], {
@@ -9,6 +12,7 @@ const summarizePricing = async (input: string) => {
       '- what are the pricing amounts for each segment?',
       '- Which features are paywalled?',
       '- Is there a free plan?',
+      `If there is no pricing information, say ${URL_INVALID}`,
     ]),
     reconciliationMessage: joinOnNewLine([
       'Consolidate all of the following summaries', // todo structure as json

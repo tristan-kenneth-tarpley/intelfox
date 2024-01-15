@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { CSSProperties } from 'react';
+import { CSSProperties, RefObject } from 'react';
 
 interface Props {
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -12,6 +12,7 @@ interface Props {
   name?: string;
   style?: CSSProperties;
   required?: boolean;
+  inputRef?: React.RefObject<HTMLInputElement | HTMLTextAreaElement>;
 }
 
 const InputField = ({
@@ -25,6 +26,7 @@ const InputField = ({
   name,
   style,
   required,
+  inputRef,
 }: Props) => {
   const classes = classNames(
     'bg-zinc-950 px-2 py-1 rounded-md',
@@ -46,6 +48,7 @@ const InputField = ({
         style={style}
         required={required}
         aria-required={required}
+        ref={inputRef as RefObject<HTMLTextAreaElement>}
       />
     ) : (
       <input
@@ -59,6 +62,7 @@ const InputField = ({
         style={style}
         required={required}
         aria-required={required}
+        ref={inputRef as RefObject<HTMLInputElement>}
       />
     )
   );

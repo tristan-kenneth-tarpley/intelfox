@@ -8,6 +8,7 @@ import onboardNewTeam from '@/lib/logic/teams/onboardNewTeam';
 import db from '@/lib/services/db/db';
 import safeParseURL from '@/utils/safeParseURL';
 import summarizeWebsiteMessaging from '@/lib/logic/aiCapabilities/summarizeWebsiteMessaging';
+import isTruthy from '@/utils/isTruthy';
 import makeRequestError from '../makeRequestError';
 
 const unauthError = makeRequestError({
@@ -24,6 +25,7 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
   }
 
   const domainResponse = formData.get('company_url');
+  const pricingPageUrl = formData.get('pricing_page_url');
   const parsedURL = safeParseURL(domainResponse?.toString() ?? '');
   const finalUrl = parsedURL?.origin;
 
@@ -32,6 +34,7 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
   }
 
   const user = await clerkClient.users.getUser(reqAuth.userId);
+  console.log(`user`, user);
 
   if (!user) {
     return unauthError;
@@ -45,7 +48,6 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
   });
 
   if (existingTeam) {
-    console.log('found an existing team');
     return redirect(routes.welcomeAbout({ t: existingTeam.id }));
   }
 
@@ -59,8 +61,13 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
     createdByName: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.emailAddresses[0].emailAddress,
     clerkOrgName: parsedURL.hostname,
     name: messagingProfile?.companyName ?? parsedURL.hostname,
+    urls: [pricingPageUrl ? {
+      type: 'PRICING_PAGE' as const,
+      url: pricingPageUrl.toString(),
+    } : undefined].filter(isTruthy),
   });
 
+  // todo this should be the links verification
   redirect(routes.welcomeAbout({ t: team.id }));
 };
 
