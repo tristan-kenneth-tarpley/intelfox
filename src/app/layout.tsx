@@ -31,7 +31,7 @@ export default function RootLayout({
               forcedTheme={'dark'}
               disableTransitionOnChange
             >
-              <main className="bg-zinc-950 min-h-screen dark">
+              <main className="min-h-screen dark">
                 {children}
               </main>
               <Toaster />

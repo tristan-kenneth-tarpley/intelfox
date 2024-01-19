@@ -1,8 +1,10 @@
-import Heading from '@/components/ui/Heading';
-import Text from '@/components/ui/Text';
-import ActionContainer from '@/components/ui/ActionContainer';
-import WelcomeBreadcrumb, { WelcomeBreadcrumbActiveName } from './WelcomeBreadcrumb';
-import { FormAction } from '../types';
+import Heading from "@/components/ui/Heading";
+import Text from "@/components/ui/Text";
+import ActionContainer from "@/components/ui/ActionContainer";
+import WelcomeBreadcrumb, {
+  WelcomeBreadcrumbActiveName,
+} from "./WelcomeBreadcrumb";
+import { FormAction } from "../types";
 
 const WelcomeContainer = ({
   activeName,
@@ -28,7 +30,9 @@ const WelcomeContainer = ({
       <WelcomeBreadcrumb activeName={activeName} />
       <div className="flex flex-col space-y-4">
         <div>
-          <Heading level={1} displayAs={3}>{heading}</Heading>
+          <Heading level={1} displayAs={3}>
+            {heading}
+          </Heading>
           <Text>{subheading}</Text>
         </div>
         <form
@@ -45,9 +49,7 @@ const WelcomeContainer = ({
             <div className="w-full flex items-stretch flex-col space-y-4">
               {children}
             </div>
-            <ActionContainer>
-              {actions}
-            </ActionContainer>
+            <ActionContainer>{actions}</ActionContainer>
             {dialog && dialog}
           </div>
         </form>

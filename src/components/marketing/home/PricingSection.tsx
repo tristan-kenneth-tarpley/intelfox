@@ -6,7 +6,7 @@ import {
 import Text from '@/components/ui/Text';
 import Heading from '@/components/ui/Heading';
 import { routes } from '@/app/routes';
-import { fuchsia, orange } from '../../../../palette';
+import { hotPink, orange } from '../../../../palette';
 
 const tiers = [
   {
@@ -43,7 +43,7 @@ const PricingSection = () => {
             <defs>
               <radialGradient id="6d1bd035-0dd1-437e-93fa-59d316231eb0">
                 <stop stopColor={orange[600]} />
-                <stop offset={1} stopColor={fuchsia[500]} />
+                <stop offset={1} stopColor={hotPink[500]} />
               </radialGradient>
             </defs>
           </svg>

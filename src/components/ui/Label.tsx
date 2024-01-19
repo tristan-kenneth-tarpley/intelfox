@@ -1,12 +1,19 @@
+import classNames from "classnames";
+
 const Label = ({
   htmlFor,
   children,
+  className,
 }: {
   htmlFor: string;
   children: React.ReactNode;
+  className?: string;
 }) => {
   return (
-    <label className="text-sm text-zinc-200" htmlFor={htmlFor}>
+    <label
+      className={classNames("text-sm text-zinc-200", className)}
+      htmlFor={htmlFor}
+    >
       {children}
     </label>
   );

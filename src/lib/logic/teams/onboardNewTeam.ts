@@ -12,8 +12,7 @@ const onboardNewTeam = async ({
   createdByName,
   name,
   clerkOrgName,
-  urls,
-}: Pick<Teams, 'primaryDomain' | 'description' | 'createdByUserId' | 'name' | 'urls'> & { clerkOrgName: string; createdByEmail: string; createdByName: string }) => {
+}: Pick<Teams, 'primaryDomain' | 'description' | 'createdByUserId' | 'name'> & { clerkOrgName: string; createdByEmail: string; createdByName: string }) => {
   const organization = await clerkClient.organizations.createOrganization({
     name: clerkOrgName,
     createdBy: createdByUserId,
@@ -35,7 +34,7 @@ const onboardNewTeam = async ({
       urls: [{
         type: 'HOMEPAGE',
         url: primaryDomain,
-      }, ...urls],
+      }],
     },
   });
 

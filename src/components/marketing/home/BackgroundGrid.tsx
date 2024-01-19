@@ -22,7 +22,12 @@ const BackgroundGrid = () => {
           strokeWidth={0}
         />
       </svg>
-      <rect width="100%" height="100%" strokeWidth={0} fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)" />
+      <rect
+        width="100%"
+        height="100%"
+        strokeWidth={0}
+        fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)"
+      />
     </svg>
   );
 };

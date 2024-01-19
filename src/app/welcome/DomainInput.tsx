@@ -1,15 +1,10 @@
-'use client';
+"use client";
 
-import InputField from '@/components/ui/Input';
-import { RefObject, useState } from 'react';
+import { useState } from "react";
+import InputField from "@/components/ui/Input";
+import handleUrlInputOnChange from "@/utils/handleUrlInputOnChange";
 
-const DomainInput = ({
-  initialValue,
-  inputRef,
-}: {
-  initialValue: string;
-  inputRef: RefObject<HTMLInputElement>;
-}) => {
+const DomainInput = ({ initialValue }: { initialValue: string }) => {
   const [domain, setDomain] = useState(initialValue);
 
   return (
@@ -17,22 +12,11 @@ const DomainInput = ({
       <InputField
         type="url"
         className="w-full"
-        placeholder='https://yourwebsite.com'
+        placeholder="https://yourwebsite.com"
         name="company_url"
         required
         value={domain}
-        inputRef={inputRef}
-        onChange={(e) => {
-          const { value } = e.target;
-          if (
-            value.length > 'https://'.length
-            && !value.startsWith('https://')
-          ) {
-            setDomain(`https://${e.target.value}`);
-          } else {
-            setDomain(e.target.value);
-          }
-        }}
+        onChange={handleUrlInputOnChange(setDomain)}
       />
     </div>
   );

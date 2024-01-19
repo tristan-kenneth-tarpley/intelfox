@@ -53,7 +53,7 @@ type TeamURLs {
 model Teams {
   id               String     @id @default(auto()) @map("_id") @db.ObjectId
   clerkOrgId       String     @unique
-  primaryDomain    String     @unique
+  primaryDomain    String
   name             String
   description      String
   shortDescription String?
@@ -67,6 +67,7 @@ model Teams {
   lastReportedAt DateTime? // todo we can maybe infer this, but use this for now
 
   @@index([lastSyncedAt])
+  @@index([primaryDomain, createdByUserId], map: "unique_team_name")
 }
 
 model Competitors {

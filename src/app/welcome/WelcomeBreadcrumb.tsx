@@ -1,29 +1,37 @@
-import BreadcrumbMenu from '@/components/ui/Breadcrumb';
+import BreadcrumbMenu from "@/components/ui/Breadcrumb";
 
 const steps = [
   {
-    name: 'Domain',
-    href: '',
+    name: "Domain",
+    href: "",
   },
   {
-    name: 'About company',
-    href: '',
+    name: "About company",
+    href: "",
   },
   {
-    name: 'Pick competitors',
-    href: '',
+    name: "Pick competitors",
+    href: "",
   },
   {
-    name: 'Key phrases',
-    href: '',
+    name: "Competitor info",
+    href: "",
+  },
+  {
+    name: "Key phrases",
+    href: "",
   },
 ] as const;
 
 const stepNames = steps.map((step) => step.name);
 
-export type WelcomeBreadcrumbActiveName = typeof stepNames[number];
+export type WelcomeBreadcrumbActiveName = (typeof stepNames)[number];
 
-const WelcomeBreadcrumb = ({ activeName }: { activeName: WelcomeBreadcrumbActiveName }) => {
+const WelcomeBreadcrumb = ({
+  activeName,
+}: {
+  activeName: WelcomeBreadcrumbActiveName;
+}) => {
   const pages = steps.map((step) => ({
     ...step,
     current: step.name === activeName,

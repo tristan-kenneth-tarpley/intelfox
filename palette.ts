@@ -40,7 +40,7 @@ const red = {
   950: '#450a0a',
 };
 
-const fuchsia = {
+const hotPink = {
   50: "#F5B2E1",
   100: "#F09BD6",
   200: "#EB7EC9",
@@ -54,5 +54,5 @@ const fuchsia = {
 };
 
 export {
-  orange, zinc, red, fuchsia,
+  orange, zinc, red, hotPink,
 };
