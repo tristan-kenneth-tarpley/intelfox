@@ -1,39 +1,50 @@
-import {
-  ScrapedItems, TrackedKeyPhrases,
-} from '@prisma/client/edge';
-import isTruthy from '@/utils/isTruthy';
-import withRocksetAPI from '../withRocksetAPI';
+import { ScrapedItems, TrackedKeyPhrases } from "@prisma/client/edge";
+import isTruthy from "@/utils/isTruthy";
+import withRocksetAPI from "../withRocksetAPI";
 
-export type KeyPhraseFeedResult =
-  { similarity: number } &
-  Pick<TrackedKeyPhrases, 'phrase' | 'id'> &
-  Pick<ScrapedItems, | 'text'
-  | 'parentText'
-  | 'bodyText'
-  | 'href'
-  | 'source'
-  | 'type'
-  | 'itemCreatedAt'>;
+export type KeyPhraseFeedResult = { similarity: number } & Pick<
+  TrackedKeyPhrases,
+  "phrase" | "id"
+> &
+  Pick<
+    ScrapedItems,
+    | "text"
+    | "parentText"
+    | "bodyText"
+    | "href"
+    | "source"
+    | "type"
+    | "itemCreatedAt"
+  >;
 
 const getKeyphraseFeedResults = async (
   teamId: string,
 ): Promise<KeyPhraseFeedResult[] | null> => {
-  const response = await withRocksetAPI((api) => api.queryLambdas
-    .executeQueryLambda('commons', 'intelfox-keyword-fulltext-search', '55cec53317563e6f', {
-      parameters: [
+  const response = await withRocksetAPI((api) =>
+    api.queryLambdas
+      .executeQueryLambda(
+        "commons",
+        "intelfox-keyword-fulltext-search",
+        "55cec53317563e6f",
         {
-          name: 'teamId',
-          type: 'string',
-          value: teamId,
+          parameters: [
+            {
+              name: "teamId",
+              type: "string",
+              value: teamId,
+            },
+          ].filter(isTruthy),
         },
-      ].filter(isTruthy),
-    })
-    .catch((err) => {
-      console.error(err);
-      return null;
-    }));
+      )
+      .catch((err) => {
+        console.error(err);
+        return null;
+      }),
+  );
 
-  return (response?.results ?? null);
+  console.log("rockset response", response?.results?.length);
+
+  return response?.results ?? null;
 };
 
 export default getKeyphraseFeedResults;

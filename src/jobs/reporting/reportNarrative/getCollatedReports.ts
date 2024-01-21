@@ -92,6 +92,7 @@ const generateReportForTeam = async (
   return {
     ...teamReports,
     scrapedItemsReport: scrapedItemsToShow,
+    scrapedItemsFound: teamReports.scrapedItemsReport?.length ?? 0,
   };
 };
 

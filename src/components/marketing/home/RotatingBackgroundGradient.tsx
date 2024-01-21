@@ -5,7 +5,8 @@ const RotatingBackgroundGradient = () => {
         transformOrigin: "top",
       }}
       aria-hidden="true"
-      className="animate-hero absolute -z-10 opacity-50 w-full h-full top-0 left-0"
+      id="rotating-gradient"
+      className="animate-hero absolute -z-10 opacity-60 w-full h-full top-0 left-0"
     >
       <div
         style={{

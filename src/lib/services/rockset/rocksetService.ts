@@ -1,4 +1,4 @@
-import getKeyphraseFeedResults from './lambdas/getKeyphraseFeedResults';
+import getKeyphraseFeedResults from "./lambdas/getKeyphraseFeedResults";
 
 const rocksetService = {
   getKeyphraseFeedResults,

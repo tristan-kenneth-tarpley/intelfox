@@ -52,17 +52,16 @@ const KeywordPageClient = ({
   // arbitrary logic... Basically, if a user spends money on PPC, their keywords _should_ be more relevant
   // but we can use seo keywords as a backfill
   const prioritizedKeywords = useMemo(() => {
+    // I've learned that sometimes the spyfu API returns markup instead of JSON when they're doing maintenance
+    if (typeof ppcKeywords === "string") {
+      return [];
+    }
     return (
       ppcKeywords.resultCount > 2
         ? ppcKeywords.results.map(({ keyword }) => keyword)
         : seoKeywords.results.map(({ keyword }) => keyword)
     ).filter((keyword) => keyword !== truncatedDomain);
-  }, [
-    ppcKeywords.resultCount,
-    ppcKeywords.results,
-    seoKeywords.results,
-    truncatedDomain,
-  ]);
+  }, [ppcKeywords, seoKeywords.results, truncatedDomain]);
 
   const selfKeyphrase = stringifyKeyphrase({
     phrase: team.name,

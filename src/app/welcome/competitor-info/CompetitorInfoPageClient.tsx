@@ -86,6 +86,7 @@ const CompetitorInfoPageClient = ({
   team: Teams;
 }) => {
   // tristan todo need to start syncing team key phrases and preparing resources for report upon submission here
+  // also upon submission, save the pricing summaries as a report so that we can show it on confirmation page
   return (
     <WelcomeContainer
       formAction={() => console.log("hi")}

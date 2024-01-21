@@ -8,6 +8,7 @@ import VStack from "@/components/ui/stack/VStack";
 import Spinner from "@/components/ui/Spinner";
 import HStack from "@/components/ui/stack/HStack";
 import Text from "@/components/ui/Text";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import DomainInput from "./DomainInput";
 import WelcomeContainer from "./WelcomeContainer";
 import handleCompanyDomainSubmission from "../actions/welcome/handleCompanyDomainSubmission";
@@ -57,9 +58,14 @@ const WelcomePageClient = ({ guessedDomain }: { guessedDomain: string }) => {
         )
       }
     >
-      <div className="w-full flex items-stretch">
-        <DomainInput key={guessedDomain} initialValue={guessedDomain} />
-      </div>
+      <Card>
+        <CardHeader>Test</CardHeader>
+        <CardContent>
+          <div className="flex items-stretch">
+            <DomainInput key={guessedDomain} initialValue={guessedDomain} />
+          </div>
+        </CardContent>
+      </Card>
     </WelcomeContainer>
   );
 };

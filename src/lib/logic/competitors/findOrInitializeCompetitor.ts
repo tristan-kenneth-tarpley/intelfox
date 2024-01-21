@@ -1,14 +1,14 @@
 import db from "@/lib/services/db/db";
 import safeParseURL from "@/utils/safeParseURL";
 import maybeAddProtocolToURL from "@/utils/maybeAddProtocolToURL";
-import scrapeMetaDescriptionFromURL from "../scraping/scrapeMetaDescriptionFromURL";
 import extractCompanyNameFromURL from "../aiCapabilities/extractCompanyNameFromURL";
+import summarizeWebsiteMessaging from "../aiCapabilities/summarizeWebsiteMessaging";
 
 const findOrInitializeCompetitor = async (domainParam: string) => {
   const domain = maybeAddProtocolToURL(domainParam);
-  const [metaDescription, companyTeamNameFromURLChatCompletion] =
+  const [websiteMessaging, companyTeamNameFromURLChatCompletion] =
     await Promise.all([
-      scrapeMetaDescriptionFromURL(domain),
+      summarizeWebsiteMessaging(domain),
       extractCompanyNameFromURL(domain).catch(() => null),
     ]);
 
@@ -28,7 +28,7 @@ const findOrInitializeCompetitor = async (domainParam: string) => {
     create: {
       domain,
       name,
-      description: metaDescription ?? "",
+      description: websiteMessaging?.summary ?? "",
       urls: [
         {
           type: "HOMEPAGE",

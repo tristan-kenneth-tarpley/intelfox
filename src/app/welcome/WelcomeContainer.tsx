@@ -30,10 +30,10 @@ const WelcomeContainer = ({
       <WelcomeBreadcrumb activeName={activeName} />
       <div className="flex flex-col space-y-4">
         <div>
-          <Heading level={1} displayAs={3}>
+          <Heading level={1} displayAs={2}>
             {heading}
           </Heading>
-          <Text>{subheading}</Text>
+          <Text size="base">{subheading}</Text>
         </div>
         <form
           onSubmit={(e) => {

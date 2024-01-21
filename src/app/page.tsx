@@ -1,10 +1,10 @@
-import RotatingBackgroundGradient from '@/components/marketing/home/RotatingBackgroundGradient';
-import BackgroundGrid from '@/components/marketing/home/BackgroundGrid';
-import HeroRight from '@/components/marketing/home/HeroRight';
-import HeroLeft from '@/components/marketing/home/HeroLeft';
-import MarketingPageNavbar from '@/components/navbar/MarketingPageNavbar';
-import AboutSection from '@/components/marketing/home/AboutSection';
-import PricingSection from '@/components/marketing/home/PricingSection';
+import RotatingBackgroundGradient from "@/components/marketing/home/RotatingBackgroundGradient";
+import BackgroundGrid from "@/components/marketing/home/BackgroundGrid";
+import HeroRight from "@/components/marketing/home/HeroRight";
+import HeroLeft from "@/components/marketing/home/HeroLeft";
+import MarketingPageNavbar from "@/components/navbar/MarketingPageNavbar";
+import AboutSection from "@/components/marketing/home/AboutSection";
+import PricingSection from "@/components/marketing/home/PricingSection";
 // import { ChevronDownIcon } from '@radix-ui/react-icons';
 
 const Hero = () => {

@@ -1,7 +1,9 @@
-import { ScrapedItemCreateParams } from '@/lib/logic/scraping/types';
-import redditAPIClient from '@/lib/services/reddit/redditAPIClient';
+import { ScrapedItemCreateParams } from "@/lib/logic/scraping/types";
+import redditAPIClient from "@/lib/services/reddit/redditAPIClient";
 
-const searchRedditPosts = async (searchTerm: string): Promise<Omit<ScrapedItemCreateParams, 'embeddings'>[]> => {
+const searchRedditPosts = async (
+  searchTerm: string,
+): Promise<Omit<ScrapedItemCreateParams, "embeddings">[]> => {
   const redditClient = await redditAPIClient();
 
   try {
@@ -11,8 +13,8 @@ const searchRedditPosts = async (searchTerm: string): Promise<Omit<ScrapedItemCr
       text: data.title,
       bodyText: data.selftext,
       parentText: null,
-      source: 'REDDIT',
-      type: 'POST',
+      source: "REDDIT",
+      type: "POST",
       itemCreatedAt: new Date(data.created_utc),
     }));
   } catch (err) {

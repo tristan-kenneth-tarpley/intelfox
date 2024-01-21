@@ -11,7 +11,7 @@ const DomainInput = ({ initialValue }: { initialValue: string }) => {
     <div className="w-full">
       <InputField
         type="url"
-        className="w-full"
+        className="w-1/2"
         placeholder="https://yourwebsite.com"
         name="company_url"
         required
