@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { routes } from "@/app/routes";
 import { PageProps } from "@/app/types";
 import { redirect } from "next/navigation";
@@ -37,10 +38,13 @@ const CompetitorsPage = ({ searchParams }: PageProps) => {
         return (
           <CompetitorsPageClient
             team={team}
-            competitors={[
-              ...(ppcCompetitors?.data.results ?? []),
-              ...(seoCompetitors?.data.results ?? []),
-            ]}
+            competitors={_.uniqBy(
+              [
+                ...(ppcCompetitors?.data.results ?? []),
+                ...(seoCompetitors?.data.results ?? []),
+              ],
+              ({ domain }) => domain,
+            )}
             trackedCompetitorDomains={competitorHostnames}
           />
         );

@@ -5,28 +5,27 @@ import usePricingPageScraper from "@/mutations/usePricingPageScraper";
 import { Competitors, Teams } from "@prisma/client/edge";
 import { useEffect, useState } from "react";
 import { URL_INVALID } from "@/lib/logic/aiCapabilities/constants";
-import FormGroup from "@/components/ui/FormGroup";
-import InputField from "@/components/ui/Input";
-import handleUrlInputOnChange from "@/utils/handleUrlInputOnChange";
 import FormStatusWrapper from "@/components/FormStatusWrapper";
 import Button from "@/components/ui/Button";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { routes } from "@/app/routes";
+import { useFormState } from "react-dom";
+import handleCompetitorInfoPageSubmission from "@/app/actions/welcome/handleCompetitorInfoPageSubmission";
+import CalloutSection from "@/components/ui/CalloutSection";
 import WelcomeContainer from "../WelcomeContainer";
 
-const CompetitorPricingCard = ({ competitor }: { competitor: Competitors }) => {
-  const {
-    data: pricingDescription,
-    mutateAsync,
-    isPending: isScrapingPricingPage,
-  } = usePricingPageScraper();
+const CompetitorPricingCard = ({
+  competitor,
+  onUrlConfirmed,
+}: {
+  competitor: Competitors;
+  onUrlConfirmed: () => void;
+}) => {
+  const { data: pricingDescription, mutateAsync } = usePricingPageScraper();
 
   const [pricingUrl, setPricingUrl] = useState<string | undefined>(
     competitor.urls.find((url) => url.type === "PRICING_PAGE")?.url,
   );
-
-  const pricingFound =
-    !!pricingDescription && pricingDescription !== URL_INVALID;
 
   useEffect(() => {
     if (pricingUrl) {
@@ -45,36 +44,24 @@ const CompetitorPricingCard = ({ competitor }: { competitor: Competitors }) => {
   }, [mutateAsync, pricingUrl, competitor.domain]);
 
   return (
-    <PricingDescriptionCard
-      heading={`${competitor.name ?? competitor.domain} pricing`}
-      description={
-        pricingFound
-          ? pricingDescription ?? "undefined"
-          : isScrapingPricingPage
-            ? undefined
-            : ""
-      }
-    >
-      {isScrapingPricingPage || !pricingDescription ? null : (
-        <FormGroup
-          label={
-            pricingFound
-              ? "We found this from their pricing page"
-              : "We couldn't find a pricing page... Can you help us out? Leave it blank if this doesn't apply."
-          }
-        >
-          <InputField
-            className="w-full"
-            name={competitor.domain}
-            disabled={pricingFound}
-            value={pricingUrl}
-            onChange={handleUrlInputOnChange(setPricingUrl)}
-            type="url"
-            placeholder="https://example.com/pricing"
-          />
-        </FormGroup>
-      )}
-    </PricingDescriptionCard>
+    <div>
+      <PricingDescriptionCard
+        heading={`${competitor.name ?? competitor.domain} pricing`}
+        description={pricingDescription ?? undefined}
+        pronoun="their"
+        inputName={`pricing_url_${competitor.id}`}
+        onUrlChange={(url) => {
+          setPricingUrl(url);
+        }}
+        value={pricingUrl}
+        onUrlConfirmed={onUrlConfirmed}
+      />
+      <input
+        hidden
+        value={pricingDescription ?? undefined}
+        name={`pricing_description_${competitor.id}`}
+      />
+    </div>
   );
 };
 
@@ -85,11 +72,24 @@ const CompetitorInfoPageClient = ({
   competitors: Competitors[];
   team: Teams;
 }) => {
+  const [state, formAction] = useFormState(handleCompetitorInfoPageSubmission, {
+    team,
+  });
+  const [urlConfirmations, setUrlConfirmations] = useState<
+    Record<string, boolean>
+  >(
+    competitors.reduce(
+      (acc, { id }) => ({ ...acc, [id]: false }),
+      {} as Record<string, boolean>,
+    ),
+  );
+
+  // const
   // tristan todo need to start syncing team key phrases and preparing resources for report upon submission here
   // also upon submission, save the pricing summaries as a report so that we can show it on confirmation page
   return (
     <WelcomeContainer
-      formAction={() => console.log("hi")}
+      formAction={formAction}
       activeName="Competitor info"
       heading="Tell us a little bit more about these competitors"
       subheading="This will help us better understand their business and your market."
@@ -100,6 +100,7 @@ const CompetitorInfoPageClient = ({
               disabled={pending}
               href={routes.welcomeCompetitorInfo({ t: team.id })}
               variant="secondary"
+              type="button"
             >
               <ChevronLeftIcon className="h-5 w-5" />
             </Button>
@@ -108,21 +109,36 @@ const CompetitorInfoPageClient = ({
         <FormStatusWrapper key="continue">
           {({ pending }) => (
             <Button
-              type="button"
-              href={routes.welcomeKeywords({ t: team.id })}
               loading={pending}
+              disabled={Object.values(urlConfirmations).some(
+                (confirmed) => !confirmed,
+              )}
             >
               Continue
             </Button>
           )}
         </FormStatusWrapper>,
       ]}
+      dialog={
+        state.message ? (
+          <CalloutSection
+            header="There were issues with the form"
+            message={state.message}
+          />
+        ) : null
+      }
     >
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid lg:grid-cols-2 gap-4">
         {competitors.map((competitor) => (
           <CompetitorPricingCard
             key={competitor.domain}
             competitor={competitor}
+            onUrlConfirmed={() =>
+              setUrlConfirmations({
+                ...urlConfirmations,
+                [competitor.id]: true,
+              })
+            }
           />
         ))}
       </div>

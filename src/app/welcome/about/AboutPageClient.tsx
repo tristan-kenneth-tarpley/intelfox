@@ -9,34 +9,14 @@ import FormGroup from "@/components/ui/FormGroup";
 import usePricingPageScraper from "@/mutations/usePricingPageScraper";
 import { useState } from "react";
 import safeParseURL from "@/utils/safeParseURL";
-import { URL_INVALID } from "@/lib/logic/aiCapabilities/constants";
-import VStack from "@/components/ui/stack/VStack";
-import Text from "@/components/ui/Text";
-import InputField from "@/components/ui/Input";
 import SpinnerWithText from "@/components/ui/SpinnerWithText";
 import CalloutSection from "@/components/ui/CalloutSection";
 import { routes } from "@/app/routes";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import PricingDescriptionCard from "@/components/PricingDescriptionCard";
-import handleUrlInputOnChange from "@/utils/handleUrlInputOnChange";
 import WelcomeContainer from "../WelcomeContainer";
 import AboutInputField from "./AboutInputField";
 import CompanyNameInputField from "./CompanyNameInputField";
-
-const PricingPageUrlInput = ({ defaultValue }: { defaultValue?: string }) => {
-  const [value, setValue] = useState(defaultValue);
-
-  return (
-    <InputField
-      className="w-full"
-      type="url"
-      name="pricing_page_url"
-      placeholder="https://yourwebsite.com/pricing"
-      value={value}
-      onChange={handleUrlInputOnChange(setValue)}
-    />
-  );
-};
 
 const AboutPageClient = ({ team }: { team: Teams }) => {
   const [step, setStep] = useState<"about" | "urls">("about");
@@ -45,14 +25,13 @@ const AboutPageClient = ({ team }: { team: Teams }) => {
   });
 
   const [pricingPageUrl, setPricingPageUrl] = useState("");
+  const [urlConfirmed, setUrlConfirmed] = useState(false);
 
   const {
     data: pricingDescription,
     mutateAsync,
     isPending: isScrapingPricingPage,
   } = usePricingPageScraper();
-
-  const pricingNotFound = pricingDescription === URL_INVALID;
 
   const tryToFindPricingPage = async () => {
     const moveOn = () => setStep("urls");
@@ -101,7 +80,14 @@ const AboutPageClient = ({ team }: { team: Teams }) => {
         </Button>,
         <FormStatusWrapper key="continue">
           {({ pending }) => (
-            <Button type="submit" disabled={isScrapingPricingPage || pending}>
+            <Button
+              type="submit"
+              disabled={
+                isScrapingPricingPage ||
+                pending ||
+                (step === "urls" && !urlConfirmed)
+              }
+            >
               Continue
             </Button>
           )}
@@ -129,22 +115,19 @@ const AboutPageClient = ({ team }: { team: Teams }) => {
         </>
       ) : step === "urls" ? (
         <>
-          {pricingDescription && pricingDescription !== URL_INVALID ? (
-            <PricingDescriptionCard description={pricingDescription}>
-              <FormGroup label="URL for your pricing page (or leave blank)">
-                <PricingPageUrlInput defaultValue={pricingPageUrl} />
-              </FormGroup>
-            </PricingDescriptionCard>
-          ) : pricingNotFound ? (
-            <VStack align="start">
-              <Text>
-                We couldn&apos;t able to find any pricing information on your
-                site. Either add your pricing page URL here, or leave it blank
-                if you don&apos;t have one.
-              </Text>
-              <PricingPageUrlInput />
-            </VStack>
-          ) : null}
+          <PricingDescriptionCard
+            heading={`${team.name ?? team.primaryDomain} pricing`}
+            description={pricingDescription ?? undefined}
+            pronoun="your"
+            inputName={`pricing_url`}
+            value={pricingPageUrl}
+            onUrlConfirmed={() => {
+              setUrlConfirmed(true);
+            }}
+            onUrlChange={(url) => {
+              setPricingPageUrl(url);
+            }}
+          />
         </>
       ) : null}
     </WelcomeContainer>

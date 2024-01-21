@@ -100,7 +100,7 @@ const Button: React.FC<IButton> = ({
                 variant === "danger",
               "bg-green-700 border-green-700 hover:bg-green-800 hover:border-green-800 focus:ring-offset-green-800":
                 variant === "success",
-              "text-zinc-200 border-transparent rounded-none focus:ring-0 focus:ring-offset-0 hover:border-b-zinc-200":
+              "text-zinc-200 border-transparent rounded-none focus:ring-0 focus:ring-offset-0 border-b-zinc-200 hover:text-zinc-400 hover:border-b-zinc-400 px-0":
                 variant === "link",
             },
       )}

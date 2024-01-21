@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useFormState } from "react-dom";
-
+import _ from "lodash";
 import { Teams } from "@prisma/client/edge";
 import { CompetitorAPIResponse } from "@/lib/services/spyfu/spyfuService";
 import Button from "@/components/ui/Button";
@@ -19,6 +19,7 @@ import handleCompetitorsPageSubmission from "@/app/actions/welcome/handleCompeti
 import getHostnameFromDomain from "@/utils/getHostnameFromDomain";
 import classNames from "classnames";
 import splitStringOnCommas from "@/utils/splitStringOnCommas";
+import SpinnerWithText from "@/components/ui/SpinnerWithText";
 import WelcomeContainer from "../WelcomeContainer";
 
 const CompetitorsPageClient = ({
@@ -44,6 +45,19 @@ const CompetitorsPageClient = ({
   const atMaxCompetitors =
     newCompetitorsArray.length + trackedCompetitorsSet.size >= 2;
 
+  const domainsToDisplay = useMemo(() => {
+    return _.uniq([
+      ...competitors
+        .filter(
+          (competitor) =>
+            competitor.domain !== getHostnameFromDomain(team.primaryDomain),
+        )
+        .slice(0, 20)
+        .map(({ domain }) => domain),
+      ...trackedCompetitorDomains,
+    ]);
+  }, [competitors, team.primaryDomain, trackedCompetitorDomains]);
+
   return (
     <WelcomeContainer
       formAction={formAction}
@@ -63,60 +77,60 @@ const CompetitorsPageClient = ({
           )}
         </FormStatusWrapper>,
         <FormStatusWrapper key="continue">
-          {({ pending }) => <Button loading={pending}>Continue</Button>}
+          {({ pending }) => <Button disabled={pending}>Continue</Button>}
         </FormStatusWrapper>,
       ]}
       dialog={
-        state.message ? (
-          <CalloutSection
-            header="There were issues with the form"
-            message={state.message}
-          />
-        ) : null
+        <FormStatusWrapper key="back">
+          {({ pending }) =>
+            state.message ? (
+              <CalloutSection
+                header="There were issues with the form"
+                message={state.message}
+              />
+            ) : pending ? (
+              <SpinnerWithText text="Looking up some info about your competitors..." />
+            ) : null
+          }
+        </FormStatusWrapper>
       }
     >
       <div className="grid grid-cols-2 gap-y-2">
-        {competitors
-          .filter(
-            (competitor) =>
-              competitor.domain !== getHostnameFromDomain(team.primaryDomain),
-          )
-          .slice(0, 20)
-          .map((competitor) => {
-            const id = `int_comp_${competitor.domain}`;
-            return (
-              <CheckboxContainer key={competitor.domain}>
-                <Checkbox
-                  id={id}
-                  name={id}
-                  defaultChecked={trackedCompetitorsSet.has(competitor.domain)}
-                  disabled={
-                    atMaxCompetitors &&
-                    !trackedCompetitorsSet.has(competitor.domain)
-                  }
-                  onChange={(e) => {
-                    setNewCompetitors((prev) => {
-                      const newSet = new Set(prev);
-                      if (e.target.checked) {
-                        newSet.add(competitor.domain);
-                      } else {
-                        newSet.delete(competitor.domain);
-                      }
-                      return Array.from(newSet);
-                    });
-                  }}
-                />
-                <Label
-                  className={classNames({
-                    "text-gray-400": atMaxCompetitors,
-                  })}
-                  htmlFor={id}
-                >
-                  {competitor.domain}
-                </Label>
-              </CheckboxContainer>
-            );
-          })}
+        {domainsToDisplay.map((competitorDomain) => {
+          const id = `int_comp_${competitorDomain}`;
+          return (
+            <CheckboxContainer key={competitorDomain}>
+              <Checkbox
+                id={id}
+                name={id}
+                defaultChecked={trackedCompetitorsSet.has(competitorDomain)}
+                disabled={
+                  atMaxCompetitors &&
+                  !trackedCompetitorsSet.has(competitorDomain)
+                }
+                onChange={(e) => {
+                  setNewCompetitors((prev) => {
+                    const newSet = new Set(prev);
+                    if (e.target.checked) {
+                      newSet.add(competitorDomain);
+                    } else {
+                      newSet.delete(competitorDomain);
+                    }
+                    return Array.from(newSet);
+                  });
+                }}
+              />
+              <Label
+                className={classNames({
+                  "text-gray-400": atMaxCompetitors,
+                })}
+                htmlFor={id}
+              >
+                {competitorDomain}
+              </Label>
+            </CheckboxContainer>
+          );
+        })}
       </div>
       <div>
         <FormGroup
@@ -129,6 +143,7 @@ const CompetitorsPageClient = ({
             value={customCompetitors}
             onChange={(e) => setCustomCompetitors(e.target.value)}
             name="custom_competitors"
+            disabled={atMaxCompetitors}
           />
         </FormGroup>
       </div>

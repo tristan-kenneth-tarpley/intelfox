@@ -1,10 +1,12 @@
-import { appConfig } from '@/config';
-import axios from 'axios';
+import { appConfig } from "@/config";
+import axios from "axios";
 
-const spyfuAuthAsB64 = Buffer.from(`${appConfig.spyfuAppId}:${appConfig.spyfuSecretKey}`).toString('base64');
+const spyfuAuthAsB64 = Buffer.from(
+  `${appConfig.spyfuAppId}:${appConfig.spyfuSecretKey}`,
+).toString("base64");
 
 const spyfuAxios = axios.create({
-  baseURL: 'https://www.spyfu.com/apis',
+  baseURL: "https://www.spyfu.com/apis",
   headers: {
     Authorization: `Basic ${spyfuAuthAsB64}`,
   },
@@ -86,28 +88,40 @@ export interface PPCKeywordAPIResponse {
 }
 
 export const spyfuService = {
-  getPPCCompetitors: (domain: string) => spyfuAxios.get<CompetitorAPIResponse>(`/competitors_api/v2/ppc/getTopCompetitors?${new URLSearchParams({
-    domain,
-    startingRow: '1',
-    pageSize: '10',
-    countryCode: 'US',
-  }).toString()}`),
-  getSEOCompetitors: (domain: string) => spyfuAxios.get<CompetitorAPIResponse>(`/competitors_api/v2/seo/getTopCompetitors?${new URLSearchParams({
-    domain,
-    startingRow: '1',
-    pageSize: '10',
-    countryCode: 'US',
-  }).toString()}`),
-  getMostSuccessfulPPCKeywords: (query: string) => spyfuAxios.get<PPCKeywordAPIResponse>(`/keyword_api/v2/ppc/getMostSuccessful?${new URLSearchParams({
-    query,
-    startingRow: '1',
-    pageSize: '10',
-    countryCode: 'US',
-  }).toString()}`),
-  getSEOKeywordsByValue: (query: string) => spyfuAxios.get<SEOKeywordsForDomainResponse>(`/serp_api/v2/seo/getMostValuableKeywords?${new URLSearchParams({
-    query,
-    startingRow: '1',
-    pageSize: '10',
-    countryCode: 'US',
-  }).toString()}`),
+  getPPCCompetitors: (domain: string) =>
+    spyfuAxios.get<CompetitorAPIResponse>(
+      `/competitors_api/v2/ppc/getTopCompetitors?${new URLSearchParams({
+        domain,
+        startingRow: "1",
+        pageSize: "10",
+        countryCode: "US",
+      }).toString()}`,
+    ),
+  getSEOCompetitors: (domain: string) =>
+    spyfuAxios.get<CompetitorAPIResponse>(
+      `/competitors_api/v2/seo/getTopCompetitors?${new URLSearchParams({
+        domain,
+        startingRow: "1",
+        pageSize: "10",
+        countryCode: "US",
+      }).toString()}`,
+    ),
+  getMostSuccessfulPPCKeywords: (query: string) =>
+    spyfuAxios.get<PPCKeywordAPIResponse>(
+      `/keyword_api/v2/ppc/getMostSuccessful?${new URLSearchParams({
+        query,
+        startingRow: "1",
+        pageSize: "10",
+        countryCode: "US",
+      }).toString()}`,
+    ),
+  getSEOKeywordsByValue: (query: string) =>
+    spyfuAxios.get<SEOKeywordsForDomainResponse>(
+      `/serp_api/v2/seo/getMostValuableKeywords?${new URLSearchParams({
+        query,
+        startingRow: "1",
+        pageSize: "10",
+        countryCode: "US",
+      }).toString()}`,
+    ),
 };

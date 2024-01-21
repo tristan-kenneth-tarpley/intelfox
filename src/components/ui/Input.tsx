@@ -16,6 +16,7 @@ interface Props {
   required?: boolean;
   inputRef?: React.RefObject<HTMLInputElement | HTMLTextAreaElement>;
   disabled?: boolean;
+  hidden?: boolean;
 }
 
 const InputField = ({
@@ -31,6 +32,7 @@ const InputField = ({
   required,
   inputRef,
   disabled,
+  hidden,
 }: Props) => {
   const classes = classNames(
     "bg-zinc-950 px-2 py-1 rounded-md",
@@ -43,6 +45,7 @@ const InputField = ({
 
   return textArea ? (
     <textarea
+      hidden={hidden}
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}
@@ -57,6 +60,7 @@ const InputField = ({
     />
   ) : (
     <input
+      hidden={hidden}
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}
