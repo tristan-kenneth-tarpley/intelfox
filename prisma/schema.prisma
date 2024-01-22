@@ -166,6 +166,7 @@ type GenericMessagingProfile {
   personality   MessagingPersonality[]
   companyName   String
   keyValueProps String[]
+  keywords      String[]
 }
 
 model MessagingProfile {

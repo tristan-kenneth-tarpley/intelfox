@@ -3,7 +3,6 @@
 import { routes } from "@/app/routes";
 import { FormStateHandler } from "@/app/types";
 import { URL_INVALID } from "@/lib/logic/aiCapabilities/constants";
-import summarizePricing from "@/lib/logic/aiCapabilities/summarizePricing";
 import db from "@/lib/services/db/db";
 import { clerkClient } from "@clerk/nextjs";
 import { Teams } from "@prisma/client/edge";
@@ -19,16 +18,15 @@ const handleAboutPageSubmission: FormStateHandler<{
 
   const aboutCompany = formData.get("about_company")?.toString();
   const companyName = formData.get("company_name")?.toString();
-  const pricingPageUrlField = formData.get("pricing_page_url")?.toString();
+  const pricingPageUrlField = formData.get("pricing_url")?.toString();
+  const pricingDescriptionField = formData
+    .get("pricing_description")
+    ?.toString();
 
-  const pricingPageSummary = pricingPageUrlField
-    ? await summarizePricing(pricingPageUrlField)
-    : undefined;
-
+  const pricingIsValid =
+    pricingDescriptionField && pricingDescriptionField !== URL_INVALID;
   const pricingPageUrl =
-    pricingPageSummary && pricingPageSummary !== URL_INVALID
-      ? pricingPageUrlField
-      : undefined;
+    pricingIsValid && pricingPageUrlField ? pricingPageUrlField : undefined;
 
   await Promise.all([
     clerkClient.organizations.updateOrganization(team.clerkOrgId, {
@@ -55,6 +53,14 @@ const handleAboutPageSubmission: FormStateHandler<{
           : undefined),
       },
     }),
+    pricingPageUrl && pricingIsValid
+      ? db.pricingPageReport.create({
+          data: {
+            pricingSummary: pricingDescriptionField,
+            teamId: team.id,
+          },
+        })
+      : Promise.resolve(),
   ]);
 
   return redirect(routes.welcomeCompetitors({ t: team.id }));

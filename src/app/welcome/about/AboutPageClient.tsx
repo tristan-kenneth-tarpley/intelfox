@@ -14,6 +14,7 @@ import CalloutSection from "@/components/ui/CalloutSection";
 import { routes } from "@/app/routes";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import PricingDescriptionCard from "@/components/PricingDescriptionCard";
+import { URL_INVALID } from "@/lib/logic/aiCapabilities/constants";
 import WelcomeContainer from "../WelcomeContainer";
 import AboutInputField from "./AboutInputField";
 import CompanyNameInputField from "./CompanyNameInputField";
@@ -66,7 +67,7 @@ const AboutPageClient = ({ team }: { team: Teams }) => {
     <WelcomeContainer
       formAction={formAction}
       onSubmit={step === "about" ? tryToFindPricingPage : undefined}
-      activeName="About company"
+      activeName="About you"
       heading="Tell us more about yourself"
       subheading="We took a stab at describing your company. Feel free to edit it or just leave as-is."
       actions={[
@@ -127,6 +128,15 @@ const AboutPageClient = ({ team }: { team: Teams }) => {
             onUrlChange={(url) => {
               setPricingPageUrl(url);
             }}
+          />
+          <input
+            hidden
+            value={
+              pricingDescription && pricingDescription !== URL_INVALID
+                ? pricingDescription
+                : ""
+            }
+            name="pricing_description"
           />
         </>
       ) : null}

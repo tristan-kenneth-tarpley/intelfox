@@ -11,11 +11,13 @@ import splitStringOnCommas from "@/utils/splitStringOnCommas";
 import findOrCreateCompetitorRelationship from "@/lib/logic/competitors/findOrCreateCompetitorRelationship";
 import findOrCreateKeyPhrase from "@/lib/logic/keyPhrases/findOrCreateKeyPhrase";
 import postCompetitorToAirtable from "@/lib/logic/teams/postCompetitorToAirtable";
+import cacheHelpers from "@/lib/next-helpers/cacheHelpers";
 
 const handleCompetitorsPageSubmission: FormStateHandler<{
   team: Teams;
   message?: string;
 }> = async ({ team }, formData) => {
+  cacheHelpers.noStore();
   if (!team) {
     return redirect(routes.welcome());
   }

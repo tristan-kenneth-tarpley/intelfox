@@ -2,23 +2,19 @@ import BreadcrumbMenu from "@/components/ui/Breadcrumb";
 
 const steps = [
   {
-    name: "Domain",
+    name: "URL",
     href: "",
   },
   {
-    name: "About company",
+    name: "About you",
     href: "",
   },
   {
-    name: "Pick competitors",
+    name: "About your competitors",
     href: "",
   },
   {
     name: "Competitor info",
-    href: "",
-  },
-  {
-    name: "Key phrases",
     href: "",
   },
 ] as const;

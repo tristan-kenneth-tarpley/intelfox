@@ -28,8 +28,6 @@ export const routes = {
     `/welcome/competitors?${new URLSearchParams({ t }).toString()}`,
   welcomeCompetitorInfo: ({ t }: { t: string }) =>
     `/welcome/competitor-info?${new URLSearchParams({ t }).toString()}`,
-  welcomeKeywords: ({ t }: { t: string }) =>
-    `/welcome/keywords?${new URLSearchParams({ t }).toString()}`,
   welcomeAbout: ({ t }: { t: string }) =>
     `/welcome/about?${new URLSearchParams({ t }).toString()}`,
   welcomeConfirmation: ({ t }: { t: string }) =>

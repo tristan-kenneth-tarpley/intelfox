@@ -79,7 +79,7 @@ const handleCompetitorInfoPageSubmission: FormStateHandler<{
     ),
   );
 
-  return redirect(routes.welcomeKeywords({ t: team.id }));
+  return redirect(routes.welcomeConfirmation({ t: team.id }));
 };
 
 export default handleCompetitorInfoPageSubmission;

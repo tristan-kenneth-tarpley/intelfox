@@ -8,7 +8,6 @@ import VStack from "@/components/ui/stack/VStack";
 import Spinner from "@/components/ui/Spinner";
 import HStack from "@/components/ui/stack/HStack";
 import Text from "@/components/ui/Text";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import DomainInput from "./DomainInput";
 import WelcomeContainer from "./WelcomeContainer";
 import handleCompanyDomainSubmission from "../actions/welcome/handleCompanyDomainSubmission";
@@ -22,14 +21,9 @@ const WelcomePageClient = ({ guessedDomain }: { guessedDomain: string }) => {
     // todo - adding a better loading state that explains everything we're doing, since this can take a while to scrape their site and feed it to GPT
     <WelcomeContainer
       formAction={formAction}
-      activeName="Domain"
+      activeName="URL"
       heading="What is your company's URL?"
       subheading="Give the URL to the public website that has the most information about your products, pricing, and company."
-      actions={[
-        <FormStatusWrapper key="container">
-          {({ pending }) => <Button disabled={pending}>Continue</Button>}
-        </FormStatusWrapper>,
-      ]}
       dialog={
         state.message ? (
           <CalloutSection
@@ -58,14 +52,14 @@ const WelcomePageClient = ({ guessedDomain }: { guessedDomain: string }) => {
         )
       }
     >
-      <Card>
-        <CardHeader>Test</CardHeader>
-        <CardContent>
-          <div className="flex items-stretch">
-            <DomainInput key={guessedDomain} initialValue={guessedDomain} />
-          </div>
-        </CardContent>
-      </Card>
+      <HStack justify="center">
+        <VStack className="w-full" align="start">
+          <DomainInput key={guessedDomain} initialValue={guessedDomain} />
+          <FormStatusWrapper>
+            {({ pending }) => <Button disabled={pending}>Continue</Button>}
+          </FormStatusWrapper>
+        </VStack>
+      </HStack>
     </WelcomeContainer>
   );
 };

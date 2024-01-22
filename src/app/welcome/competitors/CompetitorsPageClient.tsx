@@ -61,7 +61,7 @@ const CompetitorsPageClient = ({
   return (
     <WelcomeContainer
       formAction={formAction}
-      activeName="Pick competitors"
+      activeName="About your competitors"
       heading="Who are your competitors?"
       subheading="We will monitor these competitors for you around the internet and include relevant conversations in your IntelFox feed. Pick up to two."
       actions={[

@@ -1,8 +1,8 @@
-import { Teams } from '@prisma/client/edge';
-import { clerkClient } from '@clerk/nextjs';
-import db from '@/lib/services/db/db';
-import stripeService from '@/lib/services/stripe/stripeService';
-import postNewTeamToAirtable from './postNewTeamToAirtable';
+import { Teams } from "@prisma/client/edge";
+import { clerkClient } from "@clerk/nextjs";
+import db from "@/lib/services/db/db";
+import stripeService from "@/lib/services/stripe/stripeService";
+import postNewTeamToAirtable from "./postNewTeamToAirtable";
 
 const onboardNewTeam = async ({
   primaryDomain,
@@ -12,17 +12,15 @@ const onboardNewTeam = async ({
   createdByName,
   name,
   clerkOrgName,
-}: Pick<Teams, 'primaryDomain' | 'description' | 'createdByUserId' | 'name'> & { clerkOrgName: string; createdByEmail: string; createdByName: string }) => {
+}: Pick<Teams, "primaryDomain" | "description" | "createdByUserId" | "name"> & {
+  clerkOrgName: string;
+  createdByEmail: string;
+  createdByName: string;
+}) => {
   const organization = await clerkClient.organizations.createOrganization({
     name: clerkOrgName,
     createdBy: createdByUserId,
   });
-
-  // await clerkClient.organizations.createOrganizationMembership({
-  //   organizationId: organization.id,
-  //   userId: createdByUserId,
-  //   role: 'admin',
-  // });
 
   const team = await db.teams.create({
     data: {
@@ -31,10 +29,12 @@ const onboardNewTeam = async ({
       clerkOrgId: organization.id,
       description,
       createdByUserId,
-      urls: [{
-        type: 'HOMEPAGE',
-        url: primaryDomain,
-      }],
+      urls: [
+        {
+          type: "HOMEPAGE",
+          url: primaryDomain,
+        },
+      ],
     },
   });
 

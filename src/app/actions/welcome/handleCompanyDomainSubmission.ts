@@ -9,6 +9,9 @@ import db from "@/lib/services/db/db";
 import safeParseURL from "@/utils/safeParseURL";
 import summarizeWebsiteMessaging from "@/lib/logic/aiCapabilities/summarizeWebsiteMessaging";
 import cacheHelpers from "@/lib/next-helpers/cacheHelpers";
+import openAIClient from "@/lib/services/openAI/client";
+import runJob from "@/jobs/runJob";
+import syncTeamKeyPhrases from "@/jobs/applicationSyncing/syncTeamKeyPhrases";
 import makeRequestError from "../makeRequestError";
 
 const unauthError = makeRequestError({
@@ -46,14 +49,13 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
     },
   });
 
-  console.log("existingTeam", existingTeam, finalUrl);
-
   if (existingTeam) {
     return redirect(routes.welcomeAbout({ t: existingTeam.id }));
   }
 
   const messagingProfile = await summarizeWebsiteMessaging(finalUrl);
 
+  const name = messagingProfile?.companyName ?? parsedURL.hostname;
   const { team } = await onboardNewTeam({
     primaryDomain: finalUrl,
     description: messagingProfile?.summary ?? "",
@@ -64,10 +66,51 @@ const handleCompanyDomainSubmission: FormStateHandler = async (_, formData) => {
         ? `${user.firstName} ${user.lastName}`
         : user.emailAddresses[0].emailAddress,
     clerkOrgName: parsedURL.hostname,
-    name: messagingProfile?.companyName ?? parsedURL.hostname,
+    name,
   });
 
-  // todo this should be the links verification
+  if (!team) {
+    return makeRequestError({ code: 500, message: "Something went wrong" });
+  }
+
+  if (messagingProfile) {
+    await db.messagingProfile.create({
+      data: {
+        messagingProfile: messagingProfile ?? {},
+        teamId: team.id,
+      },
+    });
+
+    const { keywords } = messagingProfile;
+
+    if (keywords.length > 0) {
+      const keywordsToInit = [
+        ...keywords.map((keyword) => ({
+          phrase: keyword,
+          traits: [],
+        })),
+        {
+          phrase: name,
+          traits: ["BRANDED", "SELF"],
+        },
+      ];
+      const keywordEmbeddings = await openAIClient.getEmbeddings({
+        input: keywordsToInit.map(({ phrase }) => phrase),
+      });
+
+      const keyPhrases = keywordsToInit.map(({ phrase }, index) => ({
+        phrase,
+        phraseEmbeddings: keywordEmbeddings.data[index]?.embedding,
+        teamId: team.id,
+      }));
+
+      await db.trackedKeyPhrases.createMany({
+        data: keyPhrases,
+      });
+    }
+  }
+
+  await runJob(syncTeamKeyPhrases, { teamId: team.id });
   redirect(routes.welcomeAbout({ t: team.id }));
 };
 

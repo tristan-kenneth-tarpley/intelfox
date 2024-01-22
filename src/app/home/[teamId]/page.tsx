@@ -1,25 +1,25 @@
-import { PageProps } from '@/app/types';
-import TeamLoader from '@/components/TeamLoader';
-import Heading from '@/components/ui/Heading';
-import classNames from 'classnames';
-import VStack from '@/components/ui/stack/VStack';
+import { PageProps } from "@/app/types";
+import TeamLoader from "@/components/TeamLoader";
+import Heading from "@/components/ui/Heading";
+import classNames from "classnames";
+import VStack from "@/components/ui/stack/VStack";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import rocksetService from '@/lib/services/rockset/rocksetService';
-import Text from '@/components/ui/Text';
-import Button from '@/components/ui/Button';
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
-import { WORKSPACE_HEIGHT } from '@/constants/dimensions';
-import findCompetitorsByTeamId from '@/lib/logic/competitors/findCompetitorsByTeamId';
-import { innerPadding } from '../../styles';
-import ApplicationHomeNavbar from '../../../components/navbar/ApplicationHomeNavbar';
-import SubNav from './SubNav';
-import FeedResults from './FeedResults';
+} from "@/components/ui/card";
+import rocksetService from "@/lib/services/rockset/rocksetService";
+import Text from "@/components/ui/Text";
+import Button from "@/components/ui/Button";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
+import { WORKSPACE_HEIGHT } from "@/constants/dimensions";
+import findCompetitorsByTeamId from "@/lib/logic/competitors/findCompetitorsByTeamId";
+import { innerPadding } from "../../styles";
+import ApplicationHomeNavbar from "../../../components/navbar/ApplicationHomeNavbar";
+import SubNav from "./SubNav";
+import FeedResults from "./FeedResults";
 
 const TeamHome = async (props: PageProps) => {
   const { params } = props;
@@ -38,14 +38,15 @@ const TeamHome = async (props: PageProps) => {
             <div className="sticky top-0 bg-zinc-950">
               <ApplicationHomeNavbar team={team} />
             </div>
-            <div style={{ maxHeight: WORKSPACE_HEIGHT }} className={classNames(innerPadding, 'overflow-hidden')}>
+            <div
+              style={{ maxHeight: WORKSPACE_HEIGHT }}
+              className={classNames(innerPadding, "overflow-hidden")}
+            >
               <div>
                 <SubNav competitors={competitors} team={team} />
               </div>
-              <div className='h-fullgrid grid-cols-8 gap-x-4 items-stretch'>
-                <div className="col-span-3">
-                  hi
-                </div>
+              <div className="h-fullgrid grid-cols-8 gap-x-4 items-stretch">
+                <div className="col-span-3">hi</div>
                 {feedItems && <FeedResults feedItems={feedItems} />}
                 <VStack className="col-span-2 h-full" align="start">
                   <Card className="w-full">
@@ -68,7 +69,6 @@ const TeamHome = async (props: PageProps) => {
                     </CardFooter>
                   </Card>
                 </VStack>
-
               </div>
             </div>
           </div>

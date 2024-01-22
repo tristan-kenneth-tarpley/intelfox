@@ -18,7 +18,7 @@ const CompetitorInfoPage = ({ searchParams }: PageProps) => {
         const competitors = await findCompetitorsByTeamId(team.id);
 
         if (!competitors.length) {
-          return redirect(routes.welcomeKeywords({ t: team.id }));
+          return redirect(routes.welcomeConfirmation({ t: team.id }));
         }
 
         return (
